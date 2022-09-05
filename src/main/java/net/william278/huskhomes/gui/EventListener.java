@@ -18,6 +18,7 @@ public class EventListener implements Listener {
     public void onHomeListView(@NotNull HomeListEvent event) {
         event.setCancelled(true);
         SavedPositionMenu.create(plugin, event.getHomes(),
+                        event.getIsPublicHomeList() ? SavedPositionMenu.MenuType.PUBLIC_HOME : SavedPositionMenu.MenuType.HOME,
                         event.getIsPublicHomeList() ? "Public Homes" : event.getOnlineUser().username + "'s Homes")
                 .show(event.getOnlineUser());
     }
@@ -25,7 +26,7 @@ public class EventListener implements Listener {
     @EventHandler
     public void onWarpListView(@NotNull WarpListEvent event) {
         event.setCancelled(true);
-        SavedPositionMenu.create(plugin, event.getWarps(), "Warps")
+        SavedPositionMenu.create(plugin, event.getWarps(), SavedPositionMenu.MenuType.WARP, "Warps")
                 .show(event.getOnlineUser());
     }
 
