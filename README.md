@@ -14,4 +14,4 @@ If you prefer to browse using a menu, or would like better support for Bedrock p
 
 ### Usage
 Simply use the list commands you are familiar with to bring up a list of homes or warps.
-Then you can left click to teleport to a home/warp, right click to edit it, and shift-left click to change the icon of the home in the list to match the type of item in your main hand. Use the page navigation buttons to switch pages.
+Then you can left-click to teleport to a home/warp, right click to edit it, and shift-left click to change the icon of the home in the list to match the type of item in your main hand. Use the page navigation buttons to switch pages.
