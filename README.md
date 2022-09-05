@@ -1,7 +1,7 @@
 # [![HuskHomes Banner](images/banner-graphic.png)](https://github.com/WiIIiam278/HuskHomes2)
 [![Support Discord](https://img.shields.io/discord/818135932103557162.svg?label=&logo=discord&logoColor=fff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/tVYhJfyDWG)
 
-**HuskHomesGUI** is a GUI add-on plugin for HuskHomes v3.x on Spigot servers. It provides a chest-style graphical user interface (GUI) for browsing home and warp lists. It replaces the chat menu system that is built into HuskHomes when you type `/homelist`, `/phomelist` or `/warplist`.
+**HuskHomesGUI** is a GUI add-on plugin for [HuskHomes v3.x](https://github.com/WiIIiam278/HuskHomes2) on Spigot servers. It provides a chest-style graphical user interface (GUI) for browsing home and warp lists. It replaces the chat menu system that is built into HuskHomes when you type `/homelist`, `/phomelist` or `/warplist`.
 
 ![Menu screenshot](images/menu-screenshot.png)
 
