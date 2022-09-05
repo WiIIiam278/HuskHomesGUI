@@ -1,15 +1,11 @@
 package net.william278.huskhomes.gui;
 
-import de.themoep.inventorygui.GuiElementGroup;
-import de.themoep.inventorygui.GuiPageElement;
-import de.themoep.inventorygui.InventoryGui;
-import de.themoep.inventorygui.StaticGuiElement;
+import de.themoep.inventorygui.*;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.william278.huskhomes.api.HuskHomesAPI;
 import net.william278.huskhomes.libraries.minedown.MineDown;
 import net.william278.huskhomes.player.OnlineUser;
-import net.william278.huskhomes.position.Home;
-import net.william278.huskhomes.position.SavedPosition;
+import net.william278.huskhomes.position.*;
 import net.william278.huskhomes.util.Permission;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -18,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * A menu for displaying a list of saved positions
@@ -30,8 +27,7 @@ public class SavedPositionMenu {
             "ppppppppp",
             "bl     ne",
     };
-
-    private static final Material FILLER_MATERIAL = Material.GRAY_STAINED_GLASS_PANE;
+    private static final String TAG_KEY = "huskhomesgui:icon";
     private final InventoryGui menu;
     private final HuskHomesAPI huskHomesAPI;
     private final MenuType menuType;
@@ -54,22 +50,22 @@ public class SavedPositionMenu {
         this.huskHomesAPI = huskHomesAPI;
 
         // Add filler items
-        this.menu.setFiller(new ItemStack(FILLER_MATERIAL, 1));
+        this.menu.setFiller(new ItemStack(menuType.fillerMaterial, 1));
 
         // Add pagination handling
         this.menu.addElement(getPositionGroup(positionList));
         this.menu.addElement(new GuiPageElement('b', new ItemStack(Material.EGG),
                 GuiPageElement.PageAction.FIRST,
-                "[⏪ View first page (\\1\\)](#00fb9a)"));
+                getLegacyText("[⏪ View first page (\\1\\)](#00fb9a)")));
         this.menu.addElement(new GuiPageElement('l', new ItemStack(Material.ARROW),
                 GuiPageElement.PageAction.PREVIOUS,
-                "[◀ View previous page \\(%prevpage%\\)](#00fb9a)"));
+                getLegacyText("[◀ View previous page \\(%prevpage%\\)](#00fb9a)")));
         this.menu.addElement(new GuiPageElement('n', new ItemStack(Material.SPECTRAL_ARROW),
                 GuiPageElement.PageAction.NEXT,
-                "[View next page \\(%nextpage%\\) ▶](#00fb9a)"));
+                getLegacyText("[View next page \\(%nextpage%\\) ▶](#00fb9a)")));
         this.menu.addElement(new GuiPageElement('e', new ItemStack(Material.EGG),
                 GuiPageElement.PageAction.LAST,
-                "[View last page \\(%pages\\) ⏩](#00fb9a)"));
+                getLegacyText("[View last page \\(%pages\\) ⏩](#00fb9a)")));
     }
 
     @NotNull
@@ -89,11 +85,11 @@ public class SavedPositionMenu {
                         final OnlineUser onlineUser = huskHomesAPI.adaptUser(player);
                         switch (click.getType()) {
                             case LEFT -> {
-                                player.closeInventory();
+                                menu.close(true);
                                 huskHomesAPI.teleportPlayer(onlineUser, position, true);
                             }
                             case RIGHT -> {
-                                player.closeInventory();
+                                menu.close(true);
                                 player.performCommand(switch (menuType) {
                                     case HOME, PUBLIC_HOME ->
                                             "huskhomes:edithome " + ((Home) position).owner.username + "." + position.meta.name;
@@ -101,9 +97,11 @@ public class SavedPositionMenu {
                                 });
                             }
                             case SHIFT_LEFT -> {
-                                player.closeInventory();
-                                if (canEditPosition(position, player)) {
-                                    setPositionMaterial(position, player.getInventory().getItemInMainHand().getType());
+                                if (canEditPosition(position, player) && player.getInventory().getItemInMainHand().getType() != Material.AIR) {
+                                    menu.close(true);
+                                    setPositionMaterial(position, player.getInventory().getItemInMainHand().getType())
+                                            .thenRun(() -> player.sendMessage(getLegacyText("[Successfully updated the icon for](#00fb9a) [%1%](#00fb9a bold)")
+                                                    .replaceAll("%1%", position.meta.name)));
                                 }
                             }
                         }
@@ -111,8 +109,9 @@ public class SavedPositionMenu {
                     return true;
                 },
                 getLegacyText("[" + position.meta.name + "](#00fb9a)"),
-                getLegacyText("&7ℹ" + (position.meta.description.isBlank()
-                        ? getLocale("item_no_description") : position.meta.description)));
+                getLegacyText("&7ℹ " + (position.meta.description.isBlank()
+                        ? getLocale("item_no_description").orElse("N/A")
+                        : position.meta.description)));
     }
 
     /**
@@ -122,20 +121,23 @@ public class SavedPositionMenu {
      * @return The material to use if found
      */
     private Optional<Material> getPositionMaterial(@NotNull SavedPosition position) {
-        final String TAG_KEY = "huskhomesgui:icon";
         if (position.meta.tags.containsKey(TAG_KEY)) {
-            return Optional.ofNullable(Material.getMaterial(position.meta.tags.get(TAG_KEY)));
+            return Optional.ofNullable(Material.matchMaterial(position.meta.tags.get(TAG_KEY)));
         }
         return Optional.empty();
     }
 
-    private void setPositionMaterial(@NotNull SavedPosition position, @NotNull Material material) {
-        final String TAG_KEY = "huskhomesgui:icon";
-        position.meta.tags.put(TAG_KEY, material.getKey().toString());
-//todo
-        //        huskHomesAPI.saveHome(position).thenAccept(success -> {
-//
-//        });
+    private CompletableFuture<SavedPositionManager.SaveResult> setPositionMaterial(@NotNull SavedPosition position,
+                                                                                   @NotNull Material material) {
+        final PositionMeta meta = position.meta;
+        meta.tags.put(TAG_KEY, material.getKey().toString());
+        if (menuType == MenuType.WARP) {
+            final Warp warp = (Warp) position;
+            return huskHomesAPI.updateWarpMeta(warp, meta);
+        } else {
+            final Home home = (Home) position;
+            return huskHomesAPI.updateHomeMeta(home, meta);
+        }
     }
 
     /**
@@ -199,10 +201,19 @@ public class SavedPositionMenu {
         return BaseComponent.toLegacyText(new MineDown(mineDown).toComponent());
     }
 
+    /**
+     * Represents different types of {@link SavedPosition} that a {@link SavedPositionMenu} can display
+     */
     protected enum MenuType {
-        HOME,
-        PUBLIC_HOME,
-        WARP
+        HOME(Material.ORANGE_STAINED_GLASS_PANE),
+        PUBLIC_HOME(Material.LIME_STAINED_GLASS_PANE),
+        WARP(Material.CYAN_STAINED_GLASS_PANE);
+
+        private final Material fillerMaterial;
+
+        MenuType(@NotNull Material fillerMaterial) {
+            this.fillerMaterial = fillerMaterial;
+        }
     }
 
 }
