@@ -110,8 +110,12 @@ public class SavedPositionMenu {
                 },
                 getLegacyText("[" + position.meta.name + "](#00fb9a)"),
                 getLegacyText("&7ℹ " + (position.meta.description.isBlank()
-                        ? getLocale("item_no_description").orElse("N/A")
-                        : position.meta.description)));
+                        ? huskHomesAPI.getRawLocale("item_no_description").orElse("N/A")
+                        : position.meta.description)),
+                " ",
+                getLegacyText("[Left Click:](#00fb9a) [Teleport](gray)"),
+                getLegacyText("[Right Click:](#00fb9a) [Edit](gray)"),
+                getLegacyText("[Shift Click:](#00fb9a) [Set icon](gray)"));
     }
 
     /**
@@ -127,6 +131,13 @@ public class SavedPositionMenu {
         return Optional.empty();
     }
 
+    /**
+     * Set the material to use for a {@link SavedPosition} and update it in the database
+     *
+     * @param position The saved position
+     * @param material The {@link Material} to use
+     * @return A future that completes when the saved position has been updated
+     */
     private CompletableFuture<SavedPositionManager.SaveResult> setPositionMaterial(@NotNull SavedPosition position,
                                                                                    @NotNull Material material) {
         final PositionMeta meta = position.meta;
