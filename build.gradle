@@ -38,7 +38,7 @@ tasks.withType(JavaCompile) {
 shadowJar {
     relocate 'de.themoep.inventorygui', 'net.william278.huskhomes.gui.libraries.inventorygui'
     relocate 'de.themoep.minedown', 'net.william278.huskhomes.gui.libraries.minedown'
-    relocate 'net.kyori.adventure', 'net.william278.huskhomes.gui.libraries.adventure'
+    relocate 'net.kyori', 'net.william278.huskhomes.gui.libraries'
 }
 
 jar {
