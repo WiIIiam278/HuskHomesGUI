@@ -1,9 +1,12 @@
 package net.william278.huskhomes.gui;
 
-import de.themoep.inventorygui.*;
-import net.md_5.bungee.api.chat.BaseComponent;
+import de.themoep.inventorygui.GuiElementGroup;
+import de.themoep.inventorygui.GuiPageElement;
+import de.themoep.inventorygui.InventoryGui;
+import de.themoep.inventorygui.StaticGuiElement;
+import de.themoep.minedown.adventure.MineDown;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.william278.huskhomes.api.HuskHomesAPI;
-import net.william278.huskhomes.libraries.minedown.MineDown;
 import net.william278.huskhomes.player.OnlineUser;
 import net.william278.huskhomes.position.*;
 import net.william278.huskhomes.util.Permission;
@@ -194,11 +197,12 @@ public class SavedPositionMenu {
      * @param replacements The replacements to use
      * @return The legacy text
      */
+    @SuppressWarnings("SameParameterValue")
     @NotNull
     private Optional<String> getLocale(@NotNull String localeKey, String... replacements) {
         return huskHomesAPI.getLocale(localeKey, replacements)
-                .map(MineDown::toComponent)
-                .map(BaseComponent::toLegacyText);
+                .map(mineDown -> LegacyComponentSerializer.builder()
+                        .build().serialize(mineDown.toComponent()));
     }
 
     /**
@@ -209,7 +213,8 @@ public class SavedPositionMenu {
      */
     @NotNull
     private String getLegacyText(@NotNull String mineDown) {
-        return BaseComponent.toLegacyText(new MineDown(mineDown).toComponent());
+        return LegacyComponentSerializer.builder()
+                .build().serialize(new MineDown(mineDown).toComponent());
     }
 
     /**
