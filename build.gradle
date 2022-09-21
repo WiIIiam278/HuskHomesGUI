@@ -20,7 +20,7 @@ dependencies {
     compileOnly 'net.william278:HuskHomes2:4db869abf1'
     compileOnly 'org.jetbrains:annotations:23.0.0'
 
-    implementation 'de.themoep:inventorygui:1.5.1-SNAPSHOT'
+    implementation 'de.themoep:inventorygui:1.6-SNAPSHOT'
     implementation 'de.themoep:minedown:1.7.1-SNAPSHOT'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
