@@ -21,7 +21,7 @@ dependencies {
     compileOnly 'org.jetbrains:annotations:23.0.0'
 
     implementation 'de.themoep:inventorygui:1.6-SNAPSHOT'
-    implementation 'de.themoep:minedown-adventure:1.7.1-SNAPSHOT'
+    implementation 'de.themoep:minedown-adventure:1.7.2-SNAPSHOT'
     implementation 'net.kyori:adventure-text-serializer-legacy:4.11.0'
     implementation 'net.kyori:adventure-platform-bukkit:4.1.2'
 
