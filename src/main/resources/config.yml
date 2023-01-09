@@ -1,0 +1,33 @@
+config-version: 0
+
+# 插件消息
+# Plugin Message
+message:
+  chest-title:
+    Public-Homes: 'Public Homes'
+    Homes: "%1%'s Homes"
+    Warps: 'Warps'
+  pagination:
+    FIRST: '[⏪ View first page (\1\)](#00fb9a)'
+    FIRST-item: EGG
+    PREVIOUS: '[◀ View previous page \(%prevpage%\)](#00fb9a)'
+    PREVIOUS-item: ARROW
+    NEXT: '[View next page \(%nextpage%\) ▶](#00fb9a)'
+    NEXT-item: SPECTRAL_ARROW
+    LAST: '[View last page \(%pages\) ⏩](#00fb9a)'
+    LAST-item: EGG
+  chat:
+    updated-icon: '[Successfully updated the icon for](#00fb9a) [%1%](#00fb9a bold)'
+  item:
+    name: '[%1%](#00fb9a)'
+    description: '&7ℹ %1%'
+    description-var1-no: 'N/A'
+    space: ' '
+    Left: '[Left Click:](#00fb9a) [Teleport](gray)'
+    Right: '[Right Click:](#00fb9a) [Edit](gray)'
+    Shift: '[Shift Click:](#00fb9a) [Set icon](gray)'
+    default-item: STONE
+  menu-type:
+    HOME-item: ORANGE_STAINED_GLASS_PANE
+    PUBLIC_HOME-item: LIME_STAINED_GLASS_PANE
+    WARP-item: CYAN_STAINED_GLASS_PANE

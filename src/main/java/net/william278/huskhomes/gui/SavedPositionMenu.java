@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+import static net.william278.huskhomes.gui.Util.*;
+
 /**
  * A menu for displaying a list of saved positions
  */
@@ -57,18 +59,22 @@ public class SavedPositionMenu {
 
         // Add pagination handling
         this.menu.addElement(getPositionGroup(positionList));
-        this.menu.addElement(new GuiPageElement('b', new ItemStack(Material.EGG),
+        this.menu.addElement(new GuiPageElement('b',
+                new ItemStack(getItemFromConfig("message.pagination.FIRST-item")),
                 GuiPageElement.PageAction.FIRST,
-                getLegacyText("[⏪ View first page (\\1\\)](#00fb9a)")));
-        this.menu.addElement(new GuiPageElement('l', new ItemStack(Material.ARROW),
+                getLegacyText( getMessageFromConfig("message.pagination.FIRST") )));
+        this.menu.addElement(new GuiPageElement('l',
+                new ItemStack(getItemFromConfig("message.pagination.PREVIOUS-item")),
                 GuiPageElement.PageAction.PREVIOUS,
-                getLegacyText("[◀ View previous page \\(%prevpage%\\)](#00fb9a)")));
-        this.menu.addElement(new GuiPageElement('n', new ItemStack(Material.SPECTRAL_ARROW),
+                getLegacyText( getMessageFromConfig("message.pagination.PREVIOUS") )));
+        this.menu.addElement(new GuiPageElement('n',
+                new ItemStack(getItemFromConfig("message.pagination.NEXT-item")),
                 GuiPageElement.PageAction.NEXT,
-                getLegacyText("[View next page \\(%nextpage%\\) ▶](#00fb9a)")));
-        this.menu.addElement(new GuiPageElement('e', new ItemStack(Material.EGG),
+                getLegacyText( getMessageFromConfig("message.pagination.NEXT") )));
+        this.menu.addElement(new GuiPageElement('e',
+                new ItemStack(getItemFromConfig("message.pagination.LAST-item")),
                 GuiPageElement.PageAction.LAST,
-                getLegacyText("[View last page \\(%pages\\) ⏩](#00fb9a)")));
+                getLegacyText( getMessageFromConfig("message.pagination.LAST") )));
     }
 
     @NotNull
@@ -82,7 +88,8 @@ public class SavedPositionMenu {
 
     @NotNull
     private StaticGuiElement getPositionButton(@NotNull SavedPosition position) {
-        return new StaticGuiElement('e', new ItemStack(getPositionMaterial(position).orElse(Material.STONE)),
+        return new StaticGuiElement('e',
+                new ItemStack(getPositionMaterial(position).orElse(getItemFromConfig("message.item.default-item"))),
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
                         final OnlineUser onlineUser = huskHomesAPI.adaptUser(player);
@@ -103,7 +110,7 @@ public class SavedPositionMenu {
                                 if (canEditPosition(position, player) && player.getInventory().getItemInMainHand().getType() != Material.AIR) {
                                     menu.close(true);
                                     setPositionMaterial(position, player.getInventory().getItemInMainHand().getType())
-                                            .thenRun(() -> player.sendMessage(getLegacyText("[Successfully updated the icon for](#00fb9a) [%1%](#00fb9a bold)")
+                                            .thenRun(() -> player.sendMessage(getLegacyText( getMessageFromConfig("message.chat.updated-icon") )
                                                     .replaceAll("%1%", position.meta.name)));
                                 }
                             }
@@ -111,14 +118,14 @@ public class SavedPositionMenu {
                     }
                     return true;
                 },
-                getLegacyText("[" + position.meta.name + "](#00fb9a)"),
-                getLegacyText("&7ℹ " + (position.meta.description.isBlank()
-                        ? huskHomesAPI.getRawLocale("item_no_description").orElse("N/A")
+                getLegacyText(getMessageFromConfig("message.item.name").replace("%1%", position.meta.name)),
+                getLegacyText(getMessageFromConfig("message.item.description").replace("%1%", position.meta.description.isBlank()
+                        ? huskHomesAPI.getRawLocale("item_no_description").orElse(getMessageFromConfig("message.item.description-var1-no"))
                         : position.meta.description)),
-                " ",
-                getLegacyText("[Left Click:](#00fb9a) [Teleport](gray)"),
-                getLegacyText("[Right Click:](#00fb9a) [Edit](gray)"),
-                getLegacyText("[Shift Click:](#00fb9a) [Set icon](gray)"));
+                getMessageFromConfig("message.item.space"),
+                getLegacyText(getMessageFromConfig("message.item.Left")),
+                getLegacyText(getMessageFromConfig("message.item.Right")),
+                getLegacyText(getMessageFromConfig("message.item.Shift")));
     }
 
     /**
@@ -221,9 +228,9 @@ public class SavedPositionMenu {
      * Represents different types of {@link SavedPosition} that a {@link SavedPositionMenu} can display
      */
     protected enum MenuType {
-        HOME(Material.ORANGE_STAINED_GLASS_PANE),
-        PUBLIC_HOME(Material.LIME_STAINED_GLASS_PANE),
-        WARP(Material.CYAN_STAINED_GLASS_PANE);
+        HOME(getItemFromConfig("message.menu-type.HOME-item")),
+        PUBLIC_HOME(getItemFromConfig("message.menu-type.PUBLIC_HOME-item")),
+        WARP(getItemFromConfig("message.menu-type.WARP-item"));
 
         private final Material fillerMaterial;
 

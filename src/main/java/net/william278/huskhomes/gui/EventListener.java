@@ -1,25 +1,25 @@
 package net.william278.huskhomes.gui;
-
 import net.william278.huskhomes.event.HomeListEvent;
 import net.william278.huskhomes.event.WarpListEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
+import static net.william278.huskhomes.gui.Util.getMessageFromConfig;
+
 public class EventListener implements Listener {
 
     private final HuskHomesGui plugin;
-
     protected EventListener(@NotNull HuskHomesGui plugin) {
         this.plugin = plugin;
     }
-
     @EventHandler
     public void onHomeListView(@NotNull HomeListEvent event) {
         event.setCancelled(true);
         SavedPositionMenu.create(plugin, event.getHomes(),
-                        event.getIsPublicHomeList() ? SavedPositionMenu.MenuType.PUBLIC_HOME : SavedPositionMenu.MenuType.HOME,
-                        event.getIsPublicHomeList() ? "Public Homes" : event.getOnlineUser().username + "'s Homes")
+                event.getIsPublicHomeList() ? SavedPositionMenu.MenuType.PUBLIC_HOME : SavedPositionMenu.MenuType.HOME,
+                event.getIsPublicHomeList() ? getMessageFromConfig("message.chest-title.Public-Homes")
+                                            : getMessageFromConfig("message.chest-title.Homes").replace("%1%", event.getOnlineUser().username))
                 .show(event.getOnlineUser());
     }
 

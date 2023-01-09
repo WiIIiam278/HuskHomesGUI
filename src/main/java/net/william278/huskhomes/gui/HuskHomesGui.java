@@ -5,14 +5,24 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.logging.Level;
 
 public class HuskHomesGui extends JavaPlugin {
+    private static HuskHomesGui plugin;
 
     @Override
     public void onEnable() {
+        plugin = this;
+        plugin.saveDefaultConfig();
+        plugin.getConfig();
+
         // Register the event listener
         getServer().getPluginManager().registerEvents(new EventListener(this), this);
 
         // Log to console
         getLogger().log(Level.INFO, "Successfully enabled HuskHomes v" + getDescription().getVersion());
+    }
+
+
+    public static HuskHomesGui getInstance() {
+        return plugin;
     }
 
 }
