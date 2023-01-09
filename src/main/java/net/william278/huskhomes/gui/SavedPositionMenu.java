@@ -173,7 +173,7 @@ public class SavedPositionMenu {
         if (menuType == MenuType.WARP) {
             if (!player.hasPermission(Permission.COMMAND_EDIT_WARP.node)) {
                 System.out.println("没有权限");
-                getLocale("error_no_permission").ifPresent(player::sendMessage);
+                // getLocale("error_no_permission").ifPresent(player::sendMessage);
                 return false;
             }
             return true;
