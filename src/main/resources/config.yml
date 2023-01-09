@@ -14,7 +14,7 @@ message:
     PREVIOUS-item: ARROW
     NEXT: '[View next page \(%nextpage%\) ▶](#00fb9a)'
     NEXT-item: SPECTRAL_ARROW
-    LAST: '[View last page \(%pages\) ⏩](#00fb9a)'
+    LAST: '[View last page \(%pages%\) ⏩](#00fb9a)'
     LAST-item: EGG
   chat:
     updated-icon: '[Successfully updated the icon for](#00fb9a) [%1%](#00fb9a bold)'
