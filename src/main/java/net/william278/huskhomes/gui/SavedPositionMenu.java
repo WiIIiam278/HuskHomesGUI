@@ -1,9 +1,6 @@
 package net.william278.huskhomes.gui;
 
-import de.themoep.inventorygui.GuiElementGroup;
-import de.themoep.inventorygui.GuiPageElement;
-import de.themoep.inventorygui.InventoryGui;
-import de.themoep.inventorygui.StaticGuiElement;
+import de.themoep.inventorygui.*;
 import de.themoep.minedown.adventure.MineDown;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.william278.huskhomes.api.HuskHomesAPI;
@@ -11,6 +8,7 @@ import net.william278.huskhomes.player.OnlineUser;
 import net.william278.huskhomes.position.*;
 import net.william278.huskhomes.util.Permission;
 import org.bukkit.Material;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +28,7 @@ public class SavedPositionMenu {
             "ppppppppp",
             "ppppppppp",
             "ppppppppp",
-            "bl     ne",
+            "bl  i  ne",
     };
     private static final String TAG_KEY = "huskhomesgui:icon";
     private final InventoryGui menu;
@@ -75,6 +73,14 @@ public class SavedPositionMenu {
                 new ItemStack(getItemFromConfig("message.pagination.LAST-item")),
                 GuiPageElement.PageAction.LAST,
                 getLegacyText( getMessageFromConfig("message.pagination.LAST") )));
+        // 信息显示
+        if(getBooleanFromConfig("message.pagination.INFO-enable")){
+            this.menu.addElement(new GuiPageElement('i',
+                    new ItemStack(getItemFromConfig("message.pagination.INFO-item")),
+                    null,
+                    getLegacyText( getMessageFromConfig("message.pagination.INFO") )));
+        }
+
     }
 
     @NotNull
@@ -172,8 +178,7 @@ public class SavedPositionMenu {
         // Validate warp permission checks
         if (menuType == MenuType.WARP) {
             if (!player.hasPermission(Permission.COMMAND_EDIT_WARP.node)) {
-                System.out.println("没有权限");
-                // getLocale("error_no_permission").ifPresent(player::sendMessage);
+//                getLocale("error_no_permission").ifPresent(player::sendMessage);
                 return false;
             }
             return true;
@@ -184,12 +189,12 @@ public class SavedPositionMenu {
             final Home home = (Home) position;
             if (player.getUniqueId().equals(home.owner.uuid)) {
                 if (!player.hasPermission(Permission.COMMAND_EDIT_HOME.node)) {
-                    getLocale("error_no_permission").ifPresent(player::sendMessage);
+//                    getLocale("error_no_permission").ifPresent(player::sendMessage);
                     return false;
                 }
             } else {
                 if (!player.hasPermission(Permission.COMMAND_EDIT_HOME_OTHER.node)) {
-                    getLocale("error_no_permission").ifPresent(player::sendMessage);
+//                    getLocale("error_no_permission").ifPresent(player::sendMessage);
                     return false;
                 }
             }

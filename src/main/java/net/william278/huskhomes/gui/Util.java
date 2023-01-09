@@ -10,6 +10,11 @@ public class Util {
         return HuskHomesGui.getInstance().getConfig();
     }
 
+    // 获取布尔值
+    public static Boolean getBooleanFromConfig(String path) {
+        return fromConfig().getBoolean(path);
+    }
+
     // 获取消息
     public static String getMessageFromConfig(String path) {
         return fromConfig().getString(path);
