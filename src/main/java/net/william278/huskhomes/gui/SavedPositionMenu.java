@@ -77,7 +77,8 @@ public class SavedPositionMenu {
         if(getBooleanFromConfig("message.pagination.INFO-enable")){
             this.menu.addElement(new StaticGuiElement('i',
                     new ItemStack(getItemFromConfig("message.pagination.INFO-item")),
-                    getLegacyText( getMessageFromConfig("message.pagination.INFO") )));
+                    getLegacyText( getMessageFromConfig("message.pagination.INFO") ),
+                    getLegacyText( getMessageFromConfig("message.pagination.INFO-message") )));
         }
 
     }

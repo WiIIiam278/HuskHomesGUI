@@ -23,7 +23,8 @@ message:
     LAST-item: EGG
 
     INFO-enable: true
-    INFO: '§rLeft Click: Teleport\\nRight Click: Edit\\nShift Click: Set icon'
+    INFO: 'Operating Instructions'
+    INFO-message: '§rLeft Click: Teleport\\nRight Click: Edit\\nShift Click: Set icon'
     INFO-item: OAK_SIGN
 
 
