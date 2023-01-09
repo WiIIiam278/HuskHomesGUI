@@ -75,9 +75,8 @@ public class SavedPositionMenu {
                 getLegacyText( getMessageFromConfig("message.pagination.LAST") )));
         // 信息显示
         if(getBooleanFromConfig("message.pagination.INFO-enable")){
-            this.menu.addElement(new GuiPageElement('i',
+            this.menu.addElement(new StaticGuiElement('i',
                     new ItemStack(getItemFromConfig("message.pagination.INFO-item")),
-                    null,
                     getLegacyText( getMessageFromConfig("message.pagination.INFO") )));
         }
 
