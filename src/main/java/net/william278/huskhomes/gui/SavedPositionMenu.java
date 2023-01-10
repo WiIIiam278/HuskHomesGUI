@@ -88,7 +88,9 @@ public class SavedPositionMenu {
             this.menu.addElement(new StaticGuiElement('i',
                     new ItemStack(getItemFromConfig("menu.pagination.INFO.item")),
                     getLegacyText(getMessageFromConfig("menu.pagination.INFO.title")),
-                    getLegacyText(getMessageFromConfig("menu.pagination.INFO.message"))));
+                    getLegacyText(getMessageFromConfig("menu.pagination.INFO.message.A")),
+                    getLegacyText(getMessageFromConfig("menu.pagination.INFO.message.B")),
+                    getLegacyText(getMessageFromConfig("menu.pagination.INFO.message.C"))));
         }
 
     }

@@ -45,7 +45,11 @@ menu:
     INFO:
       enable: true
       title: 'Operating Instructions'
-      message: '§7Left Click: Teleport\nRight Click: Edit\nShift Click: Set icon'
+      # '§7Left Click: Teleport\nRight Click: Edit\nShift Click: Set icon'
+      message:
+        A: '§7Left Click: Teleport'
+        B: '§7Right Click: Edit'
+        C: '§7Shift Click: Set icon'
       item: OAK_SIGN
 
 
