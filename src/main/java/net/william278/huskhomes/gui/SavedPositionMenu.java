@@ -8,11 +8,11 @@ import net.william278.huskhomes.player.OnlineUser;
 import net.william278.huskhomes.position.*;
 import net.william278.huskhomes.util.Permission;
 import org.bukkit.Material;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -24,12 +24,21 @@ import static net.william278.huskhomes.gui.Util.*;
  */
 public class SavedPositionMenu {
 
-    private static final String[] MENU_LAYOUT = {
+//    private static final String[] MENU_LAYOUT = {
+//            "ppppppppp",
+//            "ppppppppp",
+//            "ppppppppp",
+//            "bl  i  ne",
+//    };
+    //;
+    private String[] MENU_LAYOUT = Arrays.copyOfRange(new String[]{
             "ppppppppp",
             "ppppppppp",
             "ppppppppp",
-            "bl  i  ne",
-    };
+            "ppppppppp",
+            "ppppppppp",
+            "bl  i  ne",}, 6 - getIntFromConfig("menu.size"), 6);
+
     private static final String TAG_KEY = "huskhomesgui:icon";
     private final InventoryGui menu;
     private final HuskHomesAPI huskHomesAPI;
@@ -58,27 +67,27 @@ public class SavedPositionMenu {
         // Add pagination handling
         this.menu.addElement(getPositionGroup(positionList));
         this.menu.addElement(new GuiPageElement('b',
-                new ItemStack(getItemFromConfig("message.pagination.FIRST-item")),
+                new ItemStack(getItemFromConfig("menu.pagination.FIRST.item")),
                 GuiPageElement.PageAction.FIRST,
-                getLegacyText( getMessageFromConfig("message.pagination.FIRST") )));
+                getLegacyText( getMessageFromConfig("menu.pagination.FIRST.title") )));
         this.menu.addElement(new GuiPageElement('l',
-                new ItemStack(getItemFromConfig("message.pagination.PREVIOUS-item")),
+                new ItemStack(getItemFromConfig("menu.pagination.PREVIOUS.item")),
                 GuiPageElement.PageAction.PREVIOUS,
-                getLegacyText( getMessageFromConfig("message.pagination.PREVIOUS") )));
+                getLegacyText( getMessageFromConfig("menu.pagination.PREVIOUS.title") )));
         this.menu.addElement(new GuiPageElement('n',
-                new ItemStack(getItemFromConfig("message.pagination.NEXT-item")),
+                new ItemStack(getItemFromConfig("menu.pagination.NEXT.item")),
                 GuiPageElement.PageAction.NEXT,
-                getLegacyText( getMessageFromConfig("message.pagination.NEXT") )));
+                getLegacyText( getMessageFromConfig("menu.pagination.NEXT.title") )));
         this.menu.addElement(new GuiPageElement('e',
-                new ItemStack(getItemFromConfig("message.pagination.LAST-item")),
+                new ItemStack(getItemFromConfig("menu.pagination.LAST.item")),
                 GuiPageElement.PageAction.LAST,
-                getLegacyText( getMessageFromConfig("message.pagination.LAST") )));
+                getLegacyText( getMessageFromConfig("menu.pagination.LAST.title") )));
         // 信息显示
-        if(getBooleanFromConfig("message.pagination.INFO-enable")){
+        if(getBooleanFromConfig("menu.pagination.INFO-enable")){
             this.menu.addElement(new StaticGuiElement('i',
-                    new ItemStack(getItemFromConfig("message.pagination.INFO-item")),
-                    getLegacyText( getMessageFromConfig("message.pagination.INFO") ),
-                    getLegacyText( getMessageFromConfig("message.pagination.INFO-message") )));
+                    new ItemStack(getItemFromConfig("menu.pagination.INFO.item")),
+                    getLegacyText( getMessageFromConfig("menu.pagination.INFO.title") ),
+                    getLegacyText( getMessageFromConfig("menu.pagination.INFO.message") )));
         }
 
     }
@@ -95,7 +104,7 @@ public class SavedPositionMenu {
     @NotNull
     private StaticGuiElement getPositionButton(@NotNull SavedPosition position) {
         return new StaticGuiElement('e',
-                new ItemStack(getPositionMaterial(position).orElse(getItemFromConfig("message.item.default-item"))),
+                new ItemStack(getPositionMaterial(position).orElse(getItemFromConfig("menu.item.default-item"))),
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
                         final OnlineUser onlineUser = huskHomesAPI.adaptUser(player);
@@ -116,7 +125,7 @@ public class SavedPositionMenu {
                                 if (canEditPosition(position, player) && player.getInventory().getItemInMainHand().getType() != Material.AIR) {
                                     menu.close(true);
                                     setPositionMaterial(position, player.getInventory().getItemInMainHand().getType())
-                                            .thenRun(() -> player.sendMessage(getLegacyText( getMessageFromConfig("message.chat.updated-icon") )
+                                            .thenRun(() -> player.sendMessage(getLegacyText( getMessageFromConfig("chat.updated-icon") )
                                                     .replaceAll("%1%", position.meta.name)));
                                 }
                             }
@@ -124,14 +133,14 @@ public class SavedPositionMenu {
                     }
                     return true;
                 },
-                getLegacyText(getMessageFromConfig("message.item.name").replace("%1%", position.meta.name)),
-                getLegacyText(getMessageFromConfig("message.item.description").replace("%1%", position.meta.description.isBlank()
-                        ? huskHomesAPI.getRawLocale("item_no_description").orElse(getMessageFromConfig("message.item.description-var1-no"))
+                getLegacyText(getMessageFromConfig("menu.item.name").replace("%1%", position.meta.name)),
+                getLegacyText(getMessageFromConfig("menu.item.description").replace("%1%", position.meta.description.isBlank()
+                        ? huskHomesAPI.getRawLocale("menu.item_no_description").orElse(getMessageFromConfig("menu.item.description-var1-no"))
                         : position.meta.description)),
-                getMessageFromConfig("message.item.space"),
-                getLegacyText(getMessageFromConfig("message.item.Left")),
-                getLegacyText(getMessageFromConfig("message.item.Right")),
-                getLegacyText(getMessageFromConfig("message.item.Shift")));
+                getMessageFromConfig("menu.item.space"),
+                getLegacyText(getMessageFromConfig("menu.item.Left")),
+                getLegacyText(getMessageFromConfig("menu.item.Right")),
+                getLegacyText(getMessageFromConfig("menu.item.Shift")));
     }
 
     /**
@@ -234,9 +243,9 @@ public class SavedPositionMenu {
      * Represents different types of {@link SavedPosition} that a {@link SavedPositionMenu} can display
      */
     protected enum MenuType {
-        HOME(getItemFromConfig("message.menu-type.HOME-item")),
-        PUBLIC_HOME(getItemFromConfig("message.menu-type.PUBLIC_HOME-item")),
-        WARP(getItemFromConfig("message.menu-type.WARP-item"));
+        HOME(getItemFromConfig("menu.theme-item.HOME")),
+        PUBLIC_HOME(getItemFromConfig("menu.theme-item.PUBLIC_HOME")),
+        WARP(getItemFromConfig("menu.theme-item.WARP"));
 
         private final Material fillerMaterial;
 

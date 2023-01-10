@@ -1,38 +1,22 @@
 config-version: 0
 
-# 插件消息
-# Plugin Message
-message:
-  chest-title:
-    Public-Homes: 'Public Homes'
-    Homes: "%1%'s Homes"
-    Warps: 'Warps'
 
+menu:
 
-  pagination:
-    FIRST: '[⏪ View first page (\1\)](#00fb9a)'
-    FIRST-item: EGG
+  size: 4 # 2 ~ 6
 
-    PREVIOUS: '[◀ View previous page \(%prevpage%\)](#00fb9a)'
-    PREVIOUS-item: ARROW
+  title:
+    HOME: "%1%'s Homes"
+    PUBLIC_HOME: 'Public Homes'
+    WARP: 'Warps'
 
-    NEXT: '[View next page \(%nextpage%\) ▶](#00fb9a)'
-    NEXT-item: SPECTRAL_ARROW
-
-    LAST: '[View last page \(%pages%\) ⏩](#00fb9a)'
-    LAST-item: EGG
-
-    INFO-enable: true
-    INFO: 'Operating Instructions'
-    INFO-message: '§rLeft Click: Teleport\\nRight Click: Edit\\nShift Click: Set icon'
-    INFO-item: OAK_SIGN
-
-
-  chat:
-    updated-icon: '[Successfully updated the icon for](#00fb9a) [%1%](#00fb9a bold)'
-
+  theme-item:
+    HOME: ORANGE_STAINED_GLASS_PANE
+    PUBLIC_HOME: LIME_STAINED_GLASS_PANE
+    WARP: CYAN_STAINED_GLASS_PANE
 
   item:
+    default-item: STONE
     name: '[%1%](#00fb9a)'
     description: '&7ℹ %1%'
     description-var1-no: 'N/A'
@@ -40,10 +24,34 @@ message:
     Left: '[Left Click:](#00fb9a) [Teleport](gray)'
     Right: '[Right Click:](#00fb9a) [Edit](gray)'
     Shift: '[Shift Click:](#00fb9a) [Set icon](gray)'
-    default-item: STONE
+
+  pagination:
+    FIRST:
+      title: '[⏪ View first page (\1\)](#00fb9a)'
+      item: EGG
+
+    PREVIOUS:
+      title: '[◀ View previous page \(%prevpage%\)](#00fb9a)'
+      item: ARROW
+
+    NEXT:
+      title: '[View next page \(%nextpage%\) ▶](#00fb9a)'
+      item: SPECTRAL_ARROW
+
+    LAST:
+      title: '[View last page \(%pages%\) ⏩](#00fb9a)'
+      item: EGG
+
+    INFO:
+      enable: true
+      title: 'Operating Instructions'
+      message: '§7Left Click: Teleport\nRight Click: Edit\nShift Click: Set icon'
+      item: OAK_SIGN
 
 
-  menu-type:
-    HOME-item: ORANGE_STAINED_GLASS_PANE
-    PUBLIC_HOME-item: LIME_STAINED_GLASS_PANE
-    WARP-item: CYAN_STAINED_GLASS_PANE
+chat:
+  updated-icon: '[Successfully updated the icon for](#00fb9a) [%1%](#00fb9a bold)'
+
+
+
+

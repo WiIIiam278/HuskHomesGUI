@@ -18,15 +18,15 @@ public class EventListener implements Listener {
         event.setCancelled(true);
         SavedPositionMenu.create(plugin, event.getHomes(),
                 event.getIsPublicHomeList() ? SavedPositionMenu.MenuType.PUBLIC_HOME : SavedPositionMenu.MenuType.HOME,
-                event.getIsPublicHomeList() ? getMessageFromConfig("message.chest-title.Public-Homes")
-                                            : getMessageFromConfig("message.chest-title.Homes").replace("%1%", event.getOnlineUser().username))
+                event.getIsPublicHomeList() ? getMessageFromConfig("menu.title.PUBLIC_HOME")
+                                            : getMessageFromConfig("menu.title.HOME").replace("%1%", event.getOnlineUser().username))
                 .show(event.getOnlineUser());
     }
 
     @EventHandler
     public void onWarpListView(@NotNull WarpListEvent event) {
         event.setCancelled(true);
-        SavedPositionMenu.create(plugin, event.getWarps(), SavedPositionMenu.MenuType.WARP, "Warps")
+        SavedPositionMenu.create(plugin, event.getWarps(), SavedPositionMenu.MenuType.WARP, getMessageFromConfig("menu.title.WARP"))
                 .show(event.getOnlineUser());
     }
 

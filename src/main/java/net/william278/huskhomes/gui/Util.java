@@ -15,6 +15,11 @@ public class Util {
         return fromConfig().getBoolean(path);
     }
 
+    // 获取数字
+    public static int getIntFromConfig(String path) {
+        return fromConfig().getInt(path);
+    }
+
     // 获取消息
     public static String getMessageFromConfig(String path) {
         return fromConfig().getString(path);
