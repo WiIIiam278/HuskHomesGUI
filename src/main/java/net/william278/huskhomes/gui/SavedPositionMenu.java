@@ -82,7 +82,7 @@ public class SavedPositionMenu {
         this.menu.setFiller(new ItemStack(menuType.fillerMaterial, 1));
 
         // Add pagination handling
-        this.menu.addElement(getPositionGroup(positionList));
+        this.menu.addElement(getPositionGroup(plugin, positionList));
         this.menu.addElement(new GuiPageElement('b',
                 new ItemStack(getItemFromConfig("menu.pagination.FIRST.item")),
                 GuiPageElement.PageAction.FIRST,
@@ -113,17 +113,19 @@ public class SavedPositionMenu {
 
     // 遍历传送点, 并添加按钮
     @NotNull
-    private GuiElementGroup getPositionGroup(@NotNull List<? extends SavedPosition> positions) {
+    private GuiElementGroup getPositionGroup(@NotNull HuskHomesGui plugin,
+                                             @NotNull List<? extends SavedPosition> positions) {
         final GuiElementGroup group = new GuiElementGroup('p');
         for (SavedPosition position : positions) {
-            group.addElement(getPositionButton(position));
+            group.addElement(getPositionButton(plugin, position));
         }
         return group;
     }
 
     // 创建一个传送点按钮
     @NotNull
-    private StaticGuiElement getPositionButton(@NotNull SavedPosition position) {
+    private StaticGuiElement getPositionButton(@NotNull HuskHomesGui plugin,
+                                               @NotNull SavedPosition position) {
         ItemStack position_item = new ItemStack(getPositionMaterial(position).orElse(getItemFromConfig("menu.item.default-item")));
         return new StaticGuiElement('e',
                 position_item,
@@ -147,7 +149,7 @@ public class SavedPositionMenu {
 
                                 switch (menuType) {
                                     case HOME, PUBLIC_HOME -> {
-                                        getEditGui(position, position_item).show(player);
+                                        getEditGui(plugin, position, position_item).show(player);
                                     }
                                     case WARP -> {
 
@@ -177,7 +179,9 @@ public class SavedPositionMenu {
     }
 
     // 输出编辑菜单
-    private InventoryGui getEditGui(SavedPosition position, ItemStack item) {
+    private InventoryGui getEditGui(@NotNull HuskHomesGui plugin,
+                                    SavedPosition position,
+                                    ItemStack item) {
         // a = 背景
         // b = ~~返回~~ 关闭 (不会写返回= =
         // u = 更新位置
@@ -219,8 +223,7 @@ public class SavedPositionMenu {
         this.edit_menu.addElement(new StaticGuiElement('n',
                 new ItemStack(Material.NAME_TAG),
                 click -> {
-                    Player player = (Player) click.getWhoClicked();
-                    if (player != null) {
+                    if (click.getWhoClicked() instanceof Player player) {
                         System.out.println("点击编辑页面的图标: "+ click.getType()); // test
                         edit_menu.close(true);
                         new AnvilGUI.Builder()
@@ -239,6 +242,7 @@ public class SavedPositionMenu {
                                 .itemRight(new ItemStack(Material.NAME_TAG))
                                 .title("编辑名称")
                                 // 使玩家打开它
+                                .plugin(plugin)
                                 .open(player);
                     }
                     return true;
