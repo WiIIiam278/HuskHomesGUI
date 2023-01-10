@@ -31,13 +31,16 @@ public class SavedPositionMenu {
 //            "bl  i  ne",
 //    };
     // 自定义箱子尺寸
-    private static final String[] MENU_LAYOUT = Arrays.copyOfRange(new String[]{
-            "ppppppppp",
-            "ppppppppp",
-            "ppppppppp",
-            "ppppppppp",
-            "ppppppppp",
-            "bl  i  ne",}, 6 - getIntFromConfig("menu.size"), 6);
+    private static final String[] MENU_LAYOUT = Arrays.copyOfRange(
+            new String[]{
+                "ppppppppp",
+                "ppppppppp",
+                "ppppppppp",
+                "ppppppppp",
+                "ppppppppp",
+                "bl  i  ne",},
+        6 - getIntFromConfig("menu.size"), // 2 ~ 6, 为1时只显示操作栏
+        6);
 
     private static final String TAG_KEY = "huskhomesgui:icon";
     private final InventoryGui menu;
@@ -108,15 +111,18 @@ public class SavedPositionMenu {
     private StaticGuiElement getPositionButton(@NotNull SavedPosition position) {
         return new StaticGuiElement('e',
                 new ItemStack(getPositionMaterial(position).orElse(getItemFromConfig("menu.item.default-item"))),
+                // 点击传送点物品时
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
                         final OnlineUser onlineUser = huskHomesAPI.adaptUser(player);
+                        // test
+                        System.out.println("点击图标: "+ click.getType());
                         switch (click.getType()) {
-                            case LEFT -> {
+                            case LEFT -> { // 左键传送
                                 menu.close(true);
                                 huskHomesAPI.teleportPlayer(onlineUser, position, true);
                             }
-                            case RIGHT -> {
+                            case RIGHT -> { // 右键编辑
                                 menu.close(true);
                                 player.performCommand(switch (menuType) {
                                     case HOME, PUBLIC_HOME ->
@@ -124,7 +130,7 @@ public class SavedPositionMenu {
                                     case WARP -> "huskhomes:editwarp " + position.meta.name;
                                 });
                             }
-                            case SHIFT_LEFT -> {
+                            case SHIFT_LEFT -> { // 设置物品
                                 if (canEditPosition(position, player) && player.getInventory().getItemInMainHand().getType() != Material.AIR) {
                                     menu.close(true);
                                     setPositionMaterial(position, player.getInventory().getItemInMainHand().getType())
