@@ -13,14 +13,17 @@ public class EventListener implements Listener {
     protected EventListener(@NotNull HuskHomesGui plugin) {
         this.plugin = plugin;
     }
+
+
     @EventHandler
     public void onHomeListView(@NotNull HomeListEvent event) {
         event.setCancelled(true);
-        SavedPositionMenu.create(plugin, event.getHomes(),
+        SavedPositionMenu.create(plugin,
+                event.getHomes(),
                 event.getIsPublicHomeList() ? SavedPositionMenu.MenuType.PUBLIC_HOME : SavedPositionMenu.MenuType.HOME,
                 event.getIsPublicHomeList() ? getMessageFromConfig("menu.title.PUBLIC_HOME")
                                             : getMessageFromConfig("menu.title.HOME").replace("%1%", event.getOnlineUser().username))
-                .show(event.getOnlineUser());
+            .show(event.getOnlineUser());
     }
 
     @EventHandler

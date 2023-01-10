@@ -13,6 +13,9 @@ public class HuskHomesGui extends JavaPlugin {
         plugin.saveDefaultConfig();
         plugin.getConfig();
 
+        // 注册指令
+        plugin.getCommand("huskhomesgui").setExecutor(new Command());
+
         // Register the event listener
         getServer().getPluginManager().registerEvents(new EventListener(this), this);
 

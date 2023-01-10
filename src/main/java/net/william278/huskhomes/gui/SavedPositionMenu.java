@@ -3,6 +3,7 @@ package net.william278.huskhomes.gui;
 import de.themoep.inventorygui.*;
 import de.themoep.minedown.adventure.MineDown;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.wesjd.anvilgui.AnvilGUI;
 import net.william278.huskhomes.api.HuskHomesAPI;
 import net.william278.huskhomes.player.OnlineUser;
 import net.william278.huskhomes.position.*;
@@ -30,20 +31,29 @@ public class SavedPositionMenu {
 //            "ppppppppp",
 //            "bl  i  ne",
 //    };
-    // 自定义箱子尺寸
+
+    // 传送点列表GUI // 自定义箱子尺寸
     private static final String[] MENU_LAYOUT = Arrays.copyOfRange(
-            new String[]{
-                "ppppppppp",
-                "ppppppppp",
-                "ppppppppp",
-                "ppppppppp",
-                "ppppppppp",
-                "bl  i  ne",},
-        6 - getIntFromConfig("menu.size"), // 2 ~ 6, 为1时只显示操作栏
-        6);
+            new String[] {
+                    "ppppppppp",
+                    "ppppppppp",
+                    "ppppppppp",
+                    "ppppppppp",
+                    "ppppppppp",
+                    "bl  i  ne"},
+            6 - getIntFromConfig("menu.size"), // 2 ~ 6, 为1时只显示操作栏
+            6);
+
+    // 编辑传送点GUI
+    private static final String[] EDIT_MENU_LAYOUT = new String[] {
+            "aa     ab",
+            "aundip ra",
+            "aa     aa"};
+
 
     private static final String TAG_KEY = "huskhomesgui:icon";
     private final InventoryGui menu;
+    private final InventoryGui edit_menu;
     private final HuskHomesAPI huskHomesAPI;
     private final MenuType menuType;
 
@@ -57,11 +67,14 @@ public class SavedPositionMenu {
         menu.show(huskHomesAPI.getPlayer(onlineUser));
     }
 
-    private SavedPositionMenu(@NotNull HuskHomesGui plugin, @NotNull HuskHomesAPI huskHomesAPI,
+    private SavedPositionMenu(@NotNull HuskHomesGui plugin,
+                              @NotNull HuskHomesAPI huskHomesAPI,
                               @NotNull List<? extends SavedPosition> positionList,
-                              @NotNull MenuType menuType, @NotNull String title) {
+                              @NotNull MenuType menuType,
+                              @NotNull String title) {
 
         this.menu = new InventoryGui(plugin, title, MENU_LAYOUT);
+        this.edit_menu = new InventoryGui(plugin, "编辑GUI", EDIT_MENU_LAYOUT); // ?
         this.menuType = menuType;
         this.huskHomesAPI = huskHomesAPI;
 
@@ -98,6 +111,7 @@ public class SavedPositionMenu {
 
     }
 
+    // 遍历传送点, 并添加按钮
     @NotNull
     private GuiElementGroup getPositionGroup(@NotNull List<? extends SavedPosition> positions) {
         final GuiElementGroup group = new GuiElementGroup('p');
@@ -107,16 +121,17 @@ public class SavedPositionMenu {
         return group;
     }
 
+    // 创建一个传送点按钮
     @NotNull
     private StaticGuiElement getPositionButton(@NotNull SavedPosition position) {
+        ItemStack position_item = new ItemStack(getPositionMaterial(position).orElse(getItemFromConfig("menu.item.default-item")));
         return new StaticGuiElement('e',
-                new ItemStack(getPositionMaterial(position).orElse(getItemFromConfig("menu.item.default-item"))),
+                position_item,
                 // 点击传送点物品时
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
                         final OnlineUser onlineUser = huskHomesAPI.adaptUser(player);
-                        // test
-                        System.out.println("点击图标: "+ click.getType());
+                        System.out.println("点击图标: "+ click.getType()); // test
                         switch (click.getType()) {
                             case LEFT -> { // 左键传送
                                 menu.close(true);
@@ -124,11 +139,20 @@ public class SavedPositionMenu {
                             }
                             case RIGHT -> { // 右键编辑
                                 menu.close(true);
-                                player.performCommand(switch (menuType) {
-                                    case HOME, PUBLIC_HOME ->
-                                            "huskhomes:edithome " + ((Home) position).owner.username + "." + position.meta.name;
-                                    case WARP -> "huskhomes:editwarp " + position.meta.name;
-                                });
+//                                player.performCommand(switch (menuType) {
+//                                    case HOME, PUBLIC_HOME ->
+//                                            "huskhomes:edithome " + ((Home) position).owner.username + "." + position.meta.name;
+//                                    case WARP -> "huskhomes:editwarp " + position.meta.name;
+//                                });
+
+                                switch (menuType) {
+                                    case HOME, PUBLIC_HOME -> {
+                                        editGuiShowToPlayer(player, position, position_item);
+                                    }
+                                    case WARP -> {
+
+                                    }
+                                }
                             }
                             case SHIFT_LEFT -> { // 设置物品
                                 if (canEditPosition(position, player) && player.getInventory().getItemInMainHand().getType() != Material.AIR) {
@@ -150,6 +174,91 @@ public class SavedPositionMenu {
                 getLegacyText(getMessageFromConfig("menu.item.Left")),
                 getLegacyText(getMessageFromConfig("menu.item.Right")),
                 getLegacyText(getMessageFromConfig("menu.item.Shift")));
+    }
+
+    // 将GUI显示给玩家
+    private void editGuiShowToPlayer(Player player, SavedPosition position, ItemStack item) {
+        getEditGui(position, item)
+                .show(player);
+    }
+
+    // 编辑GUI
+    private InventoryGui getEditGui(SavedPosition position, ItemStack item) {
+        // a = 背景
+        // b = ~~返回~~ 关闭 (不会写返回= =
+        // u = 更新位置
+        // -n = 更新名称
+        // d = 更新描述
+        // i = 显示信息
+        // p = 开放 (phome)
+        // r = 删除
+        // 背景
+        this.edit_menu.addElement(new StaticGuiElement('a',
+                new ItemStack(Material.LIME_STAINED_GLASS_PANE)));
+
+        // 关闭按钮
+        this.edit_menu.addElement(new StaticGuiElement('b',
+                new ItemStack(Material.ORANGE_STAINED_GLASS_PANE),
+                click -> {
+                    if (click.getWhoClicked() instanceof Player player) {
+                        System.out.println("点击编辑页面的图标: "+ click.getType()); // test
+                        edit_menu.close(true);
+                    }
+                    return true;
+                },
+                getLegacyText("关闭按钮")));
+
+        // 更新位置
+        this.edit_menu.addElement(new StaticGuiElement('u',
+                new ItemStack(Material.OAK_BOAT),
+                click -> {
+                    if (click.getWhoClicked() instanceof Player player) {
+                        System.out.println("点击编辑页面的图标: "+ click.getType()); // test
+                        switch (click.getType()) {
+                            case LEFT -> {
+//                                edit_menu.close(true);
+                                player.performCommand("huskhomes:updhome " + ((Home) position).owner.username + "." + position.meta.name);
+                            }
+                        }
+                    }
+                    return true;
+                },
+                getLegacyText("更新位置")));
+
+        // 更新名称
+        this.edit_menu.addElement(new StaticGuiElement('u',
+                new ItemStack(Material.OAK_BOAT),
+                click -> {
+                    if (click.getWhoClicked() instanceof Player player) {
+                        System.out.println("点击编辑页面的图标: "+ click.getType()); // test
+                        switch (click.getType()) {
+                            case LEFT -> {
+                                new AnvilGUI.Builder()
+                                        .onClose(playerInAnvil -> {
+                                            playerInAnvil.sendMessage("You closed the inventory.");
+                                        })
+                                        .onComplete((completion) -> {
+                                            if(completion.getText().equalsIgnoreCase("you")) {
+                                                completion.getPlayer().sendMessage("You have magical powers!");
+                                                return Arrays.asList(AnvilGUI.ResponseAction.close());
+                                            } else {
+                                                return Arrays.asList(AnvilGUI.ResponseAction.replaceInputText("Try again"));
+                                            }
+                                        })
+                                        .itemLeft(new ItemStack(item))
+                                        .itemRight(new ItemStack(Material.NAME_TAG))
+                                        .title("编辑名称")
+                                        // 使玩家打开它
+                                        .open(player);
+                            }
+                        }
+                    }
+                    return true;
+                },
+                getLegacyText("更新位置")));
+
+
+        return this.edit_menu;
     }
 
     /**

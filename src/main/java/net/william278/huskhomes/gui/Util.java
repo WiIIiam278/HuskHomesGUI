@@ -30,4 +30,8 @@ public class Util {
         return Material.valueOf(fromConfig().getString(path));
     }
 
+    // 重载配置
+    public static void reloadConfig() {
+        HuskHomesGui.getInstance().reloadConfig();
+    }
 }
