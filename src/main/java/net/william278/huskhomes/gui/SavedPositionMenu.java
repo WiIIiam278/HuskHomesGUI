@@ -30,8 +30,8 @@ public class SavedPositionMenu {
 //            "ppppppppp",
 //            "bl  i  ne",
 //    };
-    //;
-    private String[] MENU_LAYOUT = Arrays.copyOfRange(new String[]{
+    // 自定义箱子尺寸
+    private static final String[] MENU_LAYOUT = Arrays.copyOfRange(new String[]{
             "ppppppppp",
             "ppppppppp",
             "ppppppppp",
@@ -57,6 +57,7 @@ public class SavedPositionMenu {
     private SavedPositionMenu(@NotNull HuskHomesGui plugin, @NotNull HuskHomesAPI huskHomesAPI,
                               @NotNull List<? extends SavedPosition> positionList,
                               @NotNull MenuType menuType, @NotNull String title) {
+
         this.menu = new InventoryGui(plugin, title, MENU_LAYOUT);
         this.menuType = menuType;
         this.huskHomesAPI = huskHomesAPI;
@@ -69,25 +70,25 @@ public class SavedPositionMenu {
         this.menu.addElement(new GuiPageElement('b',
                 new ItemStack(getItemFromConfig("menu.pagination.FIRST.item")),
                 GuiPageElement.PageAction.FIRST,
-                getLegacyText( getMessageFromConfig("menu.pagination.FIRST.title") )));
+                getLegacyText(getMessageFromConfig("menu.pagination.FIRST.title"))));
         this.menu.addElement(new GuiPageElement('l',
                 new ItemStack(getItemFromConfig("menu.pagination.PREVIOUS.item")),
                 GuiPageElement.PageAction.PREVIOUS,
-                getLegacyText( getMessageFromConfig("menu.pagination.PREVIOUS.title") )));
+                getLegacyText(getMessageFromConfig("menu.pagination.PREVIOUS.title"))));
         this.menu.addElement(new GuiPageElement('n',
                 new ItemStack(getItemFromConfig("menu.pagination.NEXT.item")),
                 GuiPageElement.PageAction.NEXT,
-                getLegacyText( getMessageFromConfig("menu.pagination.NEXT.title") )));
+                getLegacyText(getMessageFromConfig("menu.pagination.NEXT.title"))));
         this.menu.addElement(new GuiPageElement('e',
                 new ItemStack(getItemFromConfig("menu.pagination.LAST.item")),
                 GuiPageElement.PageAction.LAST,
-                getLegacyText( getMessageFromConfig("menu.pagination.LAST.title") )));
+                getLegacyText(getMessageFromConfig("menu.pagination.LAST.title"))));
         // 信息显示
-        if(getBooleanFromConfig("menu.pagination.INFO-enable")){
+        if(getBooleanFromConfig("menu.pagination.INFO.enable")){
             this.menu.addElement(new StaticGuiElement('i',
                     new ItemStack(getItemFromConfig("menu.pagination.INFO.item")),
-                    getLegacyText( getMessageFromConfig("menu.pagination.INFO.title") ),
-                    getLegacyText( getMessageFromConfig("menu.pagination.INFO.message") )));
+                    getLegacyText(getMessageFromConfig("menu.pagination.INFO.title")),
+                    getLegacyText(getMessageFromConfig("menu.pagination.INFO.message"))));
         }
 
     }
