@@ -226,7 +226,7 @@ public class SavedPositionMenu {
                 getLegacyText("更新位置")));
 
         // 更新名称
-        this.edit_menu.addElement(new StaticGuiElement('u',
+        this.edit_menu.addElement(new StaticGuiElement('n',
                 new ItemStack(Material.OAK_BOAT),
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
