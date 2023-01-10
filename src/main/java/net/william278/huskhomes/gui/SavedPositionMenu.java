@@ -147,7 +147,7 @@ public class SavedPositionMenu {
 
                                 switch (menuType) {
                                     case HOME, PUBLIC_HOME -> {
-                                        editGuiShowToPlayer(player, position, position_item);
+                                        getEditGui(position, position_item).show(player);
                                     }
                                     case WARP -> {
 
@@ -176,13 +176,7 @@ public class SavedPositionMenu {
                 getLegacyText(getMessageFromConfig("menu.item.Shift")));
     }
 
-    // 将GUI显示给玩家
-    private void editGuiShowToPlayer(Player player, SavedPosition position, ItemStack item) {
-        getEditGui(position, item)
-                .show(player);
-    }
-
-    // 编辑GUI
+    // 输出编辑菜单
     private InventoryGui getEditGui(SavedPosition position, ItemStack item) {
         // a = 背景
         // b = ~~返回~~ 关闭 (不会写返回= =
@@ -214,12 +208,8 @@ public class SavedPositionMenu {
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
                         System.out.println("点击编辑页面的图标: "+ click.getType()); // test
-                        switch (click.getType()) {
-                            case LEFT -> {
-//                                edit_menu.close(true);
-                                player.performCommand("huskhomes:updhome " + ((Home) position).owner.username + "." + position.meta.name);
-                            }
-                        }
+//                      edit_menu.close(true);
+                        player.performCommand("huskhomes:updhome " + ((Home) position).owner.username + "." + position.meta.name);
                     }
                     return true;
                 },
@@ -227,35 +217,31 @@ public class SavedPositionMenu {
 
         // 更新名称
         this.edit_menu.addElement(new StaticGuiElement('n',
-                new ItemStack(Material.OAK_BOAT),
+                new ItemStack(Material.NAME_TAG),
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
                         System.out.println("点击编辑页面的图标: "+ click.getType()); // test
-                        switch (click.getType()) {
-                            case LEFT -> {
-                                new AnvilGUI.Builder()
-                                        .onClose(playerInAnvil -> {
-                                            playerInAnvil.sendMessage("You closed the inventory.");
-                                        })
-                                        .onComplete((completion) -> {
-                                            if(completion.getText().equalsIgnoreCase("you")) {
-                                                completion.getPlayer().sendMessage("You have magical powers!");
-                                                return Arrays.asList(AnvilGUI.ResponseAction.close());
-                                            } else {
-                                                return Arrays.asList(AnvilGUI.ResponseAction.replaceInputText("Try again"));
-                                            }
-                                        })
-                                        .itemLeft(new ItemStack(item))
-                                        .itemRight(new ItemStack(Material.NAME_TAG))
-                                        .title("编辑名称")
-                                        // 使玩家打开它
-                                        .open(player);
-                            }
-                        }
+                        new AnvilGUI.Builder()
+                                .onClose(playerInAnvil -> {
+                                    playerInAnvil.sendMessage("You closed the inventory.");
+                                })
+                                .onComplete((completion) -> {
+                                    if(completion.getText().equalsIgnoreCase("you")) {
+                                        completion.getPlayer().sendMessage("You have magical powers!");
+                                        return Arrays.asList(AnvilGUI.ResponseAction.close());
+                                    } else {
+                                        return Arrays.asList(AnvilGUI.ResponseAction.replaceInputText("Try again"));
+                                    }
+                                })
+                                .itemLeft(new ItemStack(item))
+                                .itemRight(new ItemStack(Material.NAME_TAG))
+                                .title("编辑名称")
+                                // 使玩家打开它
+                                .open(player);
                     }
                     return true;
                 },
-                getLegacyText("更新位置")));
+                getLegacyText("编辑名称")));
 
 
         return this.edit_menu;
