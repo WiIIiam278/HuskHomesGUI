@@ -199,7 +199,6 @@ public class SavedPositionMenu {
                 new ItemStack(Material.ORANGE_STAINED_GLASS_PANE),
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
-                        System.out.println("点击编辑页面的图标: "+ click.getType()); // test
                         edit_menu.close(true);
                     }
                     return true;
@@ -211,7 +210,6 @@ public class SavedPositionMenu {
                 new ItemStack(Material.OAK_BOAT),
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
-                        System.out.println("点击编辑页面的图标: "+ click.getType()); // test
 //                      edit_menu.close(true);
                         player.performCommand("huskhomes:edithome " + ((Home) position).owner.username +"."+ position.meta.name +"relocate");
                     }
@@ -224,24 +222,23 @@ public class SavedPositionMenu {
                 new ItemStack(Material.NAME_TAG),
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
-                        System.out.println("点击编辑页面的图标: "+ click.getType()); // test
                         edit_menu.close(true);
                         new AnvilGUI.Builder()
-                                .onClose(playerInAnvil -> {
-                                    playerInAnvil.sendMessage("You closed the inventory.");
-                                })
-                                .onComplete((completion) -> {
-                                    if(completion.getText().equalsIgnoreCase("you")) {
-                                        completion.getPlayer().sendMessage("You have magical powers!");
-                                        return Arrays.asList(AnvilGUI.ResponseAction.close());
-                                    } else {
-                                        return Arrays.asList(AnvilGUI.ResponseAction.replaceInputText("Try again"));
-                                    }
-                                })
+                                .title("编辑名称: "+ position.meta.name)
                                 .itemLeft(new ItemStack(item))
-                                .itemRight(new ItemStack(Material.NAME_TAG))
-                                .title("编辑名称")
-                                // 使玩家打开它
+                                .text(position.meta.name)
+//                                .itemRight(new ItemStack(Material.NAME_TAG))
+
+//                                .onClose(playerInAnvil -> {
+//                                    // 更新取消
+//                                })
+                                .onComplete((completion) -> {
+                                    if(completion.getText() != null){
+                                        player.performCommand("huskhomes:edithome " + ((Home) position).owner.username +"."+ position.meta.name +"rename"+ completion.getText());
+                                    }
+                                    return Arrays.asList(AnvilGUI.ResponseAction.close());
+                                })
+
                                 .plugin(plugin)
                                 .open(player);
                     }
