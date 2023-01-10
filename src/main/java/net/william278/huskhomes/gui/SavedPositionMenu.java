@@ -209,7 +209,7 @@ public class SavedPositionMenu {
                     if (click.getWhoClicked() instanceof Player player) {
                         System.out.println("点击编辑页面的图标: "+ click.getType()); // test
 //                      edit_menu.close(true);
-                        player.performCommand("huskhomes:updhome " + ((Home) position).owner.username + "." + position.meta.name);
+                        player.performCommand("huskhomes:edithome " + ((Home) position).owner.username +"."+ position.meta.name +"relocate");
                     }
                     return true;
                 },
@@ -219,8 +219,10 @@ public class SavedPositionMenu {
         this.edit_menu.addElement(new StaticGuiElement('n',
                 new ItemStack(Material.NAME_TAG),
                 click -> {
-                    if (click.getWhoClicked() instanceof Player player) {
+                    Player player = (Player) click.getWhoClicked();
+                    if (player != null) {
                         System.out.println("点击编辑页面的图标: "+ click.getType()); // test
+                        edit_menu.close(true);
                         new AnvilGUI.Builder()
                                 .onClose(playerInAnvil -> {
                                     playerInAnvil.sendMessage("You closed the inventory.");
