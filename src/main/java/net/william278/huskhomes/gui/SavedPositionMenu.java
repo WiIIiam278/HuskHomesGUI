@@ -141,10 +141,11 @@ public class SavedPositionMenu {
                                 ItemStack newItem = player.getItemOnCursor();
 //                                Material newItem = player.getItemOnCursor().getType();
                                 if(newItem.getType() != Material.AIR){
+                                    click.setCursor(newItem);
                                     setPositionMaterial(position, newItem.getType())
                                             .thenRun(() -> player.sendMessage(getLegacyText(getMessageFromConfig("chat.updated-icon"))
                                                     .replaceAll("%1%", position.meta.name)));
-                                    click.setCursor(newItem);
+
 
                                 }else{
                                     menu.close(true);
