@@ -205,6 +205,7 @@ public class SavedPositionMenu {
         AtomicBoolean CloseFromAnvilGUI = new AtomicBoolean(false);
 
         this.edit_menu.setCloseAction(i -> {
+            System.out.println(" "+ CloseFromAnvilGUI.get());
             if (CloseFromAnvilGUI.get()) {
                 return false;
             }
