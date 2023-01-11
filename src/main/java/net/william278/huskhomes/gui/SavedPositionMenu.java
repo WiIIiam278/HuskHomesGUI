@@ -199,10 +199,13 @@ public class SavedPositionMenu {
         // p = 开放 (phome)
         // r = 删除
 
+
+        // 如果从铁砧GUI关闭, 则不触发箱子GUI的返回
+        // 这个实现方法可能不好, 但我只能想到这个
         AtomicBoolean CloseFromAnvilGUI = new AtomicBoolean(false);
 
         this.edit_menu.setCloseAction(i -> {
-            if (!CloseFromAnvilGUI.get()) {
+            if (CloseFromAnvilGUI.get()) {
                 return false;
             }
             return true;
