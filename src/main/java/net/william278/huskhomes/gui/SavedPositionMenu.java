@@ -259,7 +259,7 @@ public class SavedPositionMenu {
                                             case WARP -> "huskhomes:editwarp " + position.meta.name +" rename "+ completion.getText();
                                         });
                                     }
-                                    getEditGui(plugin, position, item, menuType).show(player);
+                                    edit_menu.show(player);
                                     return List.of(AnvilGUI.ResponseAction.close());
                                 })
 
@@ -290,7 +290,7 @@ public class SavedPositionMenu {
                                             case WARP -> "huskhomes:editwarp " + position.meta.name +" description "+ completion.getText();
                                         });
                                     }
-                                    getEditGui(plugin, position, item, menuType).show(player);
+                                    edit_menu.show(player);
                                     return List.of(AnvilGUI.ResponseAction.close());
                                 })
 
