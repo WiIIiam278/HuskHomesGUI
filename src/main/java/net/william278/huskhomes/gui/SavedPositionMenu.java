@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static net.william278.huskhomes.gui.Util.*;
 
@@ -259,8 +258,9 @@ public class SavedPositionMenu {
                                             case WARP -> "huskhomes:editwarp " + position.meta.name +" rename "+ completion.getText();
                                         });
                                     }
-                                    edit_menu.show(player);
-                                    return Arrays.asList(AnvilGUI.ResponseAction.close());
+                                    //edit_menu.show(player);
+                                    getEditGui(plugin, position, item, menuType).show(player);
+                                    return List.of(AnvilGUI.ResponseAction.close());
                                 })
 
                                 .plugin(plugin)
@@ -291,7 +291,7 @@ public class SavedPositionMenu {
                                         });
                                     }
                                     edit_menu.show(player);
-                                    return Arrays.asList(AnvilGUI.ResponseAction.close());
+                                    return List.of(AnvilGUI.ResponseAction.close());
                                 })
 
                                 .plugin(plugin)
