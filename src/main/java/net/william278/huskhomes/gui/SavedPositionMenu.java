@@ -205,9 +205,9 @@ public class SavedPositionMenu {
         // p = 开放 (phome)
         // r = 删除
 
-        this.edit_menu.setCloseAction(i -> {
-            return false;
-        });
+//        this.edit_menu.setCloseAction(i -> {
+//            return false;
+//        });
 
         // 背景
         this.edit_menu.addElement(new StaticGuiElement('a',
@@ -253,13 +253,13 @@ public class SavedPositionMenu {
                                 })
                                 // 点击输出位
                                 .onComplete((completion) -> {
+                                    this.edit_menu.show(player);
                                     if(completion.getText() != null){
                                         player.performCommand(switch (menuType) {
                                             case HOME, PUBLIC_HOME -> "huskhomes:edithome " + ((Home) position).owner.username +"."+ position.meta.name +" rename "+ completion.getText();
                                             case WARP -> "huskhomes:editwarp " + position.meta.name +" rename "+ completion.getText();
                                         });
                                     }
-                                    edit_menu.show(player);
                                     return List.of(AnvilGUI.ResponseAction.close());
                                 })
 
@@ -284,13 +284,13 @@ public class SavedPositionMenu {
                                     edit_menu.show(player);
                                 })
                                 .onComplete((completion) -> {
+                                    edit_menu.show(player);
                                     if(completion.getText() != null){
                                         player.performCommand(switch (menuType) {
                                             case HOME, PUBLIC_HOME -> "huskhomes:edithome " + ((Home) position).owner.username +"."+ position.meta.name +" description "+ completion.getText();
                                             case WARP -> "huskhomes:editwarp " + position.meta.name +" description "+ completion.getText();
                                         });
                                     }
-                                    edit_menu.show(player);
                                     return List.of(AnvilGUI.ResponseAction.close());
                                 })
 
