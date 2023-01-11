@@ -259,7 +259,8 @@ public class SavedPositionMenu {
                                         });
                                     }
                                     AnvilGUI.ResponseAction.close();
-                                    edit_menu.show(player); // 返回了一个空箱子
+//                                    edit_menu.show(player);
+                                    getEditGui(plugin, position, item, menuType).show(player);
                                     return List.of();
                                 })
 
@@ -290,8 +291,10 @@ public class SavedPositionMenu {
                                             case WARP -> "huskhomes:editwarp " + position.meta.name +" description "+ completion.getText();
                                         });
                                     }
-                                    edit_menu.show(player);
-                                    return List.of(AnvilGUI.ResponseAction.close());
+                                    AnvilGUI.ResponseAction.close();
+//                                    edit_menu.show(player);
+                                    getEditGui(plugin, position, item, menuType).show(player);
+                                    return List.of();
                                 })
 
                                 .plugin(plugin)
