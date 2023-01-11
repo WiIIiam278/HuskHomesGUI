@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
+import static de.themoep.inventorygui.InventoryGui.get;
 import static de.themoep.inventorygui.InventoryGui.updateElements;
 import static net.william278.huskhomes.gui.Util.*;
 
@@ -144,9 +145,7 @@ public class SavedPositionMenu {
                                             .thenRun(() -> player.sendMessage(getLegacyText(getMessageFromConfig("chat.updated-icon"))
                                                     .replaceAll("%1%", position.meta.name)));
 
-                                    updateElements(player, (Collection<GuiElement>) click.getElement());
-
-//                                    int page = getPageNumber(player);
+                                    click.getGui().draw();
 
 
                                 }else{
