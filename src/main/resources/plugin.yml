@@ -4,3 +4,8 @@ version: 2.0
 description: Display HuskHomes homes and warps in a GUI
 api-version: 1.16
 depend: ['HuskHomes']
+
+commands:
+  huskhomesgui:
+    description: HuskHomesGUI 插件的主命令
+    usage: /<command>
