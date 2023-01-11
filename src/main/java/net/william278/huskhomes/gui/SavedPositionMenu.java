@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static net.william278.huskhomes.gui.Util.*;
 
@@ -198,8 +199,12 @@ public class SavedPositionMenu {
         // p = 开放 (phome)
         // r = 删除
 
+        AtomicBoolean CloseFromAnvilGUI = new AtomicBoolean(false);
+
         this.edit_menu.setCloseAction(i -> {
-            System.out.println("UseTranslatedNames test"+ i);
+            if (!CloseFromAnvilGUI.get()) {
+                return false;
+            }
             return true;
         });
 
@@ -236,7 +241,9 @@ public class SavedPositionMenu {
                 new ItemStack(getItemFromConfig("edit-menu.button.Update-name.item")),
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
+                        CloseFromAnvilGUI.set(true);
                         edit_menu.close(false); // false = 不清除历史记录
+                        CloseFromAnvilGUI.set(false);
                         new AnvilGUI.Builder()
                                 .title(getMessageFromConfig("edit-menu.button.Update-name.anvil-menu.title").replace("%1%", position.meta.name))
                                 .itemLeft(new ItemStack(item))
@@ -268,7 +275,9 @@ public class SavedPositionMenu {
                 new ItemStack(getItemFromConfig("edit-menu.button.Update-description.item")),
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
+                        CloseFromAnvilGUI.set(true);
                         edit_menu.close(false); // false = 不清除历史记录
+                        CloseFromAnvilGUI.set(false);
                         new AnvilGUI.Builder()
                                 .title(getMessageFromConfig("edit-menu.button.Update-description.anvil-menu.title").replace("%1%", position.meta.description))
                                 .itemLeft(new ItemStack(item))
