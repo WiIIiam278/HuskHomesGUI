@@ -51,7 +51,7 @@ menu:
       message:
         A: '§7  - Left Click: Teleport'
         B: '§7  - Right Click: Edit'
-        C: '§7  - Shift Click: Set icon'
+        C: '§7  - Place Item: Set icon'
       item: OAK_SIGN
 
 
