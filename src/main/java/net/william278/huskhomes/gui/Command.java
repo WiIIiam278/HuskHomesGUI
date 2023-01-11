@@ -24,8 +24,6 @@ public class Command implements CommandExecutor, TabExecutor {
                 sender.sendMessage("[ApliNi 魔改的 HuskHomesGUI]");
                 sender.sendMessage("  指令: ");
                 sender.sendMessage("    - /huskhomesgui reload - 重载配置");
-                sender.sendMessage("    - /huskhomesgui editwarp <player>.<name> - 打开编辑地标GUI");
-                sender.sendMessage("    - /huskhomesgui edithome <player>.<name> - 打开编辑传送点GUI");
                 return true;
             }
 

@@ -233,7 +233,7 @@ public class SavedPositionMenu {
                 new ItemStack(getItemFromConfig("edit-menu.button.Update-name.item")),
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
-                        edit_menu.close(false); // false = 不清除历史记录
+                        edit_menu.close(true); // false = 不清除历史记录?
                         new AnvilGUI.Builder()
                                 .title(getMessageFromConfig("edit-menu.button.Update-name.anvil-menu.title").replace("%1%", position.meta.name))
                                 .itemLeft(new ItemStack(item))
@@ -265,7 +265,7 @@ public class SavedPositionMenu {
                 new ItemStack(getItemFromConfig("edit-menu.button.Update-description.item")),
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
-                        edit_menu.close(false); // false = 不清除历史记录
+                        edit_menu.close(true);
                         new AnvilGUI.Builder()
                                 .title(getMessageFromConfig("edit-menu.button.Update-description.anvil-menu.title").replace("%1%", position.meta.description))
                                 .itemLeft(new ItemStack(item))
