@@ -142,6 +142,12 @@ public class SavedPositionMenu {
                                 huskHomesAPI.teleportPlayer(onlineUser, position, true);
                             }
                             case RIGHT -> { // 右键编辑
+                                // 如果玩家没有warp权限, 则不打开编辑页面
+                                if (Objects.requireNonNull(menuType) == MenuType.WARP) {
+                                    if (!player.hasPermission(Permission.COMMAND_EDIT_WARP.node)) {
+                                        return true;
+                                    }
+                                }
                                 getEditGui(plugin, position, position_item, menuType).show(player);
                             }
                             case SHIFT_LEFT -> { // 设置物品
