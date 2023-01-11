@@ -199,25 +199,13 @@ public class SavedPositionMenu {
         // p = 开放 (phome)
         // r = 删除
 
-
-        // 如果从铁砧GUI关闭, 则不触发箱子GUI的返回
-        // 这个实现方法可能不好, 但我只能想到这个
-        AtomicBoolean CloseFromAnvilGUI = new AtomicBoolean(false);
-
-        this.edit_menu.setCloseAction(i -> {
-            System.out.println(" "+ CloseFromAnvilGUI.get());
-            if (CloseFromAnvilGUI.get()) {
-                return false;
-            }
-            return true;
-        });
-
         // 背景
         this.edit_menu.addElement(new StaticGuiElement('a',
                 new ItemStack(switch (menuType) {
                     case HOME, PUBLIC_HOME -> getItemFromConfig("edit-menu.theme-item.HOME");
                     case WARP -> getItemFromConfig("edit-menu.theme-item.WARP");
-                })
+                }),
+                ""  // 不显示物品默认的名称
         ));
 
         // 返回按钮
@@ -245,9 +233,7 @@ public class SavedPositionMenu {
                 new ItemStack(getItemFromConfig("edit-menu.button.Update-name.item")),
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
-                        CloseFromAnvilGUI.set(true);
                         edit_menu.close(false); // false = 不清除历史记录
-                        CloseFromAnvilGUI.set(false);
                         new AnvilGUI.Builder()
                                 .title(getMessageFromConfig("edit-menu.button.Update-name.anvil-menu.title").replace("%1%", position.meta.name))
                                 .itemLeft(new ItemStack(item))
@@ -279,9 +265,7 @@ public class SavedPositionMenu {
                 new ItemStack(getItemFromConfig("edit-menu.button.Update-description.item")),
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
-                        CloseFromAnvilGUI.set(true);
                         edit_menu.close(false); // false = 不清除历史记录
-                        CloseFromAnvilGUI.set(false);
                         new AnvilGUI.Builder()
                                 .title(getMessageFromConfig("edit-menu.button.Update-description.anvil-menu.title").replace("%1%", position.meta.description))
                                 .itemLeft(new ItemStack(item))
@@ -319,9 +303,9 @@ public class SavedPositionMenu {
                 getLegacyText(getMessageFromConfig("edit-menu.button.INFO.server")
                         .replace("%1%", position.server.name)),
                 getLegacyText(getMessageFromConfig("edit-menu.button.INFO.coordinate")
-                        .replace("%x%", ""+ position.x)
-                        .replace("%y%", ""+ position.y)
-                        .replace("%z%", ""+ position.z))
+                        .replace("%x%", String.format("%.1f", position.x))
+                        .replace("%y%", String.format("%.1f", position.y))
+                        .replace("%z%", String.format("%.1f", position.z)))
         ));
 
         // 切换开放 phome
