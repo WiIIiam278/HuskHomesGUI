@@ -205,7 +205,7 @@ public class SavedPositionMenu {
                     case HOME, PUBLIC_HOME -> getItemFromConfig("edit-menu.theme-item.HOME");
                     case WARP -> getItemFromConfig("edit-menu.theme-item.WARP");
                 }),
-                ""  // 不显示物品默认的名称
+                " "  // 不显示物品默认的名称
         ));
 
         // 返回按钮
@@ -348,6 +348,7 @@ public class SavedPositionMenu {
 
         return this.edit_menu;
     }
+
 
     /**
      * Get the material to use for a saved position by icon tag
