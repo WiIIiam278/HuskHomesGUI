@@ -1,18 +1,21 @@
 # [![HuskHomes Banner](images/banner-graphic.png)](https://github.com/WiIIiam278/HuskHomes2)
-[![GitHub CI](https://img.shields.io/github/workflow/status/WiIIiam278/HuskHomesGUI/Java%20CI?logo=github)](https://github.com/WiIIiam278/HuskHomesGUI/actions/workflows/java_ci.yml)
-[![Support Discord](https://img.shields.io/discord/818135932103557162.svg?label=&logo=discord&logoColor=fff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/tVYhJfyDWG)
 
-**HuskHomesGUI** is a GUI add-on plugin for [HuskHomes v3.x](https://github.com/WiIIiam278/HuskHomes2) on Spigot servers. It provides a chest-style graphical user interface (GUI) for browsing home and warp lists. It replaces the chat menu system that is built into HuskHomes when you type `/homelist`, `/phomelist` or `/warplist`.
+这是 [HuskHomeGUI](https://github.com/WiIIiam278/HuskHomesGUI) 的分支, 我将为它修复各种错误和添加功能. 但不保证遵循规范? 
 
-![Menu screenshot](images/menu-screenshot.png)
+### 此分支
 
-If you prefer to browse using a menu, or would like better support for Bedrock players connecting over Geyser, then this add-on is for you.
+- 链接
+  - [功能预览和详细信息](https://github.com/ApliNi/HuskHomesGUI/releases)
+  - [计划中的](https://github.com/ApliNi/HuskHomesGUI/issues)
+  - [已完成的](https://github.com/ApliNi/HuskHomesGUI/issues?q=is%3Aissue+is%3Aclosed)
 
-## Instructions
-### Setup
-1. Have HuskHomes v3.x installed on your server(s)
-2. Download HuskHomesGUI and place it in your server's `plugins` folder
 
-### Usage
-Simply use the list commands you are familiar with to bring up a list of homes or warps.
-Then you can left-click to teleport to a home/warp, right click to edit it, and shift-left click to change the icon of the home in the list to match the type of item in your main hand. Use the page navigation buttons to switch pages.
+- 错误修复
+  - 主分支上的错误
+  - [修改传送点名称后会丢失图标](https://github.com/ApliNi/HuskHomesGUI/issues/5)
+
+
+- 新功能
+  - 添加配置文件和各种配置项
+  - [允许将物品拖动到传送点上以完成图标设置](https://github.com/ApliNi/HuskHomesGUI/issues/2)
+
