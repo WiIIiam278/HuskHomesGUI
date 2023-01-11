@@ -135,14 +135,13 @@ public class SavedPositionMenu {
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
                         final OnlineUser onlineUser = huskHomesAPI.adaptUser(player);
-                        System.out.println("点击图标: "+ click.getType()); // test
                         switch (click.getType()) {
                             case LEFT -> { // 左键传送
                                 menu.close(true);
                                 huskHomesAPI.teleportPlayer(onlineUser, position, true);
                             }
                             case RIGHT -> { // 右键编辑
-                                menu.close(true);
+//                                menu.close(true);
 //                                player.performCommand(switch (menuType) {
 //                                    case HOME, PUBLIC_HOME ->
 //                                            "huskhomes:edithome " + ((Home) position).owner.username + "." + position.meta.name;
