@@ -139,7 +139,7 @@ public class SavedPositionMenu {
                             case LEFT -> { // 左键传送
                                 // 如果玩家手上有物品, 就运行修改图标, 否则点击传送
                                 ItemStack newItem = player.getItemOnCursor();
-                                if(!newItem.equals(new ItemStack(Material.AIR))){ // 如果不等于air
+                                if(newItem.getType() != Material.AIR){
                                     setPositionMaterial(position, newItem.getType())
                                             .thenRun(() -> player.sendMessage(getLegacyText(getMessageFromConfig("chat.updated-icon"))
                                                     .replaceAll("%1%", position.meta.name)));
