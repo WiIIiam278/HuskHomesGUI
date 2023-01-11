@@ -9,17 +9,16 @@ import net.william278.huskhomes.player.OnlineUser;
 import net.william278.huskhomes.position.*;
 import net.william278.huskhomes.util.Permission;
 import org.bukkit.Material;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
+import static de.themoep.inventorygui.InventoryGui.updateElements;
 import static net.william278.huskhomes.gui.Util.*;
 
 /**
@@ -141,10 +140,13 @@ public class SavedPositionMenu {
                                 ItemStack newItem = player.getItemOnCursor();
 //                                Material newItem = player.getItemOnCursor().getType();
                                 if(newItem.getType() != Material.AIR){
-                                    click.setCursor(newItem);
                                     setPositionMaterial(position, newItem.getType())
                                             .thenRun(() -> player.sendMessage(getLegacyText(getMessageFromConfig("chat.updated-icon"))
                                                     .replaceAll("%1%", position.meta.name)));
+
+                                    updateElements(player, (Collection<GuiElement>) click.getElement());
+
+//                                    int page = getPageNumber(player);
 
 
                                 }else{
