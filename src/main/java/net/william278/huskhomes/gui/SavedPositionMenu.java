@@ -231,13 +231,13 @@ public class SavedPositionMenu {
                 new ItemStack(getItemFromConfig("edit-menu.button.Update-name.item")),
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
-                        edit_menu.close(true);
+//                        edit_menu.close(true);
                         new AnvilGUI.Builder()
                                 .title(getMessageFromConfig("edit-menu.button.Update-name.anvil-menu.title").replace("%1%", position.meta.name))
                                 .itemLeft(new ItemStack(item))
                                 .text(position.meta.name)
                                 .onClose(playerInAnvil -> {
-                                    getEditGui(plugin, position, item, menuType).show(player);
+                                    edit_menu.show(player);
                                 })
                                 // 点击输出位
                                 .onComplete((completion) -> {
@@ -263,13 +263,13 @@ public class SavedPositionMenu {
                 new ItemStack(getItemFromConfig("edit-menu.button.Update-description.item")),
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
-                        edit_menu.close(true);
+//                        edit_menu.close(true);
                         new AnvilGUI.Builder()
                                 .title(getMessageFromConfig("edit-menu.button.Update-description.anvil-menu.title").replace("%1%", position.meta.description))
                                 .itemLeft(new ItemStack(item))
                                 .text(position.meta.name)
                                 .onClose(playerInAnvil -> {
-                                    getEditGui(plugin, position, item, menuType).show(player);
+                                    edit_menu.show(player);
                                 })
                                 .onComplete((completion) -> {
                                     if(completion.getText() != null){
