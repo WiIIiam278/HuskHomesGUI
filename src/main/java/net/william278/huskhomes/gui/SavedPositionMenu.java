@@ -199,7 +199,7 @@ public class SavedPositionMenu {
         // r = 删除
 
         this.edit_menu.setCloseAction(i -> {
-            System.out.println("UseTranslatedNames test");
+            System.out.println("UseTranslatedNames test"+ i);
             return true;
         });
 
