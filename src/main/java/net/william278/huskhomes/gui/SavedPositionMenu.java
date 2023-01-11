@@ -124,7 +124,7 @@ public class SavedPositionMenu {
     // 创建一个传送点按钮
     private DynamicGuiElement getPositionButton(@NotNull HuskHomesGui plugin,
                                                 @NotNull SavedPosition position) {
-        ItemStack position_item = new ItemStack(getPositionMaterial(position).orElse(getItemFromConfig("menu.item.default-item")));
+//        ItemStack position_item = new ItemStack(getPositionMaterial(position).orElse(getItemFromConfig("menu.item.default-item")));
 
 //        return new StaticGuiElement('e',
 //                position_item,
@@ -180,63 +180,62 @@ public class SavedPositionMenu {
 
         return new DynamicGuiElement('e', (viewer) -> {
                 return new StaticGuiElement('e',
-                position_item,
-                // 点击传送点物品时
-                click -> {
-                    if (click.getWhoClicked() instanceof Player player) {
-                        final OnlineUser onlineUser = huskHomesAPI.adaptUser(player);
-                        switch (click.getType()) {
-                            case LEFT -> { // 左键传送
-                                // 如果玩家手上有物品, 就运行修改图标, 否则点击传送
-                                ItemStack newItem = player.getItemOnCursor();
-                                if(newItem.getType() != Material.AIR){
-                                    setPositionMaterial(position, newItem.getType())
-                                            .thenRun(() -> player.sendMessage(getLegacyText(getMessageFromConfig("chat.updated-icon"))
-                                                    .replaceAll("%1%", position.meta.name)));
-                                    click.getGui().draw();
-                                }else{
-                                    menu.close(true);
-                                    huskHomesAPI.teleportPlayer(onlineUser, position, true);
-                                }
-                            }
+                        new ItemStack(getPositionMaterial(position).orElse(getItemFromConfig("menu.item.default-item"))),
+                        click -> {
+                            if (click.getWhoClicked() instanceof Player player) {
+                                final OnlineUser onlineUser = huskHomesAPI.adaptUser(player);
+                                switch (click.getType()) {
+                                    case LEFT -> { // 左键传送
+                                        // 如果玩家手上有物品, 就运行修改图标, 否则点击传送
+                                        ItemStack newItem = player.getItemOnCursor();
+                                        if(newItem.getType() != Material.AIR){
+                                            setPositionMaterial(position, newItem.getType())
+                                                    .thenRun(() -> player.sendMessage(getLegacyText(getMessageFromConfig("chat.updated-icon"))
+                                                            .replaceAll("%1%", position.meta.name)));
+                                            click.getGui().draw();
+                                        }else{
+                                            menu.close(true);
+                                            huskHomesAPI.teleportPlayer(onlineUser, position, true);
+                                        }
+                                    }
 
-                            case RIGHT -> { // 右键编辑
-                                // 如果玩家没有warp权限, 则不打开编辑页面
-                                if (Objects.requireNonNull(menuType) == MenuType.WARP) {
-                                    if (!player.hasPermission(Permission.COMMAND_EDIT_WARP.node)) {
-                                        return true;
+                                    case RIGHT -> { // 右键编辑
+                                        // 如果玩家没有warp权限, 则不打开编辑页面
+                                        if (Objects.requireNonNull(menuType) == MenuType.WARP) {
+                                            if (!player.hasPermission(Permission.COMMAND_EDIT_WARP.node)) {
+                                                return true;
+                                            }
+                                        }
+                                        getEditGui(plugin, position, menuType).show(player);
+                                    }
+
+                                    case SHIFT_LEFT -> { // 设置物品
+                                        if (canEditPosition(position, player) && player.getInventory().getItemInMainHand().getType() != Material.AIR) {
+                                            menu.close(true);
+                                            setPositionMaterial(position, player.getInventory().getItemInMainHand().getType())
+                                                    .thenRun(() -> player.sendMessage(getLegacyText(getMessageFromConfig("chat.updated-icon"))
+                                                            .replaceAll("%1%", position.meta.name)));
+                                        }
                                     }
                                 }
-                                getEditGui(plugin, position, position_item, menuType).show(player);
                             }
-
-                            case SHIFT_LEFT -> { // 设置物品
-                                if (canEditPosition(position, player) && player.getInventory().getItemInMainHand().getType() != Material.AIR) {
-                                    menu.close(true);
-                                    setPositionMaterial(position, player.getInventory().getItemInMainHand().getType())
-                                            .thenRun(() -> player.sendMessage(getLegacyText(getMessageFromConfig("chat.updated-icon"))
-                                                    .replaceAll("%1%", position.meta.name)));
-                                }
-                            }
-                        }
-                    }
-                    return true;
-                },
-                getLegacyText(getMessageFromConfig("menu.item.name").replace("%1%", position.meta.name)),
-                getLegacyText(getMessageFromConfig("menu.item.description").replace("%1%", position.meta.description.isBlank()
-                        ? huskHomesAPI.getRawLocale("menu.item_no_description").orElse(getMessageFromConfig("menu.item.description-var1-no"))
-                        : position.meta.description)),
-                getMessageFromConfig("menu.item.space"),
-                getLegacyText(getMessageFromConfig("menu.item.Left")),
-                getLegacyText(getMessageFromConfig("menu.item.Right")),
-                getLegacyText(getMessageFromConfig("menu.item.Shift")));
+                            return true;
+                        },
+                        getLegacyText(getMessageFromConfig("menu.item.name").replace("%1%", position.meta.name)),
+                        getLegacyText(getMessageFromConfig("menu.item.description").replace("%1%", position.meta.description.isBlank()
+                                ? huskHomesAPI.getRawLocale("menu.item_no_description").orElse(getMessageFromConfig("menu.item.description-var1-no"))
+                                : position.meta.description)),
+                        getMessageFromConfig("menu.item.space"),
+                        getLegacyText(getMessageFromConfig("menu.item.Left")),
+                        getLegacyText(getMessageFromConfig("menu.item.Right")),
+                        getLegacyText(getMessageFromConfig("menu.item.Shift")));
         });
     }
 
     // 输出编辑菜单
     private InventoryGui getEditGui(@NotNull HuskHomesGui plugin,
                                     SavedPosition position,
-                                    ItemStack item,
+//                                    ItemStack item,
                                     MenuType menuType) {
 
         // inventorygui DOC: https://docs.phoenix616.dev/inventorygui/de/themoep/inventorygui/package-summary.html
@@ -256,6 +255,8 @@ public class SavedPositionMenu {
                         EDIT_MENU_LAYOUT);
             }
         }
+
+        ItemStack item = new ItemStack(getPositionMaterial(position).orElse(getItemFromConfig("menu.item.default-item")));
 
         // a = 背景
         // b = 返回
@@ -323,7 +324,7 @@ public class SavedPositionMenu {
                                     AnvilGUI.ResponseAction.close();
 //                                    edit_menu.show(player);
                                     position.meta.name = completion.getText();
-                                    getEditGui(plugin, position, item, menuType).show(player);
+                                    getEditGui(plugin, position, menuType).show(player);
                                     return List.of();
                                 })
 
@@ -357,7 +358,7 @@ public class SavedPositionMenu {
                                     AnvilGUI.ResponseAction.close();
 //                                    edit_menu.show(player);
                                     position.meta.description = completion.getText();
-                                    getEditGui(plugin, position, item, menuType).show(player);
+                                    getEditGui(plugin, position, menuType).show(player);
                                     return List.of();
                                 })
 
