@@ -55,7 +55,7 @@ public class SavedPositionMenu {
 
     private static final String TAG_KEY = "huskhomesgui:icon";
     private final InventoryGui menu;
-    private final InventoryGui edit_menu;
+    private InventoryGui edit_menu;
     private final HuskHomesAPI huskHomesAPI;
     private final MenuType menuType;
 
@@ -76,7 +76,7 @@ public class SavedPositionMenu {
                               @NotNull String title) {
 
         this.menu = new InventoryGui(plugin, title, MENU_LAYOUT);
-        this.edit_menu = new InventoryGui(plugin, "编辑GUI", EDIT_MENU_LAYOUT); // ?
+
         this.menuType = menuType;
         this.huskHomesAPI = huskHomesAPI;
 
@@ -149,14 +149,7 @@ public class SavedPositionMenu {
 //                                    case WARP -> "huskhomes:editwarp " + position.meta.name;
 //                                });
 
-                                switch (menuType) {
-                                    case HOME, PUBLIC_HOME -> {
-                                        getEditGui(plugin, position, position_item).show(player);
-                                    }
-                                    case WARP -> {
-
-                                    }
-                                }
+                                getEditGui(plugin, position, position_item, menuType).show(player);
                             }
                             case SHIFT_LEFT -> { // 设置物品
                                 if (canEditPosition(position, player) && player.getInventory().getItemInMainHand().getType() != Material.AIR) {
@@ -183,7 +176,18 @@ public class SavedPositionMenu {
     // 输出编辑菜单
     private InventoryGui getEditGui(@NotNull HuskHomesGui plugin,
                                     SavedPosition position,
-                                    ItemStack item) {
+                                    ItemStack item,
+                                    MenuType menuType) {
+
+        switch (menuType) {
+            case HOME, PUBLIC_HOME -> {
+                this.edit_menu = new InventoryGui(plugin, "编辑传送点: "+ position.meta.name, EDIT_MENU_LAYOUT);
+            }
+            case WARP -> {
+                this.edit_menu = new InventoryGui(plugin, "编辑地标: "+ position.meta.name, EDIT_MENU_LAYOUT);
+            }
+        }
+
         // a = 背景
         // b = ~~返回~~ 关闭 (不会写返回= =
         // u = 更新位置
@@ -191,7 +195,8 @@ public class SavedPositionMenu {
         // d = 更新描述
         // i = 显示信息
         // p = 开放 (phome)
-        // -r = 删除
+        // r = 删除
+
         // 背景
         this.edit_menu.addElement(new StaticGuiElement('a',
                 new ItemStack(Material.LIME_STAINED_GLASS_PANE)));
@@ -212,8 +217,10 @@ public class SavedPositionMenu {
                 new ItemStack(Material.OAK_BOAT),
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
-//                      edit_menu.close(true);
-                        player.performCommand("huskhomes:edithome " + ((Home) position).owner.username +"."+ position.meta.name +" relocate");
+                        player.performCommand(switch (menuType) {
+                            case HOME, PUBLIC_HOME -> "huskhomes:edithome " + ((Home) position).owner.username +"."+ position.meta.name +" relocate";
+                            case WARP -> "huskhomes:editwarp " + ((Home) position).owner.username +"."+ position.meta.name +" relocate";
+                        });
                     }
                     return true;
                 },
@@ -229,16 +236,25 @@ public class SavedPositionMenu {
                                 .title("编辑名称: "+ position.meta.name)
                                 .itemLeft(new ItemStack(item))
                                 .text(position.meta.name)
-//                                .itemRight(new ItemStack(Material.NAME_TAG))
-
 //                                .onClose(playerInAnvil -> {
 //                                    // 更新取消
 //                                })
+                                // 点击第一个物品
+                                .onLeftInputClick((playerInAnvil) -> {
+                                    // 关闭铁砧GUI, 打开编辑GUI
+                                    AnvilGUI.ResponseAction.close();
+                                    getEditGui(plugin, position, item, menuType).show(player);
+                                })
+                                // 点击输出位
                                 .onComplete((completion) -> {
                                     if(completion.getText() != null){
-                                        player.performCommand("huskhomes:edithome " + ((Home) position).owner.username +"."+ position.meta.name +" rename "+ completion.getText());
+                                        player.performCommand(switch (menuType) {
+                                            case HOME, PUBLIC_HOME -> "huskhomes:edithome " + ((Home) position).owner.username +"."+ position.meta.name +" rename "+ completion.getText();
+                                            case WARP -> "huskhomes:editwarp " + ((Home) position).owner.username +"."+ position.meta.name +" rename "+ completion.getText();
+                                        });
                                     }
-                                    return Arrays.asList(AnvilGUI.ResponseAction.close());
+//                                    return Arrays.asList(AnvilGUI.ResponseAction.close());
+                                    return List.of(AnvilGUI.ResponseAction.close());
                                 })
 
                                 .plugin(plugin)
@@ -265,9 +281,12 @@ public class SavedPositionMenu {
 //                                })
                                 .onComplete((completion) -> {
                                     if(completion.getText() != null){
-                                        player.performCommand("huskhomes:edithome " + ((Home) position).owner.username +"."+ position.meta.name +" description "+ completion.getText());
+                                        player.performCommand(switch (menuType) {
+                                            case HOME, PUBLIC_HOME -> "huskhomes:edithome " + ((Home) position).owner.username +"."+ position.meta.name +" description "+ completion.getText();
+                                            case WARP -> "huskhomes:editwarp " + ((Home) position).owner.username +"."+ position.meta.name +" description "+ completion.getText();
+                                        });
                                     }
-                                    return Arrays.asList(AnvilGUI.ResponseAction.close());
+                                    return List.of(AnvilGUI.ResponseAction.close());
                                 })
 
                                 .plugin(plugin)
@@ -279,20 +298,26 @@ public class SavedPositionMenu {
 
         // 显示信息
         this.edit_menu.addElement(new StaticGuiElement('i',
-                new ItemStack(item),
+                new ItemStack(Material.OAK_SIGN),
                 getLegacyText("描述")));
 
         // 切换开放 phome
-        this.edit_menu.addElement(new StaticGuiElement('p',
-                new ItemStack(Material.NETHER_STAR),
-                click -> {
-                    if (click.getWhoClicked() instanceof Player player) {
+        switch (menuType) {
+            case HOME, PUBLIC_HOME -> {
+                this.edit_menu.addElement(new StaticGuiElement('p',
+                        new ItemStack(Material.NETHER_STAR),
+                        click -> {
+                            if (click.getWhoClicked() instanceof Player player) {
 //                      edit_menu.close(true);
-                        player.performCommand("huskhomes:edithome " + ((Home) position).owner.username +"."+ position.meta.name +" privacy");
-                    }
-                    return true;
-                },
-                getLegacyText("切换开放")));
+                                player.performCommand("huskhomes:edithome " + ((Home) position).owner.username +"."+ position.meta.name +" privacy");
+                            }
+                            return true;
+                        },
+                        getLegacyText("切换开放")));
+            }
+//            case WARP -> {}
+        };
+
 
         // 删除 (使用右键
         this.edit_menu.addElement(new StaticGuiElement('r',
@@ -302,7 +327,10 @@ public class SavedPositionMenu {
                         // 右键
                         if (Objects.requireNonNull(click.getType()) == ClickType.RIGHT) {
                             edit_menu.close(true);
-                            player.performCommand("huskhomes:delhome " + ((Home) position).owner.username + "." + position.meta.name);
+                            player.performCommand(switch (menuType) {
+                                case HOME, PUBLIC_HOME -> "huskhomes:delhome " + ((Home) position).owner.username + "." + position.meta.name;
+                                case WARP -> "huskhomes:delwarp " + ((Home) position).owner.username + "." + position.meta.name;
+                            });
                         }
                     }
                     return true;
