@@ -10,11 +10,13 @@ import net.william278.huskhomes.position.*;
 import net.william278.huskhomes.util.Permission;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -185,11 +187,11 @@ public class SavedPositionMenu {
         // a = 背景
         // b = ~~返回~~ 关闭 (不会写返回= =
         // u = 更新位置
-        // -n = 更新名称
+        // n = 更新名称
         // d = 更新描述
         // i = 显示信息
         // p = 开放 (phome)
-        // r = 删除
+        // -r = 删除
         // 背景
         this.edit_menu.addElement(new StaticGuiElement('a',
                 new ItemStack(Material.LIME_STAINED_GLASS_PANE)));
@@ -211,7 +213,7 @@ public class SavedPositionMenu {
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
 //                      edit_menu.close(true);
-                        player.performCommand("huskhomes:edithome " + ((Home) position).owner.username +"."+ position.meta.name +"relocate");
+                        player.performCommand("huskhomes:edithome " + ((Home) position).owner.username +"."+ position.meta.name +" relocate");
                     }
                     return true;
                 },
@@ -234,7 +236,7 @@ public class SavedPositionMenu {
 //                                })
                                 .onComplete((completion) -> {
                                     if(completion.getText() != null){
-                                        player.performCommand("huskhomes:edithome " + ((Home) position).owner.username +"."+ position.meta.name +"rename"+ completion.getText());
+                                        player.performCommand("huskhomes:edithome " + ((Home) position).owner.username +"."+ position.meta.name +" rename "+ completion.getText());
                                     }
                                     return Arrays.asList(AnvilGUI.ResponseAction.close());
                                 })
@@ -245,6 +247,68 @@ public class SavedPositionMenu {
                     return true;
                 },
                 getLegacyText("编辑名称")));
+
+        // 更新描述
+        this.edit_menu.addElement(new StaticGuiElement('d',
+                new ItemStack(Material.WRITABLE_BOOK),
+                click -> {
+                    if (click.getWhoClicked() instanceof Player player) {
+                        edit_menu.close(true);
+                        new AnvilGUI.Builder()
+                                .title("编辑名称: "+ position.meta.name)
+                                .itemLeft(new ItemStack(item))
+                                .text(position.meta.name)
+//                                .itemRight(new ItemStack(Material.NAME_TAG))
+
+//                                .onClose(playerInAnvil -> {
+//                                    // 更新取消
+//                                })
+                                .onComplete((completion) -> {
+                                    if(completion.getText() != null){
+                                        player.performCommand("huskhomes:edithome " + ((Home) position).owner.username +"."+ position.meta.name +" description "+ completion.getText());
+                                    }
+                                    return Arrays.asList(AnvilGUI.ResponseAction.close());
+                                })
+
+                                .plugin(plugin)
+                                .open(player);
+                    }
+                    return true;
+                },
+                getLegacyText("编辑描述")));
+
+        // 显示信息
+        this.edit_menu.addElement(new StaticGuiElement('i',
+                new ItemStack(item),
+                getLegacyText("描述")));
+
+        // 切换开放 phome
+        this.edit_menu.addElement(new StaticGuiElement('p',
+                new ItemStack(Material.NETHER_STAR),
+                click -> {
+                    if (click.getWhoClicked() instanceof Player player) {
+//                      edit_menu.close(true);
+                        player.performCommand("huskhomes:edithome " + ((Home) position).owner.username +"."+ position.meta.name +" privacy");
+                    }
+                    return true;
+                },
+                getLegacyText("切换开放")));
+
+        // 删除 (使用右键
+        this.edit_menu.addElement(new StaticGuiElement('r',
+                new ItemStack(Material.BARRIER),
+                click -> {
+                    if (click.getWhoClicked() instanceof Player player) {
+                        // 右键
+                        if (Objects.requireNonNull(click.getType()) == ClickType.RIGHT) {
+                            edit_menu.close(true);
+                            player.performCommand("huskhomes:delhome " + ((Home) position).owner.username + "." + position.meta.name);
+                        }
+                    }
+                    return true;
+                },
+                getLegacyText("删除"),
+                getLegacyText("使用右键")));
 
 
         return this.edit_menu;
