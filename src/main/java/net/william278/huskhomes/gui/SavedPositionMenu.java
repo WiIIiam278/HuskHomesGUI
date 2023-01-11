@@ -9,7 +9,6 @@ import net.william278.huskhomes.player.OnlineUser;
 import net.william278.huskhomes.position.*;
 import net.william278.huskhomes.util.Permission;
 import org.bukkit.Material;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -18,8 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-import static de.themoep.inventorygui.InventoryGui.get;
-import static de.themoep.inventorygui.InventoryGui.updateElements;
 import static net.william278.huskhomes.gui.Util.*;
 
 /**
@@ -125,11 +122,64 @@ public class SavedPositionMenu {
     }
 
     // 创建一个传送点按钮
-    @NotNull
-    private StaticGuiElement getPositionButton(@NotNull HuskHomesGui plugin,
-                                               @NotNull SavedPosition position) {
+    private DynamicGuiElement getPositionButton(@NotNull HuskHomesGui plugin,
+                                                @NotNull SavedPosition position) {
         ItemStack position_item = new ItemStack(getPositionMaterial(position).orElse(getItemFromConfig("menu.item.default-item")));
-        return new StaticGuiElement('e',
+
+//        return new StaticGuiElement('e',
+//                position_item,
+//                // 点击传送点物品时
+//                click -> {
+//                    if (click.getWhoClicked() instanceof Player player) {
+//                        final OnlineUser onlineUser = huskHomesAPI.adaptUser(player);
+//                        switch (click.getType()) {
+//                            case LEFT -> { // 左键传送
+//                                // 如果玩家手上有物品, 就运行修改图标, 否则点击传送
+//                                ItemStack newItem = player.getItemOnCursor();
+//                                if(newItem.getType() != Material.AIR){
+//                                    setPositionMaterial(position, newItem.getType())
+//                                            .thenRun(() -> player.sendMessage(getLegacyText(getMessageFromConfig("chat.updated-icon"))
+//                                                    .replaceAll("%1%", position.meta.name)));
+//
+//                                }else{
+//                                    menu.close(true);
+//                                    huskHomesAPI.teleportPlayer(onlineUser, position, true);
+//                                }
+//                            }
+//
+//                            case RIGHT -> { // 右键编辑
+//                                // 如果玩家没有warp权限, 则不打开编辑页面
+//                                if (Objects.requireNonNull(menuType) == MenuType.WARP) {
+//                                    if (!player.hasPermission(Permission.COMMAND_EDIT_WARP.node)) {
+//                                        return true;
+//                                    }
+//                                }
+//                                getEditGui(plugin, position, position_item, menuType).show(player);
+//                            }
+//
+//                            case SHIFT_LEFT -> { // 设置物品
+//                                if (canEditPosition(position, player) && player.getInventory().getItemInMainHand().getType() != Material.AIR) {
+//                                    menu.close(true);
+//                                    setPositionMaterial(position, player.getInventory().getItemInMainHand().getType())
+//                                            .thenRun(() -> player.sendMessage(getLegacyText(getMessageFromConfig("chat.updated-icon"))
+//                                                    .replaceAll("%1%", position.meta.name)));
+//                                }
+//                            }
+//                        }
+//                    }
+//                    return true;
+//                },
+//                getLegacyText(getMessageFromConfig("menu.item.name").replace("%1%", position.meta.name)),
+//                getLegacyText(getMessageFromConfig("menu.item.description").replace("%1%", position.meta.description.isBlank()
+//                        ? huskHomesAPI.getRawLocale("menu.item_no_description").orElse(getMessageFromConfig("menu.item.description-var1-no"))
+//                        : position.meta.description)),
+//                getMessageFromConfig("menu.item.space"),
+//                getLegacyText(getMessageFromConfig("menu.item.Left")),
+//                getLegacyText(getMessageFromConfig("menu.item.Right")),
+//                getLegacyText(getMessageFromConfig("menu.item.Shift")));
+
+        return new DynamicGuiElement('e', (viewer) -> {
+                return new StaticGuiElement('e',
                 position_item,
                 // 点击传送点物品时
                 click -> {
@@ -139,15 +189,11 @@ public class SavedPositionMenu {
                             case LEFT -> { // 左键传送
                                 // 如果玩家手上有物品, 就运行修改图标, 否则点击传送
                                 ItemStack newItem = player.getItemOnCursor();
-//                                Material newItem = player.getItemOnCursor().getType();
                                 if(newItem.getType() != Material.AIR){
                                     setPositionMaterial(position, newItem.getType())
                                             .thenRun(() -> player.sendMessage(getLegacyText(getMessageFromConfig("chat.updated-icon"))
                                                     .replaceAll("%1%", position.meta.name)));
-
                                     click.getGui().draw();
-
-
                                 }else{
                                     menu.close(true);
                                     huskHomesAPI.teleportPlayer(onlineUser, position, true);
@@ -184,6 +230,7 @@ public class SavedPositionMenu {
                 getLegacyText(getMessageFromConfig("menu.item.Left")),
                 getLegacyText(getMessageFromConfig("menu.item.Right")),
                 getLegacyText(getMessageFromConfig("menu.item.Shift")));
+        });
     }
 
     // 输出编辑菜单
