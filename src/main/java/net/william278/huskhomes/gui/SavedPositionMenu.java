@@ -141,13 +141,6 @@ public class SavedPositionMenu {
                                 huskHomesAPI.teleportPlayer(onlineUser, position, true);
                             }
                             case RIGHT -> { // 右键编辑
-//                                menu.close(true);
-//                                player.performCommand(switch (menuType) {
-//                                    case HOME, PUBLIC_HOME ->
-//                                            "huskhomes:edithome " + ((Home) position).owner.username + "." + position.meta.name;
-//                                    case WARP -> "huskhomes:editwarp " + position.meta.name;
-//                                });
-
                                 getEditGui(plugin, position, position_item, menuType).show(player);
                             }
                             case SHIFT_LEFT -> { // 设置物品
@@ -178,12 +171,17 @@ public class SavedPositionMenu {
                                     ItemStack item,
                                     MenuType menuType) {
 
+        // title
         switch (menuType) {
             case HOME, PUBLIC_HOME -> {
-                this.edit_menu = new InventoryGui(plugin, "编辑传送点: "+ position.meta.name, EDIT_MENU_LAYOUT);
+                this.edit_menu = new InventoryGui(plugin,
+                        getMessageFromConfig("edit-menu.title.HOME").replace("%1%", position.meta.name),
+                        EDIT_MENU_LAYOUT);
             }
             case WARP -> {
-                this.edit_menu = new InventoryGui(plugin, "编辑地标: "+ position.meta.name, EDIT_MENU_LAYOUT);
+                this.edit_menu = new InventoryGui(plugin,
+                        getMessageFromConfig("edit-menu.title.WARP").replace("%1%", position.meta.name),
+                        EDIT_MENU_LAYOUT);
             }
         }
 
@@ -198,23 +196,21 @@ public class SavedPositionMenu {
 
         // 背景
         this.edit_menu.addElement(new StaticGuiElement('a',
-                new ItemStack(Material.LIME_STAINED_GLASS_PANE)));
+                new ItemStack(switch (menuType) {
+                    case HOME, PUBLIC_HOME -> getItemFromConfig("edit-menu.theme-item.HOME");
+                    case WARP -> getItemFromConfig("edit-menu.theme-item.WARP");
+                })
+        ));
 
         // 返回按钮
         this.edit_menu.addElement(new GuiBackElement('b',
-                new ItemStack(Material.ORANGE_STAINED_GLASS_PANE),
-//                click -> {
-//                    if (click.getWhoClicked() instanceof Player player) {
-//                        edit_menu.close(true);
-//                    }
-//                    return true;
-//                },
+                new ItemStack(getItemFromConfig("edit-menu.button.BACK.item")),
                 true,   // 在没有可返回的GUI时关闭GUI
-                getLegacyText("返回")));
+                getLegacyText(getMessageFromConfig("edit-menu.button.BACK.text"))));
 
         // 更新位置
         this.edit_menu.addElement(new StaticGuiElement('u',
-                new ItemStack(Material.OAK_BOAT),
+                new ItemStack(getItemFromConfig("edit-menu.button.Update-location.item")),
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
                         player.performCommand(switch (menuType) {
@@ -224,16 +220,16 @@ public class SavedPositionMenu {
                     }
                     return true;
                 },
-                getLegacyText("更新位置")));
+                getLegacyText(getMessageFromConfig("edit-menu.button.Update-location.text"))));
 
         // 更新名称
         this.edit_menu.addElement(new StaticGuiElement('n',
-                new ItemStack(Material.NAME_TAG),
+                new ItemStack(getItemFromConfig("edit-menu.button.Update-name.item")),
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
                         edit_menu.close(true);
                         new AnvilGUI.Builder()
-                                .title("编辑名称: "+ position.meta.name)
+                                .title(getMessageFromConfig("edit-menu.button.Update-name.anvil-menu.title").replace("%1%", position.meta.name))
                                 .itemLeft(new ItemStack(item))
                                 .text(position.meta.name)
 //                                .onClose(playerInAnvil -> {
@@ -262,16 +258,16 @@ public class SavedPositionMenu {
                     }
                     return true;
                 },
-                getLegacyText("编辑名称")));
+                getLegacyText(getMessageFromConfig("edit-menu.button.Update-name.text"))));
 
         // 更新描述
         this.edit_menu.addElement(new StaticGuiElement('d',
-                new ItemStack(Material.WRITABLE_BOOK),
+                new ItemStack(getItemFromConfig("edit-menu.button.Update-description.item")),
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
                         edit_menu.close(true);
                         new AnvilGUI.Builder()
-                                .title("编辑名称: "+ position.meta.name)
+                                .title(getMessageFromConfig("edit-menu.button.Update-description.anvil-menu.title").replace("%1%", position.meta.name))
                                 .itemLeft(new ItemStack(item))
                                 .text(position.meta.name)
 //                                .itemRight(new ItemStack(Material.NAME_TAG))
@@ -295,18 +291,30 @@ public class SavedPositionMenu {
                     }
                     return true;
                 },
-                getLegacyText("编辑描述")));
+                getLegacyText(getMessageFromConfig("edit-menu.button.Update-description.text"))));
 
         // 显示信息
         this.edit_menu.addElement(new StaticGuiElement('i',
                 new ItemStack(Material.OAK_SIGN),
-                getLegacyText("描述")));
+                getLegacyText(getMessageFromConfig("edit-menu.button.INFO.name")
+                        .replace("%1%", position.meta.name)),
+                getLegacyText(getMessageFromConfig("edit-menu.button.INFO.description")
+                        .replace("%1%", position.meta.description)),
+                getLegacyText(getMessageFromConfig("edit-menu.button.INFO.world")
+                        .replace("%1%", position.world.name)),
+                getLegacyText(getMessageFromConfig("edit-menu.button.INFO.server")
+                        .replace("%1%", position.server.name)),
+                getLegacyText(getMessageFromConfig("edit-menu.button.INFO.coordinate")
+                        .replace("%x%", ""+ position.x)
+                        .replace("%y%", ""+ position.y)
+                        .replace("%z%", ""+ position.z))
+        ));
 
         // 切换开放 phome
         switch (menuType) {
             case HOME, PUBLIC_HOME -> {
                 this.edit_menu.addElement(new StaticGuiElement('p',
-                        new ItemStack(Material.NETHER_STAR),
+                        new ItemStack(getItemFromConfig("edit-menu.button.Update-privacy.item")),
                         click -> {
                             if (click.getWhoClicked() instanceof Player player) {
 //                      edit_menu.close(true);
@@ -314,7 +322,7 @@ public class SavedPositionMenu {
                             }
                             return true;
                         },
-                        getLegacyText("切换开放")));
+                        getLegacyText(getMessageFromConfig("edit-menu.button.Update-privacy.text"))));
             }
 //            case WARP -> {}
         };
@@ -322,7 +330,7 @@ public class SavedPositionMenu {
 
         // 删除 (使用右键
         this.edit_menu.addElement(new StaticGuiElement('r',
-                new ItemStack(Material.BARRIER),
+                new ItemStack(getItemFromConfig("edit-menu.button.del.item")),
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
                         // 右键
@@ -336,8 +344,8 @@ public class SavedPositionMenu {
                     }
                     return true;
                 },
-                getLegacyText("删除"),
-                getLegacyText("使用右键")));
+                getLegacyText(getMessageFromConfig("edit-menu.button.del.text")),
+                getLegacyText(getMessageFromConfig("edit-menu.button.del.text-2"))));
 
 
         return this.edit_menu;
