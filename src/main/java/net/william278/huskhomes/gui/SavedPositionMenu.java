@@ -205,6 +205,10 @@ public class SavedPositionMenu {
         // p = 开放 (phome)
         // r = 删除
 
+        this.edit_menu.setCloseAction(i -> {
+            return false;
+        });
+
         // 背景
         this.edit_menu.addElement(new StaticGuiElement('a',
                 new ItemStack(switch (menuType) {
