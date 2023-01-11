@@ -139,10 +139,13 @@ public class SavedPositionMenu {
                             case LEFT -> { // 左键传送
                                 // 如果玩家手上有物品, 就运行修改图标, 否则点击传送
                                 ItemStack newItem = player.getItemOnCursor();
+//                                Material newItem = player.getItemOnCursor().getType();
                                 if(newItem.getType() != Material.AIR){
                                     setPositionMaterial(position, newItem.getType())
                                             .thenRun(() -> player.sendMessage(getLegacyText(getMessageFromConfig("chat.updated-icon"))
                                                     .replaceAll("%1%", position.meta.name)));
+                                    click.setCursor(newItem);
+
                                 }else{
                                     menu.close(true);
                                     huskHomesAPI.teleportPlayer(onlineUser, position, true);
