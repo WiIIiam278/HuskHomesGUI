@@ -253,14 +253,14 @@ public class SavedPositionMenu {
                                 })
                                 // 点击输出位
                                 .onComplete((completion) -> {
-                                    this.edit_menu.show(player);
                                     if(completion.getText() != null){
                                         player.performCommand(switch (menuType) {
                                             case HOME, PUBLIC_HOME -> "huskhomes:edithome " + ((Home) position).owner.username +"."+ position.meta.name +" rename "+ completion.getText();
                                             case WARP -> "huskhomes:editwarp " + position.meta.name +" rename "+ completion.getText();
                                         });
                                     }
-                                    return List.of(AnvilGUI.ResponseAction.close());
+                                    edit_menu.show(player);
+                                    return Arrays.asList(AnvilGUI.ResponseAction.close());
                                 })
 
                                 .plugin(plugin)
@@ -277,21 +277,21 @@ public class SavedPositionMenu {
                     if (click.getWhoClicked() instanceof Player player) {
                         edit_menu.close(false);
                         new AnvilGUI.Builder()
-                                .title(getMessageFromConfig("edit-menu.button.Update-description.anvil-menu.title").replace("%1%", position.meta.description))
+                                .title(getMessageFromConfig("edit-menu.button.Update-description.anvil-menu.title").replace("%1%", position.meta.name))
                                 .itemLeft(new ItemStack(item))
-                                .text(position.meta.name)
+                                .text(position.meta.description)
                                 .onClose(playerInAnvil -> {
                                     edit_menu.show(player);
                                 })
                                 .onComplete((completion) -> {
-                                    edit_menu.show(player);
                                     if(completion.getText() != null){
                                         player.performCommand(switch (menuType) {
                                             case HOME, PUBLIC_HOME -> "huskhomes:edithome " + ((Home) position).owner.username +"."+ position.meta.name +" description "+ completion.getText();
                                             case WARP -> "huskhomes:editwarp " + position.meta.name +" description "+ completion.getText();
                                         });
                                     }
-                                    return List.of(AnvilGUI.ResponseAction.close());
+                                    edit_menu.show(player);
+                                    return Arrays.asList(AnvilGUI.ResponseAction.close());
                                 })
 
                                 .plugin(plugin)
