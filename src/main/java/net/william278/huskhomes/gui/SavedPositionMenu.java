@@ -230,7 +230,7 @@ public class SavedPositionMenu {
                     if (click.getWhoClicked() instanceof Player player) {
                         player.performCommand(switch (menuType) {
                             case HOME, PUBLIC_HOME -> "huskhomes:edithome " + ((Home) position).owner.username +"."+ position.meta.name +" relocate";
-                            case WARP -> "huskhomes:editwarp " + ((Home) position).owner.username +"."+ position.meta.name +" relocate";
+                            case WARP -> "huskhomes:editwarp " + position.meta.name +" relocate";
                         });
                     }
                     return true;
@@ -260,6 +260,7 @@ public class SavedPositionMenu {
                                     }
                                     AnvilGUI.ResponseAction.close();
 //                                    edit_menu.show(player);
+                                    position.meta.name = completion.getText();
                                     getEditGui(plugin, position, item, menuType).show(player);
                                     return List.of();
                                 })
@@ -293,6 +294,7 @@ public class SavedPositionMenu {
                                     }
                                     AnvilGUI.ResponseAction.close();
 //                                    edit_menu.show(player);
+                                    position.meta.description = completion.getText();
                                     getEditGui(plugin, position, item, menuType).show(player);
                                     return List.of();
                                 })
@@ -349,7 +351,7 @@ public class SavedPositionMenu {
                             edit_menu.close(true);
                             player.performCommand(switch (menuType) {
                                 case HOME, PUBLIC_HOME -> "huskhomes:delhome " + ((Home) position).owner.username + "." + position.meta.name;
-                                case WARP -> "huskhomes:delwarp " + ((Home) position).owner.username + "." + position.meta.name;
+                                case WARP -> "huskhomes:delwarp " + position.meta.name;
                             });
                         }
                     }
