@@ -59,6 +59,7 @@ edit-menu:
   title:
     HOME: 'Edit Home: %1%'
     WARP: 'Edit Warp: %1%'
+
   theme-item:
     HOME: LIME_STAINED_GLASS_PANE
     WARP: LIME_STAINED_GLASS_PANE

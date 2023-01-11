@@ -171,6 +171,10 @@ public class SavedPositionMenu {
                                     ItemStack item,
                                     MenuType menuType) {
 
+        // inventorygui DOC: https://docs.phoenix616.dev/inventorygui/de/themoep/inventorygui/package-summary.html
+        // AnvilGUI: https://github.com/WesJD/AnvilGUI
+        // HuskHome Command: https://github.com/WiIIiam278/HuskHomes2/wiki/Commands
+
         // title
         switch (menuType) {
             case HOME, PUBLIC_HOME -> {
@@ -232,13 +236,7 @@ public class SavedPositionMenu {
                                 .title(getMessageFromConfig("edit-menu.button.Update-name.anvil-menu.title").replace("%1%", position.meta.name))
                                 .itemLeft(new ItemStack(item))
                                 .text(position.meta.name)
-//                                .onClose(playerInAnvil -> {
-//                                    // 更新取消
-//                                })
-                                // 点击第一个物品
-                                .onLeftInputClick((playerInAnvil) -> {
-                                    // 关闭铁砧GUI, 打开编辑GUI
-                                    AnvilGUI.ResponseAction.close();
+                                .onClose(playerInAnvil -> {
                                     getEditGui(plugin, position, item, menuType).show(player);
                                 })
                                 // 点击输出位
@@ -267,14 +265,12 @@ public class SavedPositionMenu {
                     if (click.getWhoClicked() instanceof Player player) {
                         edit_menu.close(true);
                         new AnvilGUI.Builder()
-                                .title(getMessageFromConfig("edit-menu.button.Update-description.anvil-menu.title").replace("%1%", position.meta.name))
+                                .title(getMessageFromConfig("edit-menu.button.Update-description.anvil-menu.title").replace("%1%", position.meta.description))
                                 .itemLeft(new ItemStack(item))
                                 .text(position.meta.name)
-//                                .itemRight(new ItemStack(Material.NAME_TAG))
-
-//                                .onClose(playerInAnvil -> {
-//                                    // 更新取消
-//                                })
+                                .onClose(playerInAnvil -> {
+                                    getEditGui(plugin, position, item, menuType).show(player);
+                                })
                                 .onComplete((completion) -> {
                                     if(completion.getText() != null){
                                         player.performCommand(switch (menuType) {
