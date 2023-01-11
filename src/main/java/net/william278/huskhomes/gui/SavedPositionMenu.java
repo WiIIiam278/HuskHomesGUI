@@ -189,7 +189,7 @@ public class SavedPositionMenu {
         }
 
         // a = 背景
-        // b = ~~返回~~ 关闭 (不会写返回= =
+        // b = 返回
         // u = 更新位置
         // n = 更新名称
         // d = 更新描述
@@ -201,16 +201,17 @@ public class SavedPositionMenu {
         this.edit_menu.addElement(new StaticGuiElement('a',
                 new ItemStack(Material.LIME_STAINED_GLASS_PANE)));
 
-        // 关闭按钮
-        this.edit_menu.addElement(new StaticGuiElement('b',
+        // 返回按钮
+        this.edit_menu.addElement(new GuiBackElement('b',
                 new ItemStack(Material.ORANGE_STAINED_GLASS_PANE),
-                click -> {
-                    if (click.getWhoClicked() instanceof Player player) {
-                        edit_menu.close(true);
-                    }
-                    return true;
-                },
-                getLegacyText("关闭按钮")));
+//                click -> {
+//                    if (click.getWhoClicked() instanceof Player player) {
+//                        edit_menu.close(true);
+//                    }
+//                    return true;
+//                },
+                true,   // 在没有可返回的GUI时关闭GUI
+                getLegacyText("返回")));
 
         // 更新位置
         this.edit_menu.addElement(new StaticGuiElement('u',
@@ -253,7 +254,7 @@ public class SavedPositionMenu {
                                             case WARP -> "huskhomes:editwarp " + ((Home) position).owner.username +"."+ position.meta.name +" rename "+ completion.getText();
                                         });
                                     }
-//                                    return Arrays.asList(AnvilGUI.ResponseAction.close());
+                                    getEditGui(plugin, position, item, menuType).show(player);
                                     return List.of(AnvilGUI.ResponseAction.close());
                                 })
 
@@ -286,6 +287,7 @@ public class SavedPositionMenu {
                                             case WARP -> "huskhomes:editwarp " + ((Home) position).owner.username +"."+ position.meta.name +" description "+ completion.getText();
                                         });
                                     }
+                                    getEditGui(plugin, position, item, menuType).show(player);
                                     return List.of(AnvilGUI.ResponseAction.close());
                                 })
 
