@@ -137,9 +137,18 @@ public class SavedPositionMenu {
                         final OnlineUser onlineUser = huskHomesAPI.adaptUser(player);
                         switch (click.getType()) {
                             case LEFT -> { // 左键传送
-                                menu.close(true);
-                                huskHomesAPI.teleportPlayer(onlineUser, position, true);
+                                // 如果玩家手上有物品, 就运行修改图标, 否则点击传送
+                                ItemStack newItem = player.getItemOnCursor();
+                                if(!newItem.equals(new ItemStack(Material.AIR))){ // 如果不等于air
+                                    setPositionMaterial(position, newItem.getType())
+                                            .thenRun(() -> player.sendMessage(getLegacyText(getMessageFromConfig("chat.updated-icon"))
+                                                    .replaceAll("%1%", position.meta.name)));
+                                }else{
+                                    menu.close(true);
+                                    huskHomesAPI.teleportPlayer(onlineUser, position, true);
+                                }
                             }
+
                             case RIGHT -> { // 右键编辑
                                 // 如果玩家没有warp权限, 则不打开编辑页面
                                 if (Objects.requireNonNull(menuType) == MenuType.WARP) {
@@ -149,11 +158,12 @@ public class SavedPositionMenu {
                                 }
                                 getEditGui(plugin, position, position_item, menuType).show(player);
                             }
+
                             case SHIFT_LEFT -> { // 设置物品
                                 if (canEditPosition(position, player) && player.getInventory().getItemInMainHand().getType() != Material.AIR) {
                                     menu.close(true);
                                     setPositionMaterial(position, player.getInventory().getItemInMainHand().getType())
-                                            .thenRun(() -> player.sendMessage(getLegacyText( getMessageFromConfig("chat.updated-icon") )
+                                            .thenRun(() -> player.sendMessage(getLegacyText(getMessageFromConfig("chat.updated-icon"))
                                                     .replaceAll("%1%", position.meta.name)));
                                 }
                             }
