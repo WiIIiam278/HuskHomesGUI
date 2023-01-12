@@ -18,7 +18,7 @@ repositories {
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
     compileOnly 'net.william278:HuskHomes2:06d73c23d1'
-    compileOnly 'org.jetbrains:annotations:23.0.0'
+    compileOnly 'org.jetbrains:annotations:24.0.0'
 
     implementation 'de.themoep:inventorygui:1.6-SNAPSHOT'
     implementation 'de.themoep:minedown-adventure:1.7.1-SNAPSHOT'
