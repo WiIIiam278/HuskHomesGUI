@@ -6,6 +6,7 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.wesjd.anvilgui.AnvilGUI;
 import net.william278.huskhomes.api.HuskHomesAPI;
 import net.william278.huskhomes.player.OnlineUser;
+import net.william278.huskhomes.player.User;
 import net.william278.huskhomes.position.*;
 import net.william278.huskhomes.util.Permission;
 import org.bukkit.Material;
@@ -126,6 +127,13 @@ public class SavedPositionMenu {
     private DynamicGuiElement getPositionButton(@NotNull HuskHomesGui plugin,
                                                 @NotNull SavedPosition position) {
 
+        User owner;
+        if (position instanceof Home home) {
+            owner = home.owner;
+        } else {
+            owner = null;
+        }
+
         return new DynamicGuiElement('e', (viewer) -> {
                 return new StaticGuiElement('e',
                         new ItemStack(getPositionMaterial(position).orElse(getItemFromConfig("menu.item.default-item"))),
@@ -138,6 +146,10 @@ public class SavedPositionMenu {
                                         ItemStack newItem = player.getItemOnCursor();
 
                                         if(newItem.getType() != Material.AIR){
+                                            if (!player.hasPermission(Permission.COMMAND_EDIT_HOME.node) && !player.hasPermission(Permission.COMMAND_EDIT_HOME_OTHER.node)){
+                                                return true;
+                                            }
+
                                             setPositionMaterial(position, newItem.getType())
                                                     .thenRun(() -> player.sendMessage(getLegacyText(getMessageFromConfig("chat.updated-icon"))
                                                             .replaceAll("%1%", position.meta.name)));
@@ -156,6 +168,17 @@ public class SavedPositionMenu {
                                                 return true;
                                             }
                                         }
+                                        // 如果玩家 != 创建phome的玩家, 则不打开编辑页面
+                                        // If the player != Players who create phome will not open the editing page
+                                        if (Objects.requireNonNull(menuType) == MenuType.PUBLIC_HOME) {
+                                            assert owner != null;
+                                            if (!Objects.equals(player.getUniqueId().toString(), owner.uuid.toString()) && !player.hasPermission(Permission.COMMAND_EDIT_HOME_OTHER.node)) {
+                                                return true;
+                                            }
+                                            if (!player.hasPermission(Permission.COMMAND_EDIT_HOME.node)) {
+                                                return true;
+                                            }
+                                        }
                                         int mainMenuPageNumber = menu.getPageNumber(player);
 //                                        menu.close(false);
                                         getEditGui(plugin, position, menuType, mainMenuPageNumber).show(player);
@@ -165,6 +188,9 @@ public class SavedPositionMenu {
                             return true;
                         },
                         getLegacyText(getMessageFromConfig("menu.item.name").replace("%1%", position.meta.name)),
+                        getLegacyText(Objects.requireNonNull(menuType) == MenuType.PUBLIC_HOME
+                                ? getMessageFromConfig("menu.item.PUBLIC_HOME.owner-name").replace("%1%", owner.username)
+                                : ""),
                         getLegacyText(getMessageFromConfig("menu.item.description").replace("%1%", position.meta.description.isBlank()
                                 ? huskHomesAPI.getRawLocale("menu.item_no_description").orElse(getMessageFromConfig("menu.item.description-var1-no"))
                                 : position.meta.description)),

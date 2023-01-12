@@ -27,6 +27,9 @@ menu:
     Left: '' # '[Left Click:](#00fb9a) [Teleport](gray)'
     Right: '' # '[Right Click:](#00fb9a) [Edit](gray)'
     Shift: '' # '[Shift Click:](#00fb9a) [Set icon](gray)'
+    # 显示创建 phome 的玩家名 | Display the name of the player who created the phone
+    PUBLIC_HOME:
+      owner-name: '§7[Created by §a%1%§7]'
 
   pagination:
     FIRST:
