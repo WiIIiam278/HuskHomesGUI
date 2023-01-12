@@ -18,4 +18,4 @@
 - 新功能
   - 添加配置文件和各种配置项
   - [允许将物品拖动到传送点上以完成图标设置](https://github.com/ApliNi/HuskHomesGUI/issues/2)
-
+  - 编辑页面和铁砧菜单

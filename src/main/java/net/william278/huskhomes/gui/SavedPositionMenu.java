@@ -148,7 +148,7 @@ public class SavedPositionMenu {
                                         }
                                     }
 
-                                    case RIGHT -> { // 右键编辑
+                                    case RIGHT, DROP -> { // 右键编辑
                                         // 如果玩家没有warp权限, 则不打开编辑页面
                                         if (Objects.requireNonNull(menuType) == MenuType.WARP) {
                                             if (!player.hasPermission(Permission.COMMAND_EDIT_WARP.node)) {
