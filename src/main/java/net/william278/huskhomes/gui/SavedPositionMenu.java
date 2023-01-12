@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
+import static de.themoep.inventorygui.InventoryGui.getOpen;
 import static net.william278.huskhomes.gui.Util.*;
 
 /**
@@ -155,17 +156,10 @@ public class SavedPositionMenu {
                                                 return true;
                                             }
                                         }
-                                        getEditGui(plugin, position, menuType).show(player);
+                                        int mainMenuPageNumber = menu.getPageNumber(player);
+//                                        menu.close(false);
+                                        getEditGui(plugin, position, menuType, mainMenuPageNumber).show(player);
                                     }
-
-//                                    case SHIFT_LEFT -> { // 设置物品
-//                                        if (canEditPosition(position, player) && player.getInventory().getItemInMainHand().getType() != Material.AIR) {
-////                                            menu.close(true);
-//                                            setPositionMaterial(position, player.getInventory().getItemInMainHand().getType())
-//                                                    .thenRun(() -> player.sendMessage(getLegacyText(getMessageFromConfig("chat.updated-icon"))
-//                                                            .replaceAll("%1%", position.meta.name)));
-//                                        }
-//                                    }
                                 }
                             }
                             return true;
@@ -185,7 +179,8 @@ public class SavedPositionMenu {
     private InventoryGui getEditGui(@NotNull HuskHomesGui plugin,
                                     SavedPosition position,
 //                                    ItemStack item,
-                                    MenuType menuType) {
+                                    MenuType menuType,
+                                    int mainMenuPageNumber) {
 
         // inventorygui DOC: https://docs.phoenix616.dev/inventorygui/de/themoep/inventorygui/package-summary.html
         // AnvilGUI: https://github.com/WesJD/AnvilGUI
@@ -230,9 +225,23 @@ public class SavedPositionMenu {
         ));
 
         // 返回按钮
-        this.edit_menu.addElement(new GuiBackElement('b',
+//        this.edit_menu.addElement(new GuiBackElement('b',
+//                new ItemStack(getItemFromConfig("edit-menu.button.BACK.item")),
+//                true,   // 在没有可返回的GUI时关闭GUI
+//                getLegacyText(getMessageFromConfig("edit-menu.button.BACK.text"))));
+
+        // 返回按钮
+        this.edit_menu.addElement(new StaticGuiElement('b',
                 new ItemStack(getItemFromConfig("edit-menu.button.BACK.item")),
-                true,   // 在没有可返回的GUI时关闭GUI
+                click -> {
+                    if (click.getWhoClicked() instanceof Player player) {
+                        edit_menu.close(true);
+                        this.menu.show(player);
+                        this.menu.setPageNumber(mainMenuPageNumber);
+                        this.edit_menu.destroy();
+                    }
+                    return true;
+                },
                 getLegacyText(getMessageFromConfig("edit-menu.button.BACK.text"))));
 
         // 更新位置
@@ -275,7 +284,7 @@ public class SavedPositionMenu {
                                     AnvilGUI.ResponseAction.close();
 //                                    edit_menu.show(player);
                                     position.meta.name = completion.getText();
-                                    getEditGui(plugin, position, menuType).show(player);
+                                    getEditGui(plugin, position, menuType, mainMenuPageNumber).show(player);
                                     return List.of();
                                 })
 
@@ -311,7 +320,7 @@ public class SavedPositionMenu {
                                     AnvilGUI.ResponseAction.close();
 //                                    edit_menu.show(player);
                                     position.meta.description = completion.getText();
-                                    getEditGui(plugin, position, menuType).show(player);
+                                    getEditGui(plugin, position, menuType, mainMenuPageNumber).show(player);
                                     return List.of();
                                 })
 
