@@ -148,7 +148,7 @@ public class SavedPositionMenu {
                                         }
                                     }
 
-                                    case RIGHT, DROP -> { // 右键编辑
+                                    case RIGHT, DROP -> { // RIGHT 右键编辑, DROP 基岩版的抛出物品
                                         // 如果玩家没有warp权限, 则不打开编辑页面
                                         if (Objects.requireNonNull(menuType) == MenuType.WARP) {
                                             if (!player.hasPermission(Permission.COMMAND_EDIT_WARP.node)) {

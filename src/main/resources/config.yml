@@ -6,10 +6,6 @@ menu:
   # 解决Geyser上的不完美, 也可以设为 3 | Solve the imperfection on Geyser, or set it to 3
   size: 6 # 2 ~ 6
 
-  # 显示物品数量, 用于兼容基岩版右键编辑 | Display the number of items for right click editing of compatible bedrock version
-  # 如果你不使用基岩版, 请将其设置为 1, 否则应大于 1
-
-
   title:
     HOME: "%1%'s Homes"
     PUBLIC_HOME: 'Public Homes'
