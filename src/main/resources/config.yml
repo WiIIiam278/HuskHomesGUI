@@ -102,7 +102,6 @@ edit-menu:
     del:
       item: BARRIER
       text: 'Delete'
-      text-2: 'Right Click'
 
 chat:
   updated-icon: '[Successfully updated the icon for](#00fb9a) [%1%](#00fb9a bold)'

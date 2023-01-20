@@ -11,14 +11,12 @@ import net.william278.huskhomes.position.*;
 import net.william278.huskhomes.util.Permission;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-import static de.themoep.inventorygui.InventoryGui.getOpen;
 import static net.william278.huskhomes.gui.Util.*;
 
 /**
@@ -397,19 +395,15 @@ public class SavedPositionMenu {
                 new ItemStack(getItemFromConfig("edit-menu.button.del.item")),
                 click -> {
                     if (click.getWhoClicked() instanceof Player player) {
-                        // 右键
-                        if (Objects.requireNonNull(click.getType()) == ClickType.RIGHT) {
-                            edit_menu.close(true);
-                            player.performCommand(switch (menuType) {
-                                case HOME, PUBLIC_HOME -> "huskhomes:delhome " + ((Home) position).owner.username + "." + position.meta.name;
-                                case WARP -> "huskhomes:delwarp " + position.meta.name;
-                            });
-                        }
+                        edit_menu.close(true);
+                        player.performCommand(switch (menuType) {
+                            case HOME, PUBLIC_HOME -> "huskhomes:delhome " + ((Home) position).owner.username + "." + position.meta.name;
+                            case WARP -> "huskhomes:delwarp " + position.meta.name;
+                        });
                     }
                     return true;
                 },
-                getLegacyText(getMessageFromConfig("edit-menu.button.del.text")),
-                getLegacyText(getMessageFromConfig("edit-menu.button.del.text-2"))));
+                getLegacyText(getMessageFromConfig("edit-menu.button.del.text"))));
 
 
         return this.edit_menu;
