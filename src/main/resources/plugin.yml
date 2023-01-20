@@ -1,11 +1,17 @@
 name: HuskHomesGUI
 main: net.william278.huskhomes.gui.HuskHomesGui
-version: 2.0
-description: Display HuskHomes homes and warps in a GUI
+version: 2.1
+description: 'Display HuskHomes homes and warps in a GUI'
 api-version: 1.16
-depend: ['HuskHomes']
+depend: [ 'HuskHomes' ]
 
 commands:
   huskhomesgui:
-    description: HuskHomesGUI 插件的主命令
-    usage: /<command>
+    description: 'View HuskHomesGUI plugin information & reload configs'
+    usage: '/<command> <reload/about>'
+    permission: 'huskhomesgui.command'
+
+permissions:
+  huskhomesgui.command:
+    description: 'Allows access to the /huskhomesgui command'
+    default: op
