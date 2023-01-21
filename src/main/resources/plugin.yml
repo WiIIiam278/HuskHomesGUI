@@ -1,6 +1,6 @@
 name: HuskHomesGUI
 main: net.william278.huskhomes.gui.HuskHomesGui
-version: 2.1
+version: '${version}'
 description: 'Display HuskHomes homes and warps in a GUI'
 api-version: 1.16
 depend: [ 'HuskHomes' ]

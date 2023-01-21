@@ -39,7 +39,7 @@ jobs:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           modrinth-dependencies: |
             J6U9o3JG | depends | 3.0
-          files-primary: build/libs/HuskHomesGUI-*-all.jar
+          files-primary: target/HuskHomesGUI-*.jar
           name: HuskHomesGUI v${{ env.version_name }}
           version: ${{ env.version_name }}
           version-type: alpha
@@ -58,4 +58,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: HuskHomesGUI Plugin
-          path: build/libs/HuskHomesGUI-*-all.jar
+          path: target/HuskHomesGUI-*.jar
