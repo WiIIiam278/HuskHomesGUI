@@ -7,6 +7,7 @@ import net.william278.huskhomes.player.User;
 import net.william278.huskhomes.position.Home;
 import net.william278.huskhomes.position.SavedPosition;
 import net.william278.huskhomes.position.Warp;
+import net.william278.huskhomes.teleport.Teleport;
 import net.william278.huskhomes.util.Permission;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -122,7 +123,10 @@ public class ListMenu<T extends SavedPosition> extends Menu {
                                 if (newItem.getType() == Material.AIR) {
                                     this.close(user);
                                     this.destroy();
-                                    api.teleportPlayer(user, position, true);
+                                    api.teleportBuilder(user)
+                                            .setTarget(position)
+                                            .toTimedTeleport()
+                                            .thenAccept(Teleport::execute);
                                     return true;
                                 }
 
