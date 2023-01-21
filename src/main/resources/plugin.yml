@@ -4,6 +4,8 @@ version: 2.1
 description: 'Display HuskHomes homes and warps in a GUI'
 api-version: 1.16
 depend: [ 'HuskHomes' ]
+author: 'William278'
+website: 'https://william278.net/'
 
 commands:
   huskhomesgui:
