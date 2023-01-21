@@ -47,7 +47,7 @@ public class HuskHomesGui extends JavaPlugin implements HuskHomesGuiPlugin {
     @Override
     @NotNull
     public Version getPluginVersion() {
-        return Version.fromString(getDescription().getVersion());
+        return Version.fromString(getDescription().getVersion(), "-");
     }
 
     @Override
