@@ -99,7 +99,7 @@ public class ListMenu<T extends SavedPosition> extends Menu {
         };
     }
 
-    // 遍历传送点, 并添加按钮
+    // Get the GUI group of position select buttons
     @NotNull
     private GuiElementGroup getPositionGroup(@NotNull HuskHomesGui plugin, @NotNull List<T> positions) {
         final GuiElementGroup group = new GuiElementGroup('p');
@@ -107,7 +107,7 @@ public class ListMenu<T extends SavedPosition> extends Menu {
         return group;
     }
 
-    // 创建一个传送点按钮
+    // Get a position select button for a SavedPosition
     @SuppressWarnings("unchecked")
     @NotNull
     private DynamicGuiElement getPositionButton(@NotNull HuskHomesGui plugin, @NotNull SavedPosition position) {
