@@ -36,7 +36,7 @@ public class Settings {
     @YamlKey("menu.icons.paginate_previous_page")
     private String paginatePreviousPage = "minecraft:arrow";
     @YamlKey("menu.icons.paginate_next_page")
-    private String paginateNextPage = "minecraft:spectral_arorw";
+    private String paginateNextPage = "minecraft:spectral_arrow";
     @YamlKey("menu.icons.paginate_last_page")
     private String paginateLastPage = "minecraft:egg";
     @YamlKey("menu.icons.paginate_first_page")
