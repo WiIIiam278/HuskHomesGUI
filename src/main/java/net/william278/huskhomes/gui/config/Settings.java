@@ -39,7 +39,7 @@ public class Settings {
     private String paginateNextPage = "minecraft:spectral_arrow";
     @YamlKey("menu.icons.paginate_last_page")
     private String paginateLastPage = "minecraft:egg";
-    @YamlKey("menu.icons.paginate_first_page")
+    @YamlKey("menu.icons.controls_icon")
     private String controlsIcon = "minecraft:oak_sign";
 
     @YamlComment("Options for the home/warp editor GUI")
