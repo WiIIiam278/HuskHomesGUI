@@ -111,15 +111,15 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                                     .onClose(playerInAnvil -> this.show(api.adaptUser(player)))
                                     .onComplete((completion) -> {
                                         if (completion.getText() != null) {
-                                            if (position instanceof Home home) {
-                                                player.performCommand("huskhomes:edithome " + home.owner.username + "." + position.meta.name + " rename " + completion.getText());
+                                            if (position instanceof Home) {
+                                                player.performCommand("huskhomes:edithome " + ((Home) position).owner.username + "." + position.meta.name + " rename " + completion.getText());
                                             } else if (position instanceof Warp) {
                                                 player.performCommand("huskhomes:editwarp " + position.meta.name + " rename " + completion.getText());
                                             }
                                             // Update in the menu again (fixes https://github.com/ApliNi/HuskHomesGUI/issues/5)
                                             setPositionMaterial(position, positionIcon.getType());
                                         }
-                                        position.meta.description = completion.getText();
+                                        position.meta.name = completion.getText();
                                         this.show(api.adaptUser(player));
                                         return List.of();
                                     })
