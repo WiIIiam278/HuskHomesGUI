@@ -131,7 +131,7 @@ public class ListMenu<T extends SavedPosition> extends Menu {
                                 }
 
                                 if (!player.hasPermission(Permission.COMMAND_EDIT_HOME.node)
-                                        && !player.hasPermission(Permission.COMMAND_EDIT_HOME_OTHER.node)) {
+                                    && !player.hasPermission(Permission.COMMAND_EDIT_HOME_OTHER.node)) {
                                     return true;
                                 }
                                 setPositionMaterial(position, newItem.getType()).thenRun(() -> player.sendMessage(plugin
@@ -152,7 +152,7 @@ public class ListMenu<T extends SavedPosition> extends Menu {
                                                 return true;
                                             }
                                             if (!player.getUniqueId().equals(home.owner.uuid)
-                                                    && !player.hasPermission(Permission.COMMAND_EDIT_HOME_OTHER.node)) {
+                                                && !player.hasPermission(Permission.COMMAND_EDIT_HOME_OTHER.node)) {
                                                 return true;
                                             }
                                         }

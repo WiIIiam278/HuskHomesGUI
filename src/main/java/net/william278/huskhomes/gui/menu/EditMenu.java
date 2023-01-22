@@ -125,11 +125,11 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                                             setPositionMaterial(position, positionIcon.getType());
                                         }
                                         position.meta.name = completion.getText();
+
+                                        // Refresh menu title
                                         this.close(api.adaptUser(player));
                                         this.destroy();
-                                        // Refresh Name
                                         new EditMenu<>(plugin, position, parentMenu, pageNumber).show(api.adaptUser(player));
-//                                        this.show(api.adaptUser(player));
                                         return List.of();
                                     })
                                     .plugin(plugin)
