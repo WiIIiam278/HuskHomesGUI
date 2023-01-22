@@ -159,9 +159,9 @@ public class ListMenu<T extends SavedPosition> extends Menu {
                                     }
                                 }
                                 if (position instanceof Home home) {
-                                    EditMenu.home(plugin, home, (ListMenu<Home>) this).show(user);
+                                    EditMenu.home(plugin, home, (ListMenu<Home>) this, getPageNumber(user)).show(user);
                                 } else if (position instanceof Warp warp) {
-                                    EditMenu.warp(plugin, warp, (ListMenu<Warp>) this).show(user);
+                                    EditMenu.warp(plugin, warp, (ListMenu<Warp>) this, getPageNumber(user)).show(user);
                                 }
                             }
                         }

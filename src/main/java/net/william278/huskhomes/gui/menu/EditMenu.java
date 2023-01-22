@@ -24,6 +24,7 @@ public class EditMenu<T extends SavedPosition> extends Menu {
     private final T position;
     private final Type type;
     private final ListMenu<T> parentMenu;
+    private final int pageNumber;
 
     @NotNull
     private static String[] getEditMenuLayout() {
@@ -34,23 +35,26 @@ public class EditMenu<T extends SavedPosition> extends Menu {
         };
     }
 
-    private EditMenu(@NotNull HuskHomesGui plugin, @NotNull T position, @NotNull ListMenu<T> parentMenu) {
+    private EditMenu(@NotNull HuskHomesGui plugin, @NotNull T position, @NotNull ListMenu<T> parentMenu, int pageNumber) {
         super(plugin, plugin.getLocales().getLocale(
                         position instanceof Home ? "home_editor_title" : "warp_editor_title", position.meta.name),
                 getEditMenuLayout());
         this.type = position instanceof Home ? Type.HOME : Type.WARP;
         this.position = position;
         this.parentMenu = parentMenu;
+        this.pageNumber = pageNumber;
     }
 
     public static EditMenu<Home> home(@NotNull HuskHomesGui plugin, @NotNull Home home,
-                                      @NotNull ListMenu<Home> parentMenu) {
-        return new EditMenu<>(plugin, home, parentMenu);
+                                      @NotNull ListMenu<Home> parentMenu,
+                                      int pageNumber) {
+        return new EditMenu<>(plugin, home, parentMenu, pageNumber);
     }
 
     public static EditMenu<Warp> warp(@NotNull HuskHomesGui plugin, @NotNull Warp warp,
-                                      @NotNull ListMenu<Warp> parentMenu) {
-        return new EditMenu<>(plugin, warp, parentMenu);
+                                      @NotNull ListMenu<Warp> parentMenu,
+                                      int pageNumber) {
+        return new EditMenu<>(plugin, warp, parentMenu, pageNumber);
     }
 
     @Override
@@ -77,6 +81,7 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                             final OnlineUser user = api.adaptUser(player);
                             this.close(user);
                             parentMenu.show(user);
+                            parentMenu.setPageNumber(user, pageNumber);
                             this.destroy();
                         }
                         return true;

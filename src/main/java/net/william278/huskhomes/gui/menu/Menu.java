@@ -33,6 +33,14 @@ public abstract class Menu {
         gui.show(api.getPlayer(user));
     }
 
+    public final void setPageNumber(@NotNull OnlineUser user, int pageNumber) {
+        gui.setPageNumber(api.getPlayer(user), pageNumber);
+    }
+
+    public final int getPageNumber(@NotNull OnlineUser user) {
+        return gui.getPageNumber(api.getPlayer(user));
+    }
+
     public final void close(@NotNull OnlineUser user) {
         gui.close(api.getPlayer(user));
     }
