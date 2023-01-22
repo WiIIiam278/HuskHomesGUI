@@ -27,6 +27,9 @@ public class HuskHomesGuiCommand implements CommandExecutor, TabExecutor {
                         AboutMenu.Credit.of("William278").withDescription("Click to visit website").withUrl("https://william278.net"))
                 .addAttribution("Contributors",
                         AboutMenu.Credit.of("ApliNi").withDescription("Code"))
+                .addAttribution("Translators",
+                        AboutMenu.Credit.of("ApliNi").withDescription("Simplified Chinese (zh-cn)"),
+                        AboutMenu.Credit.of("Revoolt").withDescription("Spanish (es-es)"))
                 .addButtons(
                         AboutMenu.Link.of("https://william278.net/docs/huskhomesgui").withText("About").withIcon("⛏"),
                         AboutMenu.Link.of("https://github.com/WiIIiam278/HuskHomes2/issues").withText("Issues").withIcon("❌").withColor("#ff9f0f"),
