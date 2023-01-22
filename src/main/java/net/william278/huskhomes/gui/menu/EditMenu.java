@@ -103,7 +103,7 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                     new ItemStack(plugin.getSettings().getEditorEditNameButtonIcon()),
                     (click) -> {
                         if (click.getWhoClicked() instanceof Player player) {
-                            this.close(api.adaptUser(player)); // false = 不清除历史记录?
+                            this.close(api.adaptUser(player));
                             new AnvilGUI.Builder()
                                     .title(plugin.getLocales().getLocale("edit_name_title", position.meta.name))
                                     .itemLeft(new ItemStack(positionIcon))
@@ -152,6 +152,7 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                                             setPositionMaterial(position, positionIcon.getType());
                                         }
                                         position.meta.description = completion.getText();
+                                        this.show(api.adaptUser(player));
                                         return List.of();
                                     })
                                     .plugin(plugin)
