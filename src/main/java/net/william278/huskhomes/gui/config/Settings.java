@@ -54,7 +54,7 @@ public class Settings {
     @YamlKey("editor.icons.edit_name_button")
     private String editorEditNameButtonIcon = "minecraft:name_tag";
     @YamlKey("editor.icons.edit_description_button")
-    private String editorEditDescriptionButtonIcon = "minecraft:book_and_quill";
+    private String editorEditDescriptionButtonIcon = "minecraft:writable_book";
     @YamlKey("editor.icons.edit_privacy_button")
     private String editorEditPrivacyButtonIcon = "minecraft:nether_star";
     @YamlKey("editor.icons.delete_button")
