@@ -4,13 +4,15 @@ import de.themoep.inventorygui.InventoryGui;
 import net.william278.huskhomes.api.HuskHomesAPI;
 import net.william278.huskhomes.gui.HuskHomesGui;
 import net.william278.huskhomes.gui.config.Settings;
-import net.william278.huskhomes.player.OnlineUser;
-import net.william278.huskhomes.position.*;
+import net.william278.huskhomes.position.Home;
+import net.william278.huskhomes.position.SavedPosition;
+import net.william278.huskhomes.position.Warp;
+import net.william278.huskhomes.user.OnlineUser;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public abstract class Menu {
@@ -56,8 +58,9 @@ public abstract class Menu {
      * @return The material to use if found
      */
     protected Optional<Material> getPositionMaterial(@NotNull SavedPosition position) {
-        if (position.meta.tags.containsKey(TAG_KEY)) {
-            return Optional.ofNullable(Material.matchMaterial(position.meta.tags.get(TAG_KEY)));
+        final Map<String, String> tags = position.getMeta().getTags();
+        if (tags.containsKey(TAG_KEY)) {
+            return Optional.ofNullable(Material.matchMaterial(tags.get(TAG_KEY)));
         }
         return Optional.empty();
     }
@@ -67,19 +70,18 @@ public abstract class Menu {
      *
      * @param position The saved position
      * @param material The {@link Material} to use
-     * @return A future that completes when the saved position has been updated
      */
-    protected CompletableFuture<SavedPositionManager.SaveResult> setPositionMaterial(@NotNull SavedPosition position,
-                                                                                     @NotNull Material material) {
-        final PositionMeta meta = position.meta;
-        meta.tags.put(TAG_KEY, material.getKey().toString());
+    protected void setPositionMaterial(@NotNull SavedPosition position, @NotNull Material material) {
+        final Map<String, String> tags = position.getMeta().getTags();
+        tags.put(TAG_KEY, material.getKey().toString());
+
         if (position instanceof Warp warp) {
-            return api.updateWarpMeta(warp, meta);
+            api.setWarpMetaTags(warp, tags);
+        } else if (position instanceof Home home) {
+            api.setHomeMetaTags(home, tags);
+        } else {
+            throw new IllegalArgumentException("Position must be a warp or home");
         }
-        if (position instanceof Home home) {
-            return api.updateHomeMeta(home, meta);
-        }
-        throw new IllegalArgumentException("Position must be a warp or home");
     }
 
     /**

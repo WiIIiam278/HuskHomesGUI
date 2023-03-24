@@ -38,7 +38,7 @@ jobs:
           modrinth-featured: false
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           modrinth-dependencies: |
-            J6U9o3JG | depends | 3.0
+            huskhomes | depends | 3.0
           files-primary: target/HuskHomesGUI-*.jar
           name: HuskHomesGUI v${{ env.version_name }}
           version: ${{ env.version_name }}
@@ -52,7 +52,7 @@ jobs:
             1.16.5
             1.17.1
             1.18.2
-            1.19.3
+            1.19.4
           java: 16
       - name: Upload GitHub Artifact
         uses: actions/upload-artifact@v2

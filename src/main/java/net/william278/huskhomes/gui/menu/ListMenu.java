@@ -2,13 +2,12 @@ package net.william278.huskhomes.gui.menu;
 
 import de.themoep.inventorygui.*;
 import net.william278.huskhomes.gui.HuskHomesGui;
-import net.william278.huskhomes.player.OnlineUser;
-import net.william278.huskhomes.player.User;
 import net.william278.huskhomes.position.Home;
 import net.william278.huskhomes.position.SavedPosition;
 import net.william278.huskhomes.position.Warp;
-import net.william278.huskhomes.teleport.Teleport;
-import net.william278.huskhomes.util.Permission;
+import net.william278.huskhomes.teleport.TeleportationException;
+import net.william278.huskhomes.user.OnlineUser;
+import net.william278.huskhomes.user.User;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -23,6 +22,9 @@ import java.util.function.Consumer;
  */
 public class ListMenu<T extends SavedPosition> extends Menu {
 
+    private static final String EDIT_HOME_PERMISSION = "huskhomes.command.edithome";
+    private static final String EDIT_HOME_OTHER_PERMISSION = "huskhomes.command.edithome.other";
+    private static final String EDIT_WARP_PERMISSION = "huskhomes.command.editwarp";
     private final List<T> positions;
     private final Type type;
     private final int pageNumber = 1;
@@ -30,7 +32,7 @@ public class ListMenu<T extends SavedPosition> extends Menu {
     @NotNull
     public static ListMenu<Home> homes(@NotNull HuskHomesGui plugin, @NotNull List<Home> homes, @NotNull User owner) {
         return new ListMenu<>(plugin, homes, Type.HOME,
-                plugin.getLocales().getLocale("homes_menu_title", owner.username));
+                plugin.getLocales().getLocale("homes_menu_title", owner.getUsername()));
     }
 
     @NotNull
@@ -123,36 +125,40 @@ public class ListMenu<T extends SavedPosition> extends Menu {
                                 if (newItem.getType() == Material.AIR) {
                                     this.close(user);
                                     this.destroy();
-                                    api.teleportBuilder(user)
-                                            .setTarget(position)
-                                            .toTimedTeleport()
-                                            .thenAccept(Teleport::execute);
+
+                                    try {
+                                        api.teleportBuilder(user)
+                                                .target(position)
+                                                .toTimedTeleport()
+                                                .execute();
+                                    } catch (TeleportationException ignored) {
+                                    }
                                     return true;
                                 }
 
-                                if (!player.hasPermission(Permission.COMMAND_EDIT_HOME.node)
-                                    && !player.hasPermission(Permission.COMMAND_EDIT_HOME_OTHER.node)) {
+                                if (!player.hasPermission(EDIT_HOME_PERMISSION)
+                                        && !player.hasPermission(EDIT_HOME_OTHER_PERMISSION)) {
                                     return true;
                                 }
-                                setPositionMaterial(position, newItem.getType()).thenRun(() -> player.sendMessage(plugin
-                                        .getLocales().getLocale("updated_icon", position.meta.name)));
+                                setPositionMaterial(position, newItem.getType());
+                                player.sendMessage(plugin.getLocales().getLocale("updated_icon", position.getName()));
                                 click.getGui().draw();
                             }
 
                             case RIGHT, DROP -> {
                                 switch (type) {
                                     case WARP -> {
-                                        if (!player.hasPermission(Permission.COMMAND_EDIT_WARP.node)) {
+                                        if (!player.hasPermission(EDIT_WARP_PERMISSION)) {
                                             return true;
                                         }
                                     }
                                     case PUBLIC_HOME, HOME -> {
                                         if (position instanceof Home home) {
-                                            if (!player.hasPermission(Permission.COMMAND_EDIT_HOME.node)) {
+                                            if (!player.hasPermission(EDIT_HOME_PERMISSION)) {
                                                 return true;
                                             }
-                                            if (!player.getUniqueId().equals(home.owner.uuid)
-                                                && !player.hasPermission(Permission.COMMAND_EDIT_HOME_OTHER.node)) {
+                                            if (!player.getUniqueId().equals(home.getOwner().getUuid())
+                                                    && !player.hasPermission(EDIT_HOME_OTHER_PERMISSION)) {
                                                 return true;
                                             }
                                         }
@@ -168,16 +174,16 @@ public class ListMenu<T extends SavedPosition> extends Menu {
                     }
                     return true;
                 },
-                plugin.getLocales().getLocale("item_name", position.meta.name),
-                (!position.meta.description.isBlank() ?
-                        plugin.getLocales().getLocale("item_description", position.meta.description)
+                plugin.getLocales().getLocale("item_name", position.getName()),
+                (!position.getMeta().getDescription().isBlank() ?
+                        plugin.getLocales().getLocale("item_description", position.getMeta().getDescription())
                         : plugin.getLocales().getLocale("item_description_blank")),
                 (position instanceof Home home ?
-                        plugin.getLocales().getLocale("home_owner_name", home.owner.username)
+                        plugin.getLocales().getLocale("home_owner_name", home.getOwner().getUsername())
                         : ""),
                 plugin.getLocales().getLocale("item_controls_left_click"),
                 plugin.getLocales().getLocale("item_controls_right_click"),
-                plugin.getLocales().getLocale("item_controls_shift_click")));
+                plugin.getLocales().getLocale("item_controls_drag_drop_item")));
     }
 
 }

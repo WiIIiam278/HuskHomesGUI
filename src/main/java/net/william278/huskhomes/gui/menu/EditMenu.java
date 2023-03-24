@@ -4,10 +4,11 @@ import de.themoep.inventorygui.InventoryGui;
 import de.themoep.inventorygui.StaticGuiElement;
 import net.wesjd.anvilgui.AnvilGUI;
 import net.william278.huskhomes.gui.HuskHomesGui;
-import net.william278.huskhomes.player.OnlineUser;
+import net.william278.huskhomes.user.OnlineUser;
 import net.william278.huskhomes.position.Home;
 import net.william278.huskhomes.position.SavedPosition;
 import net.william278.huskhomes.position.Warp;
+import net.william278.huskhomes.util.ValidationException;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -37,7 +38,7 @@ public class EditMenu<T extends SavedPosition> extends Menu {
 
     private EditMenu(@NotNull HuskHomesGui plugin, @NotNull T position, @NotNull ListMenu<T> parentMenu, int pageNumber) {
         super(plugin, plugin.getLocales().getLocale(
-                        position instanceof Home ? "home_editor_title" : "warp_editor_title", position.meta.name),
+                        position instanceof Home ? "home_editor_title" : "warp_editor_title", position.getName()),
                 getEditMenuLayout());
         this.type = position instanceof Home ? Type.HOME : Type.WARP;
         this.position = position;
@@ -93,11 +94,16 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                     new ItemStack(plugin.getSettings().getEditorEditLocationButtonIcon()),
                     (click) -> {
                         if (click.getWhoClicked() instanceof Player player) {
-                            player.performCommand(switch (type) {
-                                case HOME, PUBLIC_HOME ->
-                                        "huskhomes:edithome " + ((Home) position).owner.username + "." + position.meta.name + " relocate";
-                                case WARP -> "huskhomes:editwarp " + position.meta.name + " relocate";
-                            });
+                            final OnlineUser onlineUser = api.adaptUser(player);
+                            try {
+                                if (position instanceof Home home) {
+                                    api.relocateHome(home, onlineUser.getPosition());
+                                } else if (position instanceof Warp warp) {
+                                    api.relocateWarp(warp, onlineUser.getPosition());
+                                }
+                            } catch (ValidationException e) {
+                                return true;
+                            }
                         }
                         return true;
                     },
@@ -110,21 +116,23 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                         if (click.getWhoClicked() instanceof Player player) {
                             this.close(api.adaptUser(player));
                             new AnvilGUI.Builder()
-                                    .title(plugin.getLocales().getLocale("edit_name_title", position.meta.name))
+                                    .title(plugin.getLocales().getLocale("edit_name_title", position.getName()))
                                     .itemLeft(new ItemStack(positionIcon))
-                                    .text(position.meta.name)
+                                    .text(position.getName())
                                     .onClose(playerInAnvil -> this.show(api.adaptUser(player)))
                                     .onComplete((completion) -> {
                                         if (completion.getText() != null) {
-                                            if (position instanceof Home) {
-                                                player.performCommand("huskhomes:edithome " + ((Home) position).owner.username + "." + position.meta.name + " rename " + completion.getText());
-                                            } else if (position instanceof Warp) {
-                                                player.performCommand("huskhomes:editwarp " + position.meta.name + " rename " + completion.getText());
+                                            try {
+                                                if (position instanceof Home home) {
+                                                    api.renameHome(home, completion.getText());
+                                                } else if (position instanceof Warp warp) {
+                                                    api.renameWarp(warp, completion.getText());
+                                                }
+                                            } catch (ValidationException e) {
+                                                return List.of();
                                             }
-                                            // Update in the menu again (fixes https://github.com/ApliNi/HuskHomesGUI/issues/5)
-                                            setPositionMaterial(position, positionIcon.getType());
                                         }
-                                        position.meta.name = completion.getText();
+                                        position.getMeta().setName(completion.getText());
 
                                         // Refresh menu title
                                         this.close(api.adaptUser(player));
@@ -146,21 +154,23 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                         if (click.getWhoClicked() instanceof Player player) {
                             this.close(api.adaptUser(player));
                             new AnvilGUI.Builder()
-                                    .title(plugin.getLocales().getLocale("edit_description_title", position.meta.name))
+                                    .title(plugin.getLocales().getLocale("edit_description_title", position.getName()))
                                     .itemLeft(new ItemStack(positionIcon))
-                                    .text(position.meta.description)
+                                    .text(position.getMeta().getDescription())
                                     .onClose(playerInAnvil -> this.show(api.adaptUser(player)))
                                     .onComplete((completion) -> {
                                         if (completion.getText() != null) {
-                                            if (position instanceof Home) {
-                                                player.performCommand("huskhomes:edithome " + ((Home) position).owner.username + "." + position.meta.name + " description " + completion.getText());
-                                            } else if (position instanceof Warp) {
-                                                player.performCommand("huskhomes:editwarp " + position.meta.name + " description " + completion.getText());
+                                            try {
+                                                if (position instanceof Home home) {
+                                                    api.setHomeDescription(home, completion.getText());
+                                                } else if (position instanceof Warp warp) {
+                                                    api.setWarpDescription(warp, completion.getText());
+                                                }
+                                            } catch (ValidationException e) {
+                                                return List.of();
                                             }
-                                            // Update in the menu again (fixes https://github.com/ApliNi/HuskHomesGUI/issues/5)
-                                            setPositionMaterial(position, positionIcon.getType());
                                         }
-                                        position.meta.description = completion.getText();
+                                        position.getMeta().setDescription(completion.getText());
                                         this.show(api.adaptUser(player));
                                         return List.of();
                                     })
@@ -176,8 +186,12 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                 menu.addElement(new StaticGuiElement('p',
                         new ItemStack(plugin.getSettings().getEditorEditPrivacyButtonIcon()),
                         (click) -> {
-                            if (click.getWhoClicked() instanceof Player player) {
-                                player.performCommand("huskhomes:edithome " + home.owner.username + "." + position.meta.name + " privacy");
+                            if (click.getWhoClicked() instanceof Player) {
+                                try {
+                                    api.setHomePrivacy(home, !home.isPublic());
+                                } catch (ValidationException e) {
+                                    return true;
+                                }
                             }
                             return true;
                         },
@@ -190,10 +204,14 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                     (click) -> {
                         if (click.getWhoClicked() instanceof Player player) {
                             this.close(api.adaptUser(player));
-                            if (position instanceof Home home) {
-                                player.performCommand("huskhomes:delhome " + home.owner.username + "." + position.meta.name);
-                            } else if (position instanceof Warp warp) {
-                                player.performCommand("huskhomes:delwarp " + warp.meta.name);
+                            try {
+                                if (position instanceof Home home) {
+                                    api.deleteHome(home);
+                                } else if (position instanceof Warp warp) {
+                                    api.deleteWarp(warp);
+                                }
+                            } catch (ValidationException e) {
+                                return true;
                             }
                         }
                         return true;
@@ -203,16 +221,16 @@ public class EditMenu<T extends SavedPosition> extends Menu {
             // Controls display
             menu.addElement(new StaticGuiElement('i',
                     new ItemStack(Material.OAK_SIGN),
-                    plugin.getLocales().getLocale("item_info_name", position.meta.name),
-                    plugin.getLocales().getLocale("item_info_description", position.meta.description),
-                    plugin.getLocales().getLocale("item_info_world", position.world.name),
-                    plugin.getLocales().getLocale("item_info_server", position.server.name),
+                    plugin.getLocales().getLocale("item_info_name", position.getName()),
+                    plugin.getLocales().getLocale("item_info_description", position.getMeta().getDescription()),
+                    plugin.getLocales().getLocale("item_info_world", position.getWorld().getName()),
+                    plugin.getLocales().getLocale("item_info_server", position.getServer()),
                     plugin.getLocales().getLocale("item_info_coordinates",
-                            Integer.toString((int) Math.floor(position.x)),
-                            Integer.toString((int) Math.floor(position.y)),
-                            Integer.toString((int) Math.floor(position.z))),
+                            Integer.toString((int) Math.floor(position.getX())),
+                            Integer.toString((int) Math.floor(position.getY())),
+                            Integer.toString((int) Math.floor(position.getZ()))),
                     position instanceof Home home ? plugin.getLocales()
-                            .getLocale("home_owner_name", home.owner.username) : ""
+                            .getLocale("home_owner_name", home.getOwner().getUsername()) : ""
             ));
         };
     }
