@@ -24,7 +24,7 @@ repositories {
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
-    compileOnly 'net.william278:HuskHomes2:4ebbba730c'
+    compileOnly 'net.william278:HuskHomes2:4.0.3'
     compileOnly 'org.jetbrains:annotations:24.0.1'
 
     implementation 'de.themoep:inventorygui:1.6-SNAPSHOT'
