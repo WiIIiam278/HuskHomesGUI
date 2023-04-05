@@ -20,9 +20,9 @@ public class Settings {
     private String language = "en-gb";
     @YamlComment("Options for the home/warp list menu GUI")
     @YamlKey("menu.rows")
-    private int menuSize;
+    private int menuSize = 6;
     @YamlKey("menu.show_controls")
-    private boolean showMenuControls;
+    private boolean showMenuControls = true;
     @YamlKey("menu.items.homes_filler")
     private String homesFillerItem = "minecraft:orange_stained_glass_pane";
     @YamlKey("menu.items.public_homes_filler")
@@ -32,13 +32,13 @@ public class Settings {
     @YamlKey("menu.items.default_icon")
     private String defaultIcon = "minecraft:stone";
     @YamlKey("menu.icons.paginate_first_page")
-    private String paginateFirstPage = "minecraft:egg";
+    private String paginateFirstPage = "minecraft:spectral_arrow";
     @YamlKey("menu.icons.paginate_previous_page")
     private String paginatePreviousPage = "minecraft:arrow";
     @YamlKey("menu.icons.paginate_next_page")
-    private String paginateNextPage = "minecraft:spectral_arrow";
+    private String paginateNextPage = "minecraft:arrow";
     @YamlKey("menu.icons.paginate_last_page")
-    private String paginateLastPage = "minecraft:egg";
+    private String paginateLastPage = "minecraft:spectral_arrow";
     @YamlKey("menu.icons.controls_icon")
     private String controlsIcon = "minecraft:oak_sign";
 
