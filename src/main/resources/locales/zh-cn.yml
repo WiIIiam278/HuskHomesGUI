@@ -1,23 +1,23 @@
+# 标题
 homes_menu_title: '%1%''的家'
 public_homes_menu_title: '开放的家'
 warps_menu_title: '地标'
+# 编辑页面标题
+home_editor_title: '编辑家: %1%'
+warp_editor_title: '编辑地标: %1%'
+
+# 物品
 item_name: '[%1%](#00fb9a)'
 item_description: '&7ℹ %1%'
 item_description_blank: ''
 item_controls_space: ''
 item_controls_left_click: '[左键点击:](#00fb9a) [传送](gray)'
 item_controls_right_click: '[右键点击:](#00fb9a) [编辑](gray)'
-item_controls_drag_drop_item: '[Drag+Drop Item:](#00fb9a) [Set icon](gray)'
+item_controls_drag_drop_item: '[拖放物品:](#00fb9a) [设置图标](gray)'
+# 物品详细信息
 home_owner_name: '[[由 %1% 创建]](#00fb9a)'
-pagination_first_page: '[⏪ 首页 \\(1\\)](#00fb9a)'
-pagination_previous_page: '[◀ 上一页 \\(%prevpage%\\)](#00fb9a)'
-pagination_next_page: '[下一页 \\(%nextpage%\\) ▶](#00fb9a)'
-pagination_last_page: '[尾页 \\(%pages%\\) ⏩](#00fb9a)'
-menu_controls_title: '[说明](gray)'
-menu_controls_details: '[  • 左键点击: 传送](gray)\n[  • 右键点击: 编辑](gray)\n[  • 放置物品: 设置图标](gray)\n'
-home_editor_title: '编辑家: %1%'
-warp_editor_title: '编辑地标: %1%'
-back_button: '[返回](#00fb9a)'
+
+# 编辑页面物品
 edit_location_button: '[更新位置](#00fb9a)'
 edit_name_button: '[修改名称](#00fb9a)'
 edit_description_button: '[修改描述](#00fb9a)'
@@ -25,9 +25,21 @@ edit_name_title: '修改名称: %1%'
 edit_description_title: '修改描述: %1%'
 edit_privacy_button: '[隐私设置](#00fb9a)'
 delete_button: '[删除](#00fb9a)'
+# 详细信息
 item_info_name: '[名称:](#00fb9a) %1%'
-item_info_description: '%1%'
+item_info_description: '&7ℹ %1%'
 item_info_world: '[世界:](#00fb9a) %1%'
 item_info_server: '[服务器:](#00fb9a) %1%'
 item_info_coordinates: '[坐标:](#00fb9a) x: %1%, y: %2%, z: %3%'
+
+# GUI 控件
+back_button: '[返回](#00fb9a)'
+pagination_first_page: '[⏪ 首页 \\(1\\)](#00fb9a)'
+pagination_previous_page: '[◀ 上一页 \\(%prevpage%\\)](#00fb9a)'
+pagination_next_page: '[下一页 \\(%nextpage%\\) ▶](#00fb9a)'
+pagination_last_page: '[尾页 \\(%pages%\\) ⏩](#00fb9a)'
+menu_controls_title: '[操作说明](gray)'
+menu_controls_details: '[  • 左键点击: 传送](gray)\n[  • 右键点击: 编辑](gray)\n[  • 放置物品: 设置图标](gray)\n'
+
+# 消息
 updated_icon: '[已成功更新图标:](#00fb9a) [%1%](#00fb9a bold)'
