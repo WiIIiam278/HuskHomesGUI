@@ -27,7 +27,7 @@ edit_description_default_message: '&7ℹ %1%'
 edit_description_default_message_blank: '' # 没有描述
 edit_description_default_input: '没有描述' # 留空''则会填充图标物品名称, 输入空格' '则会清空描述
 edit_privacy_button: '[切换开放状态](#00fb9a)'
-edit_privacy_message: '&7当前为 %1% &7状态'
+edit_privacy_message: '[当前为](#00fb9a) %1% [状态](#00fb9a)'
 edit_privacy_message_var1_public: '&a开放'
 edit_privacy_message_var1_private: '&6私有'
 
@@ -35,7 +35,7 @@ delete_button: '[删除](#00fb9a)\n此操作无法撤销!'
 # 详细信息
 item_info_name: '[名称:](#00fb9a) %1%'
 item_info_description: '&7ℹ %1%'
-item_info_description_blank: '没有描述' # ''
+item_info_description_blank: '' # 没有描述
 item_info_world: '[世界:](#00fb9a) %1%'
 item_info_server: '[服务器:](#00fb9a) %1%'
 item_info_coordinates: '[坐标:](#00fb9a) x: %1%, y: %2%, z: %3%'
