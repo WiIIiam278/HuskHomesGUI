@@ -98,10 +98,8 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                             try {
                                 if (position instanceof Home home) {
                                     player.performCommand("huskhomes:edithome " + home.getOwner().getUsername() +"."+ home.getName() +" relocate");
-//                                    api.relocateHome(home, onlineUser.getPosition());
                                 } else if (position instanceof Warp warp) {
                                     player.performCommand("huskhomes:editwarp " + warp.getName() +" relocate");
-//                                    api.relocateWarp(warp, onlineUser.getPosition());
                                 }
                             } catch (ValidationException e) {
                                 return true;
@@ -109,7 +107,11 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                         }
                         return true;
                     },
-                    plugin.getLocales().getLocale("edit_location_button")));
+                    plugin.getLocales().getLocale("edit_location_button"),
+                    plugin.getLocales().getLocale("edit_location_default_message",
+                            Integer.toString((int) Math.floor(position.getX())),
+                            Integer.toString((int) Math.floor(position.getY())),
+                            Integer.toString((int) Math.floor(position.getZ())))));
 
             // Editing name (Via anvil)
             menu.addElement(new StaticGuiElement('n',
@@ -160,17 +162,18 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                             new AnvilGUI.Builder()
                                     .title(plugin.getLocales().getLocale("edit_description_title", position.getName()))
                                     .itemLeft(new ItemStack(positionIcon))
-                                    .text(position.getMeta().getDescription())
+                                    // description or default_description
+                                    .text(!position.getMeta().getDescription().isBlank() ?
+                                            position.getMeta().getDescription()
+                                            : plugin.getLocales().getLocale("edit_description_default_input"))
                                     .onClose(playerInAnvil -> this.show(api.adaptUser(player)))
                                     .onComplete((completion) -> {
                                         if (completion.getText() != null) {
                                             try {
                                                 if (position instanceof Home home) {
                                                     player.performCommand("huskhomes:edithome " + home.getOwner().getUsername() +"."+ home.getName() +" description "+ completion.getText());
-//                                                    api.setHomeDescription(home, completion.getText());
                                                 } else if (position instanceof Warp warp) {
                                                     player.performCommand("huskhomes:editwarp " + warp.getName() +" description "+ completion.getText());
-//                                                    api.setWarpDescription(warp, completion.getText());
                                                 }
                                             } catch (ValidationException e) {
                                                 return List.of();
@@ -185,7 +188,12 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                         }
                         return true;
                     },
-                    plugin.getLocales().getLocale("edit_description_button")));
+                    plugin.getLocales().getLocale("edit_description_button"),
+
+                    // description
+                    (!position.getMeta().getDescription().isBlank() ?
+                            plugin.getLocales().getLocale("edit_description_default_message", position.getMeta().getDescription())
+                            : plugin.getLocales().getLocale("edit_description_default_message_blank"))));
 
             // Editing home privacy
             if (position instanceof Home home) {
@@ -194,19 +202,22 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                         (click) -> {
                             if (click.getWhoClicked() instanceof Player player) {
                                 try {
-                                    String not_isPublic = home.isPublic()? "private" : "public";
+                                    String not_isPublic = home.isPublic() ? "private" : "public";
                                     player.performCommand("huskhomes:edithome " + home.getOwner().getUsername() +"."+ home.getName() +" privacy "+ not_isPublic);
                                     home.setPublic(!home.isPublic()); // Change the data here, not the database // The player may click the button repeatedly
 
 //                                    player.performCommand("huskhomes:edithome " + home.getOwner().getUsername() +"."+ home.getName() +" privacy");
-//                                    api.setHomePrivacy(home, !home.isPublic());
                                 } catch (ValidationException e) {
                                     return true;
                                 }
                             }
                             return true;
                         },
-                        plugin.getLocales().getLocale("edit_privacy_button")));
+                        plugin.getLocales().getLocale("edit_privacy_button"),
+                        // public or private
+                        plugin.getLocales().getLocale("edit_privacy_message", (home.isPublic() ?
+                                plugin.getLocales().getLocale("edit_privacy_message_var1_public")
+                                : plugin.getLocales().getLocale("edit_privacy_message_var1_private")))));
             }
 
             // Deleting
@@ -218,14 +229,21 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                             try {
                                 if (position instanceof Home home) {
                                     player.performCommand("huskhomes:delhome " + home.getOwner().getUsername() + "." + home.getName());
-//                                    api.deleteHome(home);
+                                    home.getMeta().setName(plugin.getLocales().getLocale("item_deleted_name", home.getName())); // listMenu
                                 } else if (position instanceof Warp warp) {
                                     player.performCommand("huskhomes:delwarp " + warp.getName());
-//                                    api.deleteWarp(warp);
+                                    warp.getMeta().setName(plugin.getLocales().getLocale("item_deleted_name", warp.getName())); // listMenu
                                 }
                             } catch (ValidationException e) {
                                 return true;
                             }
+
+                            // Return to the parent list menu
+                            final OnlineUser user = api.adaptUser(player);
+                            this.close(user);
+                            parentMenu.show(user);
+                            parentMenu.setPageNumber(user, pageNumber);
+                            this.destroy();
                         }
                         return true;
                     },

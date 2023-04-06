@@ -187,7 +187,9 @@ public class ListMenu<T extends SavedPosition> extends Menu {
 
                 // player name
                 (position instanceof Home home ?
-                        plugin.getLocales().getLocale("home_owner_name", home.getOwner().getUsername())
+                        type == Type.PUBLIC_HOME ?
+                                plugin.getLocales().getLocale("home_owner_name", home.getOwner().getUsername())
+                                : ""
                         : ""),
 
                 // item_controls
