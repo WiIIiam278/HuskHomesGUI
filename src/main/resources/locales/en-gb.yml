@@ -33,11 +33,11 @@ item_info_coordinates: '[Coordinates:](#00fb9a) x: %1%, y: %2%, z: %3%'
 updated_icon: '[Successfully updated the icon for](#00fb9a) [%1%](#00fb9a bold)'
 
 item_controls: '[  • Left Click: Teleport](gray)\n[  • Right Click: Edit](gray)\n[  • Place Item: Set icon](gray)\n'
-item_deleted_name: '&c[已删除] [%1%](#00fb9a)'
-edit_location_default_message: '  &f- &7当前位置为: x%1%, y%2%, z%3%'
-edit_description_default_message: '  &f- &7%1%'
-edit_description_default_message_blank: '' # 没有描述
-edit_description_default_input: '没有描述' # 留空''则会填充图标物品名称, 输入空格' '则会清空描述
-edit_privacy_message: '&7当前为 %1% &7状态'
-edit_privacy_message_var1_public: '开放'
-edit_privacy_message_var1_private: '私有'
+item_deleted_name: '&c[DEL] [%1%](#00fb9a)'
+edit_location_default_message: '[Coordinates:](#00fb9a) x: %1%, y: %2%, z: %3%'
+edit_description_default_message: '&7ℹ %1%'
+edit_description_default_message_blank: ''
+edit_description_default_input: 'null' # Deje en blanco '' para completar el nombre del elemento del icono, ingrese un espacio en blanco '' para vaciar la descripción # 留空''则会填充图标物品名称, 输入空格' '则会清空描述
+edit_privacy_message: '&7currently %1%'
+edit_privacy_message_var1_public: '&apublic'
+edit_privacy_message_var1_private: '&6private'
