@@ -252,14 +252,22 @@ public class EditMenu<T extends SavedPosition> extends Menu {
             // Controls display
             menu.addElement(new StaticGuiElement('i',
                     new ItemStack(Material.OAK_SIGN),
+                    // name
                     plugin.getLocales().getLocale("item_info_name", position.getName()),
-                    plugin.getLocales().getLocale("item_info_description", position.getMeta().getDescription()),
+                    // description
+                    (!position.getMeta().getDescription().isBlank() ?
+                            plugin.getLocales().getLocale("item_info_description", position.getMeta().getDescription())
+                            : plugin.getLocales().getLocale("item_info_description_blank")),
+                    // world name
                     plugin.getLocales().getLocale("item_info_world", position.getWorld().getName()),
+                    // server
                     plugin.getLocales().getLocale("item_info_server", position.getServer()),
+                    // xyz
                     plugin.getLocales().getLocale("item_info_coordinates",
                             Integer.toString((int) Math.floor(position.getX())),
                             Integer.toString((int) Math.floor(position.getY())),
                             Integer.toString((int) Math.floor(position.getZ()))),
+                    // by playerName
                     position instanceof Home home ? plugin.getLocales()
                             .getLocale("home_owner_name", home.getOwner().getUsername()) : ""
             ));
