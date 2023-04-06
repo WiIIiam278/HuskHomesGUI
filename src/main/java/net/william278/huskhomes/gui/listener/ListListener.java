@@ -17,6 +17,7 @@ public class ListListener implements Listener {
         this.plugin = plugin;
     }
 
+    // home or phome
     @EventHandler
     public void onHomeListView(@NotNull HomeListEvent event) {
         if (!(event.getListViewer() instanceof OnlineUser onlineUser)) {
@@ -37,6 +38,7 @@ public class ListListener implements Listener {
         menu.show(onlineUser);
     }
 
+    // warp
     @EventHandler
     public void onWarpListView(@NotNull WarpListEvent event) {
         if (!(event.getListViewer() instanceof OnlineUser onlineUser)) {

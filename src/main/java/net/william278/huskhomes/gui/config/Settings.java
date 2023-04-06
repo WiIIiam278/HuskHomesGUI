@@ -20,9 +20,12 @@ public class Settings {
     private String language = "en-gb";
     @YamlComment("Options for the home/warp list menu GUI")
     @YamlKey("menu.rows")
-    private int menuSize = 6;
+    private int menuSize = 4;
     @YamlKey("menu.show_controls")
     private boolean showMenuControls = true;
+    @YamlKey("menu.display-operation-help-in-item")
+    private boolean menu_displayOperationHelpInItem = false;
+
     @YamlKey("menu.items.homes_filler")
     private String homesFillerItem = "minecraft:orange_stained_glass_pane";
     @YamlKey("menu.items.public_homes_filler")
@@ -75,6 +78,10 @@ public class Settings {
 
     public boolean doShowMenuControls() {
         return showMenuControls;
+    }
+
+    public boolean menu_displayOperationHelpInItem() {
+        return menu_displayOperationHelpInItem;
     }
 
     @NotNull

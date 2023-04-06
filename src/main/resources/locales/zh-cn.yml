@@ -9,11 +9,12 @@ warp_editor_title: '编辑地标: %1%'
 # 物品
 item_name: '[%1%](#00fb9a)'
 item_description: '&7ℹ %1%'
-item_description_blank: ''
+item_description_blank: '' # '没有描述'
 item_controls_space: ''
-item_controls_left_click: '[左键点击:](#00fb9a) [传送](gray)'
-item_controls_right_click: '[右键点击:](#00fb9a) [编辑](gray)'
-item_controls_drag_drop_item: '[拖放物品:](#00fb9a) [设置图标](gray)'
+item_controls: '[  • 左键点击: 传送](gray)\n[  • 右键点击: 编辑](gray)\n[  • 放置物品: 设置图标](gray)\n'
+    #item_controls_left_click: '[左键点击:](#00fb9a) [传送](gray)'
+    #item_controls_right_click: '[右键点击:](#00fb9a) [编辑](gray)'
+    #item_controls_drag_drop_item: '[拖放物品:](#00fb9a) [设置图标](gray)'
 # 物品详细信息
 home_owner_name: '[[由 %1% 创建]](#00fb9a)'
 

@@ -65,7 +65,7 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                     .orElse(plugin.getSettings().getDefaultIcon()));
             menu.setCloseAction(i -> false);
 
-            // Filler icons
+            // Filler background icons
             menu.addElement(new StaticGuiElement('a',
                     new ItemStack(switch (type) {
                         case HOME, PUBLIC_HOME -> plugin.getSettings().getHomeEditorFillerIcon();
@@ -97,10 +97,10 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                             final OnlineUser onlineUser = api.adaptUser(player);
                             try {
                                 if (position instanceof Home home) {
-                                    player.performCommand("huskhomes:edithome " + ((Home) position).getOwner().getUsername() +"."+ position.getName() +" relocate");
+                                    player.performCommand("huskhomes:edithome " + home.getOwner().getUsername() +"."+ home.getName() +" relocate");
 //                                    api.relocateHome(home, onlineUser.getPosition());
                                 } else if (position instanceof Warp warp) {
-                                    player.performCommand("huskhomes:editwarp " + position.getName() +" relocate");
+                                    player.performCommand("huskhomes:editwarp " + warp.getName() +" relocate");
 //                                    api.relocateWarp(warp, onlineUser.getPosition());
                                 }
                             } catch (ValidationException e) {
@@ -125,11 +125,11 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                                     .onComplete((completion) -> {
                                         if (completion.getText() != null) {
                                             try {
-                                                if (position instanceof Home) {
-                                                    player.performCommand("huskhomes:edithome " + ((Home) position).getOwner().getUsername() +"."+ position.getName() +" rename "+ completion.getText());
+                                                if (position instanceof Home home) {
+                                                    player.performCommand("huskhomes:edithome " + home.getOwner().getUsername() +"."+ home.getName() +" rename "+ completion.getText());
 //                                                    api.renameHome(home, completion.getText());
-                                                } else if (position instanceof Warp) {
-                                                    player.performCommand("huskhomes:editwarp " + position.getName() +" description "+ completion.getText());
+                                                } else if (position instanceof Warp warp) {
+                                                    player.performCommand("huskhomes:editwarp " + warp.getName() +" description "+ completion.getText());
 //                                                    api.renameWarp(warp, completion.getText());
                                                 }
                                             } catch (ValidationException e) {
@@ -165,11 +165,11 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                                     .onComplete((completion) -> {
                                         if (completion.getText() != null) {
                                             try {
-                                                if (position instanceof Home) {
-                                                    player.performCommand("huskhomes:edithome " + ((Home) position).getOwner().getUsername() +"."+ position.getName() +" description "+ completion.getText());
+                                                if (position instanceof Home home) {
+                                                    player.performCommand("huskhomes:edithome " + home.getOwner().getUsername() +"."+ home.getName() +" description "+ completion.getText());
 //                                                    api.setHomeDescription(home, completion.getText());
-                                                } else if (position instanceof Warp) {
-                                                    player.performCommand("huskhomes:editwarp " + position.getName() +" description "+ completion.getText());
+                                                } else if (position instanceof Warp warp) {
+                                                    player.performCommand("huskhomes:editwarp " + warp.getName() +" description "+ completion.getText());
 //                                                    api.setWarpDescription(warp, completion.getText());
                                                 }
                                             } catch (ValidationException e) {
@@ -197,6 +197,8 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                                     String not_isPublic = home.isPublic()? "private" : "public";
                                     player.performCommand("huskhomes:edithome " + home.getOwner().getUsername() +"."+ home.getName() +" privacy "+ not_isPublic);
                                     home.setPublic(!home.isPublic()); // Change the data here, not the database // The player may click the button repeatedly
+
+//                                    player.performCommand("huskhomes:edithome " + home.getOwner().getUsername() +"."+ home.getName() +" privacy");
 //                                    api.setHomePrivacy(home, !home.isPublic());
                                 } catch (ValidationException e) {
                                     return true;
@@ -214,11 +216,11 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                         if (click.getWhoClicked() instanceof Player player) {
                             this.close(api.adaptUser(player));
                             try {
-                                if (position instanceof Home) {
-                                    player.performCommand("huskhomes:delhome " + ((Home) position).getOwner().getUsername() + "." + position.getName());
+                                if (position instanceof Home home) {
+                                    player.performCommand("huskhomes:delhome " + home.getOwner().getUsername() + "." + home.getName());
 //                                    api.deleteHome(home);
-                                } else if (position instanceof Warp) {
-                                    player.performCommand("huskhomes:delwarp " + position.getName());
+                                } else if (position instanceof Warp warp) {
+                                    player.performCommand("huskhomes:delwarp " + warp.getName());
 //                                    api.deleteWarp(warp);
                                 }
                             } catch (ValidationException e) {

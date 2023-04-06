@@ -123,6 +123,7 @@ public class ListMenu<T extends SavedPosition> extends Menu {
                                 // Update the icon with the item on the cursor
                                 final ItemStack newItem = player.getItemOnCursor();
                                 if (newItem.getType() == Material.AIR) {
+                                    // teleport
                                     this.close(user);
                                     this.destroy();
 
@@ -136,6 +137,7 @@ public class ListMenu<T extends SavedPosition> extends Menu {
                                     return true;
                                 }
 
+                                // Update the icon with the item on the cursor
                                 if (!player.hasPermission(EDIT_HOME_PERMISSION)
                                         && !player.hasPermission(EDIT_HOME_OTHER_PERMISSION)) {
                                     return true;
@@ -145,7 +147,7 @@ public class ListMenu<T extends SavedPosition> extends Menu {
                                 click.getGui().draw();
                             }
 
-                            case RIGHT, DROP -> {
+                            case RIGHT, DROP -> { // DROP: geyser player throw item
                                 switch (type) {
                                     case WARP -> {
                                         if (!player.hasPermission(EDIT_WARP_PERMISSION)) {
@@ -174,16 +176,25 @@ public class ListMenu<T extends SavedPosition> extends Menu {
                     }
                     return true;
                 },
+
+                // home name
                 plugin.getLocales().getLocale("item_name", position.getName()),
+
+                // description
                 (!position.getMeta().getDescription().isBlank() ?
                         plugin.getLocales().getLocale("item_description", position.getMeta().getDescription())
                         : plugin.getLocales().getLocale("item_description_blank")),
+
+                // player name
                 (position instanceof Home home ?
                         plugin.getLocales().getLocale("home_owner_name", home.getOwner().getUsername())
                         : ""),
-                plugin.getLocales().getLocale("item_controls_left_click"),
-                plugin.getLocales().getLocale("item_controls_right_click"),
-                plugin.getLocales().getLocale("item_controls_drag_drop_item")));
+
+                // item_controls
+                (plugin.getSettings().menu_displayOperationHelpInItem() ?
+                        plugin.getLocales().getLocale("item_controls")
+                        : "")
+        ));
     }
 
 }
