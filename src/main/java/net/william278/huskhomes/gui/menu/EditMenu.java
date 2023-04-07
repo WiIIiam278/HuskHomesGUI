@@ -202,11 +202,8 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                         (click) -> {
                             if (click.getWhoClicked() instanceof Player player) {
                                 try {
-                                    String not_isPublic = home.isPublic() ? "private" : "public";
-                                    player.performCommand("huskhomes:edithome " + home.getOwner().getUsername() +"."+ home.getName() +" privacy "+ not_isPublic);
-                                    home.setPublic(!home.isPublic()); // Change the data here, not the database // The player may click the button repeatedly
-
-//                                    player.performCommand("huskhomes:edithome " + home.getOwner().getUsername() +"."+ home.getName() +" privacy");
+                                    player.performCommand("huskhomes:edithome " + home.getOwner().getUsername() +"."+ home.getName() +" privacy");
+                                    home.setPublic(!home.isPublic()); // Update the status display on the menu
                                 } catch (ValidationException e) {
                                     return true;
                                 }
