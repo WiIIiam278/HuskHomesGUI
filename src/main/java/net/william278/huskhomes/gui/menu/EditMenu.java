@@ -94,7 +94,7 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                     new ItemStack(plugin.getSettings().getEditorEditLocationButtonIcon()),
                     (click) -> {
                         if (click.getWhoClicked() instanceof Player player) {
-                            final OnlineUser onlineUser = api.adaptUser(player);
+//                            final OnlineUser onlineUser = api.adaptUser(player);
                             try {
                                 if (position instanceof Home home) {
                                     player.performCommand("huskhomes:edithome " + home.getOwner().getUsername() +"."+ home.getName() +" relocate");
