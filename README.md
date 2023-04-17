@@ -1,5 +1,4 @@
 <!--suppress ALL -->
-<h4>
 <p align="center">
     <img src="images/banner.png" alt="HuskHomesGUI" />
     <a href="https://github.com/WiIIiam278/HuskHomesGUI/actions/workflows/java_ci.yml">
@@ -23,7 +22,6 @@
     </b>
 </p>
 </br>
-</h4>
 
 **HuskHomesGUI** is a GUI add-on plugin for [HuskHomes v3.x](https://github.com/WiIIiam278/HuskHomes2) on Spigot servers. It provides a chest-style graphical user interface (GUI) for browsing home and warp lists as well as editing homes.
 
