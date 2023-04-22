@@ -23,7 +23,7 @@
 </p>
 </br>
 
-**HuskHomesGUI** is a GUI add-on plugin for [HuskHomes v3.x](https://github.com/WiIIiam278/HuskHomes2) on Spigot servers. It provides a chest-style graphical user interface (GUI) for browsing home and warp lists as well as editing homes.
+**HuskHomesGUI** is a GUI add-on plugin for [HuskHomes v4.x](https://github.com/WiIIiam278/HuskHomes2) on Spigot servers. It provides a chest-style graphical user interface (GUI) for browsing home and warp lists as well as editing homes.
 
 It replaces the chat menu system that is built into HuskHomes when you type `/homelist`, `/phomelist` or `/warplist` and includes anvil-based rename and description editing functionality to allow for easy editing.
 
