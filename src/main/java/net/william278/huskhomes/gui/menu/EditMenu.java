@@ -124,7 +124,7 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                                     .text(position.getName())
                                     .onClose(playerInAnvil -> this.show(api.adaptUser(player)))
                                     .onClick((slot, stateSnapshot) -> {
-                                        if(slot == AnvilGUI.Slot.OUTPUT) {
+                                        if (slot == AnvilGUI.Slot.OUTPUT) {
                                             if (stateSnapshot.getText() != null) {
                                                 try {
                                                     if (position instanceof Home home) {
@@ -168,7 +168,7 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                                             : plugin.getLocales().getLocale("edit_description_default_input"))
                                     .onClose(playerInAnvil -> this.show(api.adaptUser(player)))
                                     .onClick((slot, stateSnapshot) -> {
-                                        if(slot == AnvilGUI.Slot.OUTPUT) {
+                                        if (slot == AnvilGUI.Slot.OUTPUT) {
                                             if (stateSnapshot.getText() != null) {
                                                 try {
                                                     if (position instanceof Home home) {
