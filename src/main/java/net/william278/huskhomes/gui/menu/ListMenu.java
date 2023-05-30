@@ -17,8 +17,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static org.bukkit.Bukkit.getLogger;
-
 /**
  * A menu for displaying a list of saved positions
  */
