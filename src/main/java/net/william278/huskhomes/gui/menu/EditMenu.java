@@ -94,12 +94,11 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                     new ItemStack(plugin.getSettings().getEditorEditLocationButtonIcon()),
                     (click) -> {
                         if (click.getWhoClicked() instanceof Player player) {
-//                            final OnlineUser onlineUser = api.adaptUser(player);
                             try {
                                 if (position instanceof Home home) {
-                                    player.performCommand("huskhomes:edithome " + home.getOwner().getUsername() +"."+ home.getName() +" relocate");
+                                    api.relocateHome(home, api.adaptUser(player).getPosition());
                                 } else if (position instanceof Warp warp) {
-                                    player.performCommand("huskhomes:editwarp " + warp.getName() +" relocate");
+                                    api.relocateWarp(warp, api.adaptUser(player).getPosition());
                                 }
                             } catch (ValidationException e) {
                                 return true;
@@ -128,11 +127,9 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                                         if (completion.getText() != null) {
                                             try {
                                                 if (position instanceof Home home) {
-                                                    player.performCommand("huskhomes:edithome " + home.getOwner().getUsername() +"."+ home.getName() +" rename "+ completion.getText());
-//                                                    api.renameHome(home, completion.getText());
+                                                    api.renameHome(home, completion.getText());
                                                 } else if (position instanceof Warp warp) {
-                                                    player.performCommand("huskhomes:editwarp " + warp.getName() +" description "+ completion.getText());
-//                                                    api.renameWarp(warp, completion.getText());
+                                                    api.renameWarp(warp, completion.getText());
                                                 }
                                             } catch (ValidationException e) {
                                                 return List.of();
@@ -172,10 +169,8 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                                             try {
                                                 if (position instanceof Home home) {
                                                     api.setHomeDescription(home, completion.getText());
-//                                                    player.performCommand("huskhomes:edithome " + home.getOwner().getUsername() +"."+ home.getName() +" description "+ completion.getText());
                                                 } else if (position instanceof Warp warp) {
                                                     api.setWarpDescription(warp, completion.getText());
-//                                                    player.performCommand("huskhomes:editwarp " + warp.getName() +" description "+ completion.getText());
                                                 }
                                             } catch (ValidationException e) {
                                                 return List.of();
@@ -205,8 +200,9 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                             if (click.getWhoClicked() instanceof Player player) {
                                 try {
                                     api.setHomePrivacy(home, !home.isPublic());
-                                    player.performCommand("huskhomes:edithome " + home.getOwner().getUsername() +"."+ home.getName() +" privacy");
-//                                    home.setPublic(!home.isPublic()); // Update the status display on the menu
+                                    // Update the status display on the menu
+                                    home.setPublic(!home.isPublic());
+                                    this.show(api.adaptUser(player));
                                 } catch (ValidationException e) {
                                     return true;
                                 }
@@ -228,10 +224,10 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                             this.close(api.adaptUser(player));
                             try {
                                 if (position instanceof Home home) {
-                                    player.performCommand("huskhomes:delhome " + home.getOwner().getUsername() + "." + home.getName());
+                                    api.deleteHome(home);
                                     home.getMeta().setName(plugin.getLocales().getLocale("item_deleted_name", home.getName())); // listMenu
                                 } else if (position instanceof Warp warp) {
-                                    player.performCommand("huskhomes:delwarp " + warp.getName());
+                                    api.deleteWarp(warp);
                                     warp.getMeta().setName(plugin.getLocales().getLocale("item_deleted_name", warp.getName())); // listMenu
                                 }
                             } catch (ValidationException e) {
