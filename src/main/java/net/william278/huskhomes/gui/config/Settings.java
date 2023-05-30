@@ -23,7 +23,7 @@ public class Settings {
     private int menuSize = 4;
     @YamlKey("menu.show_controls")
     private boolean showMenuControls = true;
-    @YamlKey("menu.display-operation-help-in-item")
+    @YamlKey("menu.display_controls_help_in_lore")
     private boolean menu_displayOperationHelpInItem = false;
 
     @YamlKey("menu.items.homes_filler")
