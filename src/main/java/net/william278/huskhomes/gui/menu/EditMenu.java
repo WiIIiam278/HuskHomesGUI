@@ -123,24 +123,27 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                                     .itemLeft(new ItemStack(positionIcon))
                                     .text(position.getName())
                                     .onClose(playerInAnvil -> this.show(api.adaptUser(player)))
-                                    .onComplete((completion) -> {
-                                        if (completion.getText() != null) {
-                                            try {
-                                                if (position instanceof Home home) {
-                                                    api.renameHome(home, completion.getText());
-                                                } else if (position instanceof Warp warp) {
-                                                    api.renameWarp(warp, completion.getText());
+                                    .onClick((slot, stateSnapshot) -> {
+                                        if(slot == AnvilGUI.Slot.OUTPUT) {
+                                            if (stateSnapshot.getText() != null) {
+                                                try {
+                                                    if (position instanceof Home home) {
+                                                        api.renameHome(home, stateSnapshot.getText());
+                                                    } else if (position instanceof Warp warp) {
+                                                        api.renameWarp(warp, stateSnapshot.getText());
+                                                    }
+                                                } catch (ValidationException e) {
+                                                    return List.of();
                                                 }
-                                            } catch (ValidationException e) {
-                                                return List.of();
                                             }
-                                        }
-                                        position.getMeta().setName(completion.getText());
+                                            position.getMeta().setName(stateSnapshot.getText());
 
-                                        // Refresh menu title
-                                        this.close(api.adaptUser(player));
-                                        this.destroy();
-                                        new EditMenu<>(plugin, position, parentMenu, pageNumber).show(api.adaptUser(player));
+                                            // Refresh menu title
+                                            this.close(api.adaptUser(player));
+                                            this.destroy();
+                                            new EditMenu<>(plugin, position, parentMenu, pageNumber).show(api.adaptUser(player));
+                                            return List.of();
+                                        }
                                         return List.of();
                                     })
                                     .plugin(plugin)
@@ -164,20 +167,22 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                                             position.getMeta().getDescription()
                                             : plugin.getLocales().getLocale("edit_description_default_input"))
                                     .onClose(playerInAnvil -> this.show(api.adaptUser(player)))
-                                    .onComplete((completion) -> {
-                                        if (completion.getText() != null) {
-                                            try {
-                                                if (position instanceof Home home) {
-                                                    api.setHomeDescription(home, completion.getText());
-                                                } else if (position instanceof Warp warp) {
-                                                    api.setWarpDescription(warp, completion.getText());
+                                    .onClick((slot, stateSnapshot) -> {
+                                        if(slot == AnvilGUI.Slot.OUTPUT) {
+                                            if (stateSnapshot.getText() != null) {
+                                                try {
+                                                    if (position instanceof Home home) {
+                                                        api.setHomeDescription(home, stateSnapshot.getText());
+                                                    } else if (position instanceof Warp warp) {
+                                                        api.setWarpDescription(warp, stateSnapshot.getText());
+                                                    }
+                                                } catch (ValidationException e) {
+                                                    return List.of();
                                                 }
-                                            } catch (ValidationException e) {
-                                                return List.of();
                                             }
+                                            position.getMeta().setDescription(stateSnapshot.getText());
+                                            this.show(api.adaptUser(player));
                                         }
-                                        position.getMeta().setDescription(completion.getText());
-                                        this.show(api.adaptUser(player));
                                         return List.of();
                                     })
                                     .plugin(plugin)
