@@ -145,7 +145,7 @@ public class ListMenu<T extends SavedPosition> extends Menu {
                                 return true;
                             }
                             setPositionMaterial(position, newItem.getType());
-                            player.sendMessage(plugin.getLocales().getLocale("updated_icon", position.getName()));
+//                            player.sendMessage(plugin.getLocales().getLocale("updated_icon", position.getName()));
                             click.getGui().draw();
                         }
 

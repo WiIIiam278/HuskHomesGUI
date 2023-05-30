@@ -31,7 +31,7 @@ item_info_description: '%1%'
 item_info_world: '[Mundo:](#00fb9a) %1%'
 item_info_server: '[Servidor:](#00fb9a) %1%'
 item_info_coordinates: '[Coordenades:](#00fb9a) x: %1%, y: %2%, z: %3%'
-updated_icon: '[Icono actualizado con éxito para](#00fb9a) [%1%](#00fb9a bold)'
+#updated_icon: '[Icono actualizado con éxito para](#00fb9a) [%1%](#00fb9a bold)'
 
 item_controls: '[  • Click Izquierdo: Teleport](gray)\n[  • Click Derecho: Editar](gray)\n[  • Colocar Item: Establecer icono](gray)\n'
 item_deleted_name: '&c[BORRAR] [%1%](#00fb9a)'

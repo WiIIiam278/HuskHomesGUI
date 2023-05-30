@@ -51,4 +51,4 @@ menu_controls_title: '[操作说明:](gray)'
 menu_controls_details: '[  • 左键点击: 传送](gray)\n[  • 右键点击: 编辑](gray)\n[  • 放置物品: 设置图标](gray)\n'
 
 # 消息
-updated_icon: '[已更新图标:](#00fb9a) [%1%](#00fb9a bold)'
+#updated_icon: '[已更新图标:](#00fb9a) [%1%](#00fb9a bold)'
