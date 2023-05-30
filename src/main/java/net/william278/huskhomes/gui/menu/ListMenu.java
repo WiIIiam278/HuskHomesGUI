@@ -17,6 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static org.bukkit.Bukkit.getLogger;
+
 /**
  * A menu for displaying a list of saved positions
  */
@@ -114,88 +116,88 @@ public class ListMenu<T extends SavedPosition> extends Menu {
     @NotNull
     private DynamicGuiElement getPositionButton(@NotNull HuskHomesGui plugin, @NotNull SavedPosition position) {
         return new DynamicGuiElement('e', (viewer) -> new StaticGuiElement('e',
-                new ItemStack(getPositionMaterial(position).orElse(plugin.getSettings().getDefaultIcon())),
-                (click) -> {
-                    if (click.getWhoClicked() instanceof Player player) {
-                        final OnlineUser user = api.adaptUser(player);
-                        switch (click.getType()) {
-                            case LEFT -> {
-                                // Update the icon with the item on the cursor
-                                final ItemStack newItem = player.getItemOnCursor();
-                                if (newItem.getType() == Material.AIR) {
-                                    // teleport
-                                    this.close(user);
-                                    this.destroy();
+            new ItemStack(getPositionMaterial(position).orElse(plugin.getSettings().getDefaultIcon())),
+            (click) -> {
+                if (click.getWhoClicked() instanceof Player player) {
+                    final OnlineUser user = api.adaptUser(player);
+                    switch (click.getType()) {
+                        case LEFT -> {
+                            // Update the icon with the item on the cursor
+                            final ItemStack newItem = player.getItemOnCursor();
+                            if (newItem.getType() == Material.AIR) {
+                                // teleport
+                                this.close(user);
+                                this.destroy();
 
-                                    try {
-                                        api.teleportBuilder(user)
-                                                .target(position)
-                                                .toTimedTeleport()
-                                                .execute();
-                                    } catch (TeleportationException ignored) {
-                                    }
-                                    return true;
+                                try {
+                                    api.teleportBuilder(user)
+                                            .target(position)
+                                            .toTimedTeleport()
+                                            .execute();
+                                } catch (TeleportationException ignored) {
                                 }
-
-                                // Update the icon with the item on the cursor
-                                if (!player.hasPermission(EDIT_HOME_PERMISSION)
-                                        && !player.hasPermission(EDIT_HOME_OTHER_PERMISSION)) {
-                                    return true;
-                                }
-                                setPositionMaterial(position, newItem.getType());
-                                player.sendMessage(plugin.getLocales().getLocale("updated_icon", position.getName()));
-                                click.getGui().draw();
+                                return true;
                             }
 
-                            case RIGHT, DROP -> { // DROP: geyser player throw item
-                                switch (type) {
-                                    case WARP -> {
-                                        if (!player.hasPermission(EDIT_WARP_PERMISSION)) {
+                            // Update the icon with the item on the cursor
+                            if (!player.hasPermission(EDIT_HOME_PERMISSION)
+                                    && !player.hasPermission(EDIT_HOME_OTHER_PERMISSION)) {
+                                return true;
+                            }
+                            setPositionMaterial(position, newItem.getType());
+                            player.sendMessage(plugin.getLocales().getLocale("updated_icon", position.getName()));
+                            click.getGui().draw();
+                        }
+
+                        case RIGHT, DROP -> { // DROP: geyser player throw item
+                            switch (type) {
+                                case WARP -> {
+                                    if (!player.hasPermission(EDIT_WARP_PERMISSION)) {
+                                        return true;
+                                    }
+                                }
+                                case PUBLIC_HOME, HOME -> {
+                                    if (position instanceof Home home) {
+                                        if (!player.hasPermission(EDIT_HOME_PERMISSION)) {
+                                            return true;
+                                        }
+                                        if (!player.getUniqueId().equals(home.getOwner().getUuid())
+                                                && !player.hasPermission(EDIT_HOME_OTHER_PERMISSION)) {
                                             return true;
                                         }
                                     }
-                                    case PUBLIC_HOME, HOME -> {
-                                        if (position instanceof Home home) {
-                                            if (!player.hasPermission(EDIT_HOME_PERMISSION)) {
-                                                return true;
-                                            }
-                                            if (!player.getUniqueId().equals(home.getOwner().getUuid())
-                                                    && !player.hasPermission(EDIT_HOME_OTHER_PERMISSION)) {
-                                                return true;
-                                            }
-                                        }
-                                    }
                                 }
-                                if (position instanceof Home home) {
-                                    EditMenu.home(plugin, home, (ListMenu<Home>) this, getPageNumber(user)).show(user);
-                                } else if (position instanceof Warp warp) {
-                                    EditMenu.warp(plugin, warp, (ListMenu<Warp>) this, getPageNumber(user)).show(user);
-                                }
+                            }
+                            if (position instanceof Home home) {
+                                EditMenu.home(plugin, home, (ListMenu<Home>) this, getPageNumber(user)).show(user);
+                            } else if (position instanceof Warp warp) {
+                                EditMenu.warp(plugin, warp, (ListMenu<Warp>) this, getPageNumber(user)).show(user);
                             }
                         }
                     }
-                    return true;
-                },
+                }
+                return true;
+            },
 
-                // home name
-                plugin.getLocales().getLocale("item_name", position.getName()),
+            // home name
+            plugin.getLocales().getLocale("item_name", position.getName()),
 
-                // description
-                (!position.getMeta().getDescription().isBlank() ?
-                        plugin.getLocales().getLocale("item_description", position.getMeta().getDescription())
-                        : plugin.getLocales().getLocale("item_description_blank")),
+            // description
+            (!position.getMeta().getDescription().isBlank() ?
+                    plugin.getLocales().getLocale("item_description", position.getMeta().getDescription())
+                    : plugin.getLocales().getLocale("item_description_blank")),
 
-                // player name
-                (position instanceof Home home ?
-                        type == Type.PUBLIC_HOME ?
-                                plugin.getLocales().getLocale("home_owner_name", home.getOwner().getUsername())
-                                : ""
-                        : ""),
+            // player name
+            (position instanceof Home home ?
+                    type == Type.PUBLIC_HOME ?
+                            plugin.getLocales().getLocale("home_owner_name", home.getOwner().getUsername())
+                            : ""
+                    : ""),
 
-                // item_controls
-                (plugin.getSettings().menu_displayOperationHelpInItem() ?
-                        plugin.getLocales().getLocale("item_controls")
-                        : "")
+            // item_controls
+            (plugin.getSettings().menu_displayOperationHelpInItem() ?
+                    plugin.getLocales().getLocale("item_controls")
+                    : "")
         ));
     }
 

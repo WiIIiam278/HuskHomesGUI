@@ -171,9 +171,11 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                                         if (completion.getText() != null) {
                                             try {
                                                 if (position instanceof Home home) {
-                                                    player.performCommand("huskhomes:edithome " + home.getOwner().getUsername() +"."+ home.getName() +" description "+ completion.getText());
+                                                    api.setHomeDescription(home, completion.getText());
+//                                                    player.performCommand("huskhomes:edithome " + home.getOwner().getUsername() +"."+ home.getName() +" description "+ completion.getText());
                                                 } else if (position instanceof Warp warp) {
-                                                    player.performCommand("huskhomes:editwarp " + warp.getName() +" description "+ completion.getText());
+                                                    api.setWarpDescription(warp, completion.getText());
+//                                                    player.performCommand("huskhomes:editwarp " + warp.getName() +" description "+ completion.getText());
                                                 }
                                             } catch (ValidationException e) {
                                                 return List.of();
@@ -202,8 +204,9 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                         (click) -> {
                             if (click.getWhoClicked() instanceof Player player) {
                                 try {
+                                    api.setHomePrivacy(home, !home.isPublic());
                                     player.performCommand("huskhomes:edithome " + home.getOwner().getUsername() +"."+ home.getName() +" privacy");
-                                    home.setPublic(!home.isPublic()); // Update the status display on the menu
+//                                    home.setPublic(!home.isPublic()); // Update the status display on the menu
                                 } catch (ValidationException e) {
                                     return true;
                                 }
