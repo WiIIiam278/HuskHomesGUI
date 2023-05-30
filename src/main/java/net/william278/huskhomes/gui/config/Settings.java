@@ -24,7 +24,7 @@ public class Settings {
     @YamlKey("menu.show_controls")
     private boolean showMenuControls = true;
     @YamlKey("menu.display_controls_help_in_lore")
-    private boolean menu_displayOperationHelpInItem = false;
+    private boolean displayControlsHelpInCore = false;
 
     @YamlKey("menu.items.homes_filler")
     private String homesFillerItem = "minecraft:orange_stained_glass_pane";
@@ -80,8 +80,8 @@ public class Settings {
         return showMenuControls;
     }
 
-    public boolean menu_displayOperationHelpInItem() {
-        return menu_displayOperationHelpInItem;
+    public boolean camelCase() {
+        return displayControlsHelpInCore;
     }
 
     @NotNull

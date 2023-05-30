@@ -212,8 +212,8 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                         plugin.getLocales().getLocale("edit_privacy_button"),
                         // public or private
                         plugin.getLocales().getLocale("edit_privacy_message", (home.isPublic() ?
-                                plugin.getLocales().getLocale("edit_privacy_message_var1_public")
-                                : plugin.getLocales().getLocale("edit_privacy_message_var1_private")))));
+                                plugin.getLocales().getLocale("edit_privacy_message_public")
+                                : plugin.getLocales().getLocale("edit_privacy_message_private")))));
             }
 
             // Deleting
