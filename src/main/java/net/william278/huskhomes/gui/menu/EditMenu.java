@@ -220,30 +220,36 @@ public class EditMenu<T extends SavedPosition> extends Menu {
             menu.addElement(new StaticGuiElement('r',
                     new ItemStack(plugin.getSettings().getEditorDeleteButtonIcon()),
                     (click) -> {
-                        if (click.getWhoClicked() instanceof Player player) {
-                            this.close(api.adaptUser(player));
-                            try {
-                                if (position instanceof Home home) {
-                                    api.deleteHome(home);
-                                    home.getMeta().setName(plugin.getLocales().getLocale("item_deleted_name", home.getName())); // listMenu
-                                } else if (position instanceof Warp warp) {
-                                    api.deleteWarp(warp);
-                                    warp.getMeta().setName(plugin.getLocales().getLocale("item_deleted_name", warp.getName())); // listMenu
-                                }
-                            } catch (ValidationException e) {
-                                return true;
-                            }
+                        switch (click.getType()) {
+                            case RIGHT, DROP -> { // DROP: geyser player throw item
+                                if (click.getWhoClicked() instanceof Player player) {
+                                    this.close(api.adaptUser(player));
+                                    try {
+                                        if (position instanceof Home home) {
+                                            api.deleteHome(home);
+                                            home.getMeta().setName(plugin.getLocales().getLocale("item_deleted_name", home.getName())); // update listMenu
+                                        } else if (position instanceof Warp warp) {
+                                            api.deleteWarp(warp);
+                                            warp.getMeta().setName(plugin.getLocales().getLocale("item_deleted_name", warp.getName())); // update listMenu
+                                        }
+                                    } catch (ValidationException e) {
+                                        return true;
+                                    }
 
-                            // Return to the parent list menu
-                            final OnlineUser user = api.adaptUser(player);
-                            this.close(user);
-                            parentMenu.show(user);
-                            parentMenu.setPageNumber(user, pageNumber);
-                            this.destroy();
+                                    // Return to the parent list menu
+                                    final OnlineUser user = api.adaptUser(player);
+                                    this.close(user);
+                                    parentMenu.show(user);
+                                    parentMenu.setPageNumber(user, pageNumber);
+                                    this.destroy();
+                                }
+                            }
                         }
                         return true;
                     },
-                    plugin.getLocales().getLocale("delete_button")));
+                    plugin.getLocales().getLocale("delete_button"),
+                    plugin.getLocales().getLocale("delete_button_describe")
+            ));
 
             // Controls display
             menu.addElement(new StaticGuiElement('i',
