@@ -1,13 +1,32 @@
+/*
+ * This file is part of HuskHomesGUI, licensed under the Apache License 2.0.
+ *
+ *  Copyright (c) William278 <will27528@gmail.com>
+ *  Copyright (c) contributors
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 package net.william278.huskhomes.gui.menu;
 
 import de.themoep.inventorygui.InventoryGui;
 import de.themoep.inventorygui.StaticGuiElement;
 import net.wesjd.anvilgui.AnvilGUI;
 import net.william278.huskhomes.gui.HuskHomesGui;
-import net.william278.huskhomes.user.OnlineUser;
 import net.william278.huskhomes.position.Home;
 import net.william278.huskhomes.position.SavedPosition;
 import net.william278.huskhomes.position.Warp;
+import net.william278.huskhomes.user.OnlineUser;
 import net.william278.huskhomes.util.ValidationException;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -162,7 +181,7 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                             new AnvilGUI.Builder()
                                     .title(plugin.getLocales().getLocale("edit_description_title", position.getName()))
                                     .itemLeft(new ItemStack(positionIcon))
-                                    // description or default_description
+                                    // Description or default_description
                                     .text(!position.getMeta().getDescription().isBlank() ?
                                             position.getMeta().getDescription()
                                             : plugin.getLocales().getLocale("edit_description_default_input"))
@@ -215,7 +234,6 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                             return true;
                         },
                         plugin.getLocales().getLocale("edit_privacy_button"),
-                        // public or private
                         plugin.getLocales().getLocale("edit_privacy_message", (home.isPublic() ?
                                 plugin.getLocales().getLocale("edit_privacy_message_public")
                                 : plugin.getLocales().getLocale("edit_privacy_message_private")))));
@@ -259,22 +277,22 @@ public class EditMenu<T extends SavedPosition> extends Menu {
             // Controls display
             menu.addElement(new StaticGuiElement('i',
                     new ItemStack(Material.OAK_SIGN),
-                    // name
+                    // Name
                     plugin.getLocales().getLocale("item_info_name", position.getName()),
-                    // description
+                    // Description
                     (!position.getMeta().getDescription().isBlank() ?
                             plugin.getLocales().getLocale("item_info_description", position.getMeta().getDescription())
                             : plugin.getLocales().getLocale("item_info_description_blank")),
-                    // world name
+                    // World name
                     plugin.getLocales().getLocale("item_info_world", position.getWorld().getName()),
-                    // server
+                    // Server name
                     plugin.getLocales().getLocale("item_info_server", position.getServer()),
-                    // xyz
+                    // Coordinates
                     plugin.getLocales().getLocale("item_info_coordinates",
                             Integer.toString((int) Math.floor(position.getX())),
                             Integer.toString((int) Math.floor(position.getY())),
                             Integer.toString((int) Math.floor(position.getZ()))),
-                    // by playerName
+                    // Owner name (Only for homes)
                     position instanceof Home home ? plugin.getLocales()
                             .getLocale("home_owner_name", home.getOwner().getUsername()) : ""
             ));

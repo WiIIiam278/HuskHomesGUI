@@ -3,14 +3,18 @@ import org.apache.tools.ant.filters.ReplaceTokens
 plugins {
     id 'java'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
-    id 'org.ajoberstar.grgit' version '5.0.0'
+    id 'org.cadixdev.licenser' version '0.6.1'
+    id 'org.ajoberstar.grgit' version '5.2.0'
 }
 
 group 'net.william278'
-version "$ext.plugin_version-${versionMetadata()}"
+version "$ext.plugin_version${versionMetadata()}"
+description "$ext.plugin_description"
+defaultTasks 'licenseFormat', 'build'
 
 ext {
     set 'version', version.toString()
+    set 'description', description.toString()
 }
 
 repositories {
@@ -20,22 +24,24 @@ repositories {
     maven { url 'https://jitpack.io/' }
     maven { url 'https://repo.minebench.de/' }
     maven { url 'https://repo.codemc.io/repository/maven-snapshots/' }
+    maven { url 'https://repo.william278.net/releases' }
+    maven { url 'https://repo.william278.net/snapshots' }
 }
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
-    compileOnly 'net.william278:HuskHomes2:4ebbba730c'
     compileOnly 'org.jetbrains:annotations:24.0.1'
+    compileOnly 'net.william278:huskhomes:4.3.2'
 
     implementation 'de.themoep:inventorygui:1.6-SNAPSHOT'
     implementation 'org.apache.commons:commons-text:1.10.0'
     implementation 'de.themoep:minedown-adventure:1.7.2-SNAPSHOT'
-    implementation 'net.kyori:adventure-text-serializer-legacy:4.13.0'
+    implementation 'net.kyori:adventure-text-serializer-legacy:4.13.1'
     implementation 'net.kyori:adventure-platform-bukkit:4.3.0'
-    implementation 'net.william278:Annotaml:2.0.1'
     implementation 'dev.dejvokep:boosted-yaml:1.3.1'
     implementation 'net.wesjd:anvilgui:1.6.5-SNAPSHOT'
-    implementation 'net.william278:DesertWell:1.1.1'
+    implementation 'net.william278:annotaml:2.0.2'
+    implementation 'net.william278:DesertWell:2.0.4'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
@@ -77,6 +83,12 @@ test {
     useJUnitPlatform()
 }
 
+license {
+    header = rootProject.file('HEADER')
+    include '**/*.java'
+    newLine = true
+}
+
 logger.lifecycle("Building HuskHomesGUI ${version} by William278")
 
 @SuppressWarnings('GrMethodMayBeStatic')
@@ -89,7 +101,7 @@ def versionMetadata() {
 
     // Otherwise, get the last commit hash and if it's a clean head
     if (grgit == null) {
-        return System.getenv("GITHUB_RUN_NUMBER") ? 'build.' + System.getenv("GITHUB_RUN_NUMBER") : 'unknown'
+        return '-' + System.getenv("GITHUB_RUN_NUMBER") ? 'build.' + System.getenv("GITHUB_RUN_NUMBER") : 'unknown'
     }
-    return grgit.head().abbreviatedId + (grgit.status().clean ? '' : '-indev')
+    return '-' + grgit.head().abbreviatedId + (grgit.status().clean ? '' : '-indev')
 }
