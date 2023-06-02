@@ -65,7 +65,7 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                     .orElse(plugin.getSettings().getDefaultIcon()));
             menu.setCloseAction(i -> false);
 
-            // Filler icons
+            // Filler background icons
             menu.addElement(new StaticGuiElement('a',
                     new ItemStack(switch (type) {
                         case HOME, PUBLIC_HOME -> plugin.getSettings().getHomeEditorFillerIcon();
@@ -94,12 +94,11 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                     new ItemStack(plugin.getSettings().getEditorEditLocationButtonIcon()),
                     (click) -> {
                         if (click.getWhoClicked() instanceof Player player) {
-                            final OnlineUser onlineUser = api.adaptUser(player);
                             try {
                                 if (position instanceof Home home) {
-                                    api.relocateHome(home, onlineUser.getPosition());
+                                    api.relocateHome(home, api.adaptUser(player).getPosition());
                                 } else if (position instanceof Warp warp) {
-                                    api.relocateWarp(warp, onlineUser.getPosition());
+                                    api.relocateWarp(warp, api.adaptUser(player).getPosition());
                                 }
                             } catch (ValidationException e) {
                                 return true;
@@ -107,7 +106,11 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                         }
                         return true;
                     },
-                    plugin.getLocales().getLocale("edit_location_button")));
+                    plugin.getLocales().getLocale("edit_location_button"),
+                    plugin.getLocales().getLocale("edit_location_default_message",
+                            Integer.toString((int) Math.floor(position.getX())),
+                            Integer.toString((int) Math.floor(position.getY())),
+                            Integer.toString((int) Math.floor(position.getZ())))));
 
             // Editing name (Via anvil)
             menu.addElement(new StaticGuiElement('n',
@@ -120,24 +123,27 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                                     .itemLeft(new ItemStack(positionIcon))
                                     .text(position.getName())
                                     .onClose(playerInAnvil -> this.show(api.adaptUser(player)))
-                                    .onComplete((completion) -> {
-                                        if (completion.getText() != null) {
-                                            try {
-                                                if (position instanceof Home home) {
-                                                    api.renameHome(home, completion.getText());
-                                                } else if (position instanceof Warp warp) {
-                                                    api.renameWarp(warp, completion.getText());
+                                    .onClick((slot, stateSnapshot) -> {
+                                        if (slot == AnvilGUI.Slot.OUTPUT) {
+                                            if (stateSnapshot.getText() != null) {
+                                                try {
+                                                    if (position instanceof Home home) {
+                                                        api.renameHome(home, stateSnapshot.getText());
+                                                    } else if (position instanceof Warp warp) {
+                                                        api.renameWarp(warp, stateSnapshot.getText());
+                                                    }
+                                                } catch (ValidationException e) {
+                                                    return List.of();
                                                 }
-                                            } catch (ValidationException e) {
-                                                return List.of();
                                             }
-                                        }
-                                        position.getMeta().setName(completion.getText());
+                                            position.getMeta().setName(stateSnapshot.getText());
 
-                                        // Refresh menu title
-                                        this.close(api.adaptUser(player));
-                                        this.destroy();
-                                        new EditMenu<>(plugin, position, parentMenu, pageNumber).show(api.adaptUser(player));
+                                            // Refresh menu title
+                                            this.close(api.adaptUser(player));
+                                            this.destroy();
+                                            new EditMenu<>(plugin, position, parentMenu, pageNumber).show(api.adaptUser(player));
+                                            return List.of();
+                                        }
                                         return List.of();
                                     })
                                     .plugin(plugin)
@@ -156,22 +162,27 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                             new AnvilGUI.Builder()
                                     .title(plugin.getLocales().getLocale("edit_description_title", position.getName()))
                                     .itemLeft(new ItemStack(positionIcon))
-                                    .text(position.getMeta().getDescription())
+                                    // description or default_description
+                                    .text(!position.getMeta().getDescription().isBlank() ?
+                                            position.getMeta().getDescription()
+                                            : plugin.getLocales().getLocale("edit_description_default_input"))
                                     .onClose(playerInAnvil -> this.show(api.adaptUser(player)))
-                                    .onComplete((completion) -> {
-                                        if (completion.getText() != null) {
-                                            try {
-                                                if (position instanceof Home home) {
-                                                    api.setHomeDescription(home, completion.getText());
-                                                } else if (position instanceof Warp warp) {
-                                                    api.setWarpDescription(warp, completion.getText());
+                                    .onClick((slot, stateSnapshot) -> {
+                                        if (slot == AnvilGUI.Slot.OUTPUT) {
+                                            if (stateSnapshot.getText() != null) {
+                                                try {
+                                                    if (position instanceof Home home) {
+                                                        api.setHomeDescription(home, stateSnapshot.getText());
+                                                    } else if (position instanceof Warp warp) {
+                                                        api.setWarpDescription(warp, stateSnapshot.getText());
+                                                    }
+                                                } catch (ValidationException e) {
+                                                    return List.of();
                                                 }
-                                            } catch (ValidationException e) {
-                                                return List.of();
                                             }
+                                            position.getMeta().setDescription(stateSnapshot.getText());
+                                            this.show(api.adaptUser(player));
                                         }
-                                        position.getMeta().setDescription(completion.getText());
-                                        this.show(api.adaptUser(player));
                                         return List.of();
                                     })
                                     .plugin(plugin)
@@ -179,56 +190,91 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                         }
                         return true;
                     },
-                    plugin.getLocales().getLocale("edit_description_button")));
+                    plugin.getLocales().getLocale("edit_description_button"),
+
+                    // description
+                    (!position.getMeta().getDescription().isBlank() ?
+                            plugin.getLocales().getLocale("edit_description_default_message", position.getMeta().getDescription())
+                            : plugin.getLocales().getLocale("edit_description_default_message_blank"))));
 
             // Editing home privacy
             if (position instanceof Home home) {
                 menu.addElement(new StaticGuiElement('p',
                         new ItemStack(plugin.getSettings().getEditorEditPrivacyButtonIcon()),
                         (click) -> {
-                            if (click.getWhoClicked() instanceof Player) {
+                            if (click.getWhoClicked() instanceof Player player) {
                                 try {
                                     api.setHomePrivacy(home, !home.isPublic());
+                                    // Update the status display on the menu
+                                    home.setPublic(!home.isPublic());
+                                    this.show(api.adaptUser(player));
                                 } catch (ValidationException e) {
                                     return true;
                                 }
                             }
                             return true;
                         },
-                        plugin.getLocales().getLocale("edit_privacy_button")));
+                        plugin.getLocales().getLocale("edit_privacy_button"),
+                        // public or private
+                        plugin.getLocales().getLocale("edit_privacy_message", (home.isPublic() ?
+                                plugin.getLocales().getLocale("edit_privacy_message_public")
+                                : plugin.getLocales().getLocale("edit_privacy_message_private")))));
             }
 
             // Deleting
             menu.addElement(new StaticGuiElement('r',
                     new ItemStack(plugin.getSettings().getEditorDeleteButtonIcon()),
                     (click) -> {
-                        if (click.getWhoClicked() instanceof Player player) {
-                            this.close(api.adaptUser(player));
-                            try {
-                                if (position instanceof Home home) {
-                                    api.deleteHome(home);
-                                } else if (position instanceof Warp warp) {
-                                    api.deleteWarp(warp);
+                        switch (click.getType()) {
+                            case RIGHT, DROP -> { // DROP: geyser player throw item
+                                if (click.getWhoClicked() instanceof Player player) {
+                                    this.close(api.adaptUser(player));
+                                    try {
+                                        if (position instanceof Home home) {
+                                            api.deleteHome(home);
+                                            home.getMeta().setName(plugin.getLocales().getLocale("item_deleted_name", home.getName())); // update listMenu
+                                        } else if (position instanceof Warp warp) {
+                                            api.deleteWarp(warp);
+                                            warp.getMeta().setName(plugin.getLocales().getLocale("item_deleted_name", warp.getName())); // update listMenu
+                                        }
+                                    } catch (ValidationException e) {
+                                        return true;
+                                    }
+
+                                    // Return to the parent list menu
+                                    final OnlineUser user = api.adaptUser(player);
+                                    this.close(user);
+                                    parentMenu.show(user);
+                                    parentMenu.setPageNumber(user, pageNumber);
+                                    this.destroy();
                                 }
-                            } catch (ValidationException e) {
-                                return true;
                             }
                         }
                         return true;
                     },
-                    plugin.getLocales().getLocale("delete_button")));
+                    plugin.getLocales().getLocale("delete_button"),
+                    plugin.getLocales().getLocale("delete_button_describe")
+            ));
 
             // Controls display
             menu.addElement(new StaticGuiElement('i',
                     new ItemStack(Material.OAK_SIGN),
+                    // name
                     plugin.getLocales().getLocale("item_info_name", position.getName()),
-                    plugin.getLocales().getLocale("item_info_description", position.getMeta().getDescription()),
+                    // description
+                    (!position.getMeta().getDescription().isBlank() ?
+                            plugin.getLocales().getLocale("item_info_description", position.getMeta().getDescription())
+                            : plugin.getLocales().getLocale("item_info_description_blank")),
+                    // world name
                     plugin.getLocales().getLocale("item_info_world", position.getWorld().getName()),
+                    // server
                     plugin.getLocales().getLocale("item_info_server", position.getServer()),
+                    // xyz
                     plugin.getLocales().getLocale("item_info_coordinates",
                             Integer.toString((int) Math.floor(position.getX())),
                             Integer.toString((int) Math.floor(position.getY())),
                             Integer.toString((int) Math.floor(position.getZ()))),
+                    // by playerName
                     position instanceof Home home ? plugin.getLocales()
                             .getLocale("home_owner_name", home.getOwner().getUsername()) : ""
             ));
