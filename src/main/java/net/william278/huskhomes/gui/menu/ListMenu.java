@@ -196,7 +196,11 @@ public class ListMenu<T extends SavedPosition> extends Menu {
                 },
 
                 // home name
-                plugin.getLocales().getLocale("item_name", position.getName()),
+                (position instanceof Home home ?
+                        home.isPublic() ?
+                                plugin.getLocales().getLocale("item_name", plugin.getLocales().getLocale("item_name_prefix_privacy") + position.getName())
+                                : plugin.getLocales().getLocale("item_name", position.getName())
+                        : ""),
 
                 // description
                 (!position.getMeta().getDescription().isBlank() ?
