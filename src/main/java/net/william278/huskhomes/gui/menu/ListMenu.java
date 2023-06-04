@@ -197,10 +197,8 @@ public class ListMenu<T extends SavedPosition> extends Menu {
 
                 // home name
                 // Only use "item_name_public" for public home in home list
-                (type == Type.HOME ?
-                        ((Home) position).isPublic() ?
-                                plugin.getLocales().getLocale("item_name_public", position.getName())
-                                : plugin.getLocales().getLocale("item_name", position.getName())
+                ((type == Type.HOME && ((Home) position).isPublic()) ?
+                        plugin.getLocales().getLocale("item_name_public", position.getName())
                         : plugin.getLocales().getLocale("item_name", position.getName())),
 
                 // description
