@@ -22,8 +22,10 @@ package net.william278.huskhomes.gui.config;
 import de.themoep.minedown.adventure.MineDown;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.william278.annotaml.YamlFile;
+import net.william278.huskhomes.gui.HuskHomesGui;
 import org.apache.commons.text.StringEscapeUtils;
 import org.jetbrains.annotations.NotNull;
+import org.apache.commons.text.WordUtils;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -140,5 +142,20 @@ public class Locales {
         return value.toString();
     }
 
+
+    /**
+     * Wraps the given string to a new line after every 40 characters.
+     *
+     * @param string the string to be wrapped, cannot be null
+     * @return the wrapped string
+     * @throws NullPointerException if the string is null
+     */
+    public static String textWrap(@NotNull HuskHomesGui plugin, @NotNull String string) {
+        String prefix = plugin.getLocales().getLocale("item_description_line_prefix");
+        String suffix = plugin.getLocales().getLocale("item_description_line_suffix");
+
+        return MineDown.parse(prefix + WordUtils.wrap(string, plugin.getSettings().getTextWrapLength(),
+                suffix +"\n"+ prefix, true) + suffix).serialize();
+    }
 
 }

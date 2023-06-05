@@ -36,6 +36,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static net.william278.huskhomes.gui.config.Locales.textWrap;
+
 /**
  * A menu for editing a saved position
  */
@@ -213,7 +215,7 @@ public class EditMenu<T extends SavedPosition> extends Menu {
 
                     // description
                     (!position.getMeta().getDescription().isBlank() ?
-                            plugin.getLocales().getLocale("edit_description_default_message", position.getMeta().getDescription())
+                            plugin.getLocales().getLocale("edit_description_default_message").replace("%1%", textWrap(plugin, position.getMeta().getDescription()))
                             : plugin.getLocales().getLocale("edit_description_default_message_blank"))));
 
             // Editing home privacy
@@ -281,7 +283,7 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                     plugin.getLocales().getLocale("item_info_name", position.getName()),
                     // Description
                     (!position.getMeta().getDescription().isBlank() ?
-                            plugin.getLocales().getLocale("item_info_description", position.getMeta().getDescription())
+                            plugin.getLocales().getLocale("item_info_description").replace("%1%", textWrap(plugin, position.getMeta().getDescription()))
                             : plugin.getLocales().getLocale("item_info_description_blank")),
                     // World name
                     plugin.getLocales().getLocale("item_info_world", position.getWorld().getName()),
