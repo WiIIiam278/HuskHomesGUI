@@ -25,12 +25,12 @@ import net.william278.annotaml.YamlFile;
 import net.william278.huskhomes.gui.HuskHomesGui;
 import org.apache.commons.text.StringEscapeUtils;
 import org.jetbrains.annotations.NotNull;
-import org.apache.commons.text.WordUtils;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.bukkit.Bukkit.getLogger;
 
 @YamlFile(header = """
         ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -143,19 +143,37 @@ public class Locales {
     }
 
 
+    public static List<String> splitString(String string, int length) {
+        List<String> result = new ArrayList<>();
+        Pattern pattern = Pattern.compile(".{1,"+ length +"}(\\s|$)");
+        Matcher matcher = pattern.matcher(string);
+        while (matcher.find()) {
+            result.add(matcher.group().trim());
+        }
+        return result;
+    }
+
+
     /**
-     * Wraps the given string to a new line after every 40 characters.
+     * Wraps the given string to a new line after every (int) characters.
      *
      * @param string the string to be wrapped, cannot be null
      * @return the wrapped string
      * @throws NullPointerException if the string is null
      */
     public static String textWrap(@NotNull HuskHomesGui plugin, @NotNull String string) {
-        String prefix = plugin.getLocales().getLocale("item_description_line_prefix");
-        String suffix = plugin.getLocales().getLocale("item_description_line_suffix");
 
-        return MineDown.parse(prefix + WordUtils.wrap(string, plugin.getSettings().getTextWrapLength(),
-                suffix +"\n"+ prefix, true) + suffix).serialize();
+        Matcher matcher = Pattern.compile(".{1,"+ plugin.getSettings().getTextWrapLength() +"}").matcher(string);
+
+        StringBuilder out = new StringBuilder();
+
+        while (matcher.find()) {
+            out.append(plugin.getLocales().getLocale("item_description_line_style", matcher.group().trim()));
+        }
+
+        getLogger().info(String.valueOf(out));
+
+        return String.valueOf(out);
     }
 
 }

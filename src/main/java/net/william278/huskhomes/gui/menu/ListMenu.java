@@ -205,7 +205,7 @@ public class ListMenu<T extends SavedPosition> extends Menu {
 
                 // description
                 (!position.getMeta().getDescription().isBlank() ?
-                        plugin.getLocales().getLocale("item_description").replace("%1%", textWrap(plugin, position.getMeta().getDescription()))
+                        plugin.getLocales().getLocale("item_description", textWrap(plugin, position.getMeta().getDescription()))
                         : plugin.getLocales().getLocale("item_description_blank")),
 
                 // player name
