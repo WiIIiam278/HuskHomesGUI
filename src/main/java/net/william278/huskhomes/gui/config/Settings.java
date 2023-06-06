@@ -45,6 +45,8 @@ public class Settings {
     private boolean showMenuControls = true;
     @YamlKey("menu.display_controls_help_in_lore")
     private boolean displayControlsHelpInCore = false;
+    @YamlKey("menu.text_wrap_length")
+    private int textWrapLength = 25;
 
     @YamlKey("menu.items.homes_filler")
     private String homesFillerItem = "minecraft:orange_stained_glass_pane";
@@ -102,6 +104,10 @@ public class Settings {
 
     public boolean camelCase() {
         return displayControlsHelpInCore;
+    }
+
+    public int getTextWrapLength() {
+        return textWrapLength;
     }
 
     @NotNull
