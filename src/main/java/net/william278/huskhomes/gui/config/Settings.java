@@ -45,7 +45,7 @@ public class Settings {
     private boolean showMenuControls = true;
     @YamlKey("menu.display_controls_help_in_lore")
     private boolean displayControlsHelpInCore = false;
-    @YamlKey("menu.text-wrap-length")
+    @YamlKey("menu.text_wrap_length")
     private int textWrapLength = 25;
 
     @YamlKey("menu.items.homes_filler")
