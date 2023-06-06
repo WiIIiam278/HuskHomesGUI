@@ -160,12 +160,12 @@ public class ListMenu<T extends SavedPosition> extends Menu {
                                 // Update the icon with the item on the cursor
                                 switch (type) {
                                     case HOME, PUBLIC_HOME -> {
-                                        if(((Home) position).getOwner().getUuid() == player.getUniqueId()){
-                                            if(!player.hasPermission(EDIT_HOME_PERMISSION)){
+                                        if (player.getUniqueId().equals(((Home) position).getOwner().getUuid())) {
+                                            if (!player.hasPermission(EDIT_HOME_PERMISSION)) {
                                                 return true;
                                             }
-                                        }else {
-                                            if(!player.hasPermission(EDIT_HOME_OTHER_PERMISSION)){
+                                        } else {
+                                            if (!player.hasPermission(EDIT_HOME_OTHER_PERMISSION)) {
                                                 return true;
                                             }
                                         }
