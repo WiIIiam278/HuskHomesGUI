@@ -141,7 +141,6 @@ public class ListMenu<T extends SavedPosition> extends Menu {
                         final OnlineUser user = api.adaptUser(player);
                         switch (click.getType()) {
                             case LEFT -> {
-                                // Update the icon with the item on the cursor
                                 final ItemStack newItem = player.getItemOnCursor();
                                 if (newItem.getType() == Material.AIR) {
                                     // teleport
@@ -159,9 +158,23 @@ public class ListMenu<T extends SavedPosition> extends Menu {
                                 }
 
                                 // Update the icon with the item on the cursor
-                                if (!player.hasPermission(EDIT_HOME_PERMISSION)
-                                    && !player.hasPermission(EDIT_HOME_OTHER_PERMISSION)) {
-                                    return true;
+                                switch (type) {
+                                    case HOME, PUBLIC_HOME -> {
+                                        if(((Home) position).getOwner().getUuid() == player.getUniqueId()){
+                                            if(!player.hasPermission(EDIT_HOME_PERMISSION)){
+                                                return true;
+                                            }
+                                        }else {
+                                            if(!player.hasPermission(EDIT_HOME_OTHER_PERMISSION)){
+                                                return true;
+                                            }
+                                        }
+                                    }
+                                    case WARP -> {
+                                        if (!player.hasPermission(EDIT_WARP_PERMISSION)) {
+                                            return true;
+                                        }
+                                    }
                                 }
                                 setPositionMaterial(position, newItem.getType());
                                 click.getGui().draw();
