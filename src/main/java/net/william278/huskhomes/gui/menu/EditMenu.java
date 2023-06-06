@@ -281,10 +281,6 @@ public class EditMenu<T extends SavedPosition> extends Menu {
                     new ItemStack(Material.OAK_SIGN),
                     // Name
                     plugin.getLocales().getLocale("item_info_name", position.getName()),
-                    // Description
-                    (!position.getMeta().getDescription().isBlank() ?
-                            plugin.getLocales().getLocale("item_info_description", textWrap(plugin, position.getMeta().getDescription()))
-                            : plugin.getLocales().getLocale("item_info_description_blank")),
                     // World name
                     plugin.getLocales().getLocale("item_info_world", position.getWorld().getName()),
                     // Server name
