@@ -36,6 +36,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static net.william278.huskhomes.gui.config.Locales.textWrap;
+
 /**
  * A menu for displaying a list of saved positions
  */
@@ -139,7 +141,6 @@ public class ListMenu<T extends SavedPosition> extends Menu {
                         final OnlineUser user = api.adaptUser(player);
                         switch (click.getType()) {
                             case LEFT -> {
-                                // Update the icon with the item on the cursor
                                 final ItemStack newItem = player.getItemOnCursor();
                                 if (newItem.getType() == Material.AIR) {
                                     // teleport
@@ -157,9 +158,23 @@ public class ListMenu<T extends SavedPosition> extends Menu {
                                 }
 
                                 // Update the icon with the item on the cursor
-                                if (!player.hasPermission(EDIT_HOME_PERMISSION)
-                                    && !player.hasPermission(EDIT_HOME_OTHER_PERMISSION)) {
-                                    return true;
+                                switch (type) {
+                                    case HOME, PUBLIC_HOME -> {
+                                        if (player.getUniqueId().equals(((Home) position).getOwner().getUuid())) {
+                                            if (!player.hasPermission(EDIT_HOME_PERMISSION)) {
+                                                return true;
+                                            }
+                                        } else {
+                                            if (!player.hasPermission(EDIT_HOME_OTHER_PERMISSION)) {
+                                                return true;
+                                            }
+                                        }
+                                    }
+                                    case WARP -> {
+                                        if (!player.hasPermission(EDIT_WARP_PERMISSION)) {
+                                            return true;
+                                        }
+                                    }
                                 }
                                 setPositionMaterial(position, newItem.getType());
                                 click.getGui().draw();
@@ -203,7 +218,7 @@ public class ListMenu<T extends SavedPosition> extends Menu {
 
                 // description
                 (!position.getMeta().getDescription().isBlank() ?
-                        plugin.getLocales().getLocale("item_description", position.getMeta().getDescription())
+                        plugin.getLocales().getLocale("item_description", textWrap(plugin, position.getMeta().getDescription()))
                         : plugin.getLocales().getLocale("item_description_blank")),
 
                 // player name
