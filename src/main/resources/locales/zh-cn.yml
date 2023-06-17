@@ -38,3 +38,4 @@ pagination_next_page: '[下一页 \\(%nextpage%\\) ▶](#00fb9a)'
 pagination_last_page: '[尾页 \\(%pages%\\) ⏩](#00fb9a)'
 menu_controls_title: '[操作说明:](gray)'
 menu_controls_details: '[  • 左键点击: 传送](gray)\n[  • 右键点击: 编辑](gray)\n[  • 放置物品: 设置图标](gray)\n'
+
