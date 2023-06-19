@@ -156,7 +156,9 @@ public class Locales {
         StringBuilder out = new StringBuilder();
 
         while (matcher.find()) {
-            out.append(plugin.getLocales().getLocale("item_description_line_style", matcher.group().trim()));
+            if (!matcher.group().trim().equals("")) {
+                out.append(plugin.getLocales().getLocale("item_description_line_style", matcher.group().trim()));
+            }
         }
         return String.valueOf(out);
     }
