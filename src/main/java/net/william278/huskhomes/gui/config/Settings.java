@@ -46,7 +46,7 @@ public class Settings {
     @YamlKey("menu.display_controls_help_in_lore")
     private boolean displayControlsHelpInCore = false;
     @YamlKey("menu.text_wrap_length")
-    private int textWrapLength = 27;
+    private int textWrapLength = 17;
 
     @YamlKey("menu.items.homes_filler")
     private String homesFillerItem = "minecraft:orange_stained_glass_pane";
