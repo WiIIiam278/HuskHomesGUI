@@ -12,7 +12,7 @@
         <a href="https://www.spigotmc.org/resources/huskhomesgui.91059/">Spigot</a>
     </b> —
     <b>
-        <a href="https://william278.net/docs/huskhomes/gui">Docs</a>
+        <a href="https://william278.net/docs/huskhomes/gui-add-on">Docs</a>
     </b> — 
     <b>
         <a href="https://github.com/WiIIiam278/HuskHomes/">Homes</a>
