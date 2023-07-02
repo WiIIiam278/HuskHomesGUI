@@ -22,13 +22,15 @@ package net.william278.huskhomes.gui.config;
 import de.themoep.minedown.adventure.MineDown;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.william278.annotaml.YamlFile;
+import net.william278.huskhomes.gui.HuskHomesGui;
 import org.apache.commons.text.StringEscapeUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.bukkit.Bukkit.getLogger;
 
 @YamlFile(header = """
         ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -140,5 +142,22 @@ public class Locales {
         return value.toString();
     }
 
+
+    /**
+     * Wraps the given string to a new line after every (int) characters.
+     *
+     * @param string the string to be wrapped, cannot be null
+     * @return the wrapped string
+     * @throws NullPointerException if the string is null
+     */
+    public static String textWrap(@NotNull HuskHomesGui plugin, @NotNull String string) {
+        Matcher matcher = Pattern.compile(".{1,"+ plugin.getSettings().getTextWrapLength() +"}").matcher(string);
+        StringBuilder out = new StringBuilder();
+
+        while (matcher.find()) {
+            out.append(plugin.getLocales().getLocale("item_description_line_style", matcher.group().trim()));
+        }
+        return String.valueOf(out);
+    }
 
 }
