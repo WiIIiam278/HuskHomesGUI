@@ -52,7 +52,7 @@ public class HuskHomesGuiCommand implements CommandExecutor, TabExecutor {
                         AboutMenu.Credit.of("ApliNi").description("Simplified Chinese (zh-cn)"),
                         AboutMenu.Credit.of("Revoolt").description("Spanish (es-es)"))
                 .buttons(
-                        AboutMenu.Link.of("https://william278.net/docs/gui-add-on")
+                        AboutMenu.Link.of("https://william278.net/docs/huskhomes/gui-add-on")
                                 .text("About").icon("⛏"),
                         AboutMenu.Link.of("https://github.com/WiIIiam278/HuskHomesGUI/issues")
                                 .text("Issues").icon("❌").color(TextColor.color(0xff0000)),
