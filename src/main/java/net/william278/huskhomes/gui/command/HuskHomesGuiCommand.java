@@ -50,7 +50,8 @@ public class HuskHomesGuiCommand implements CommandExecutor, TabExecutor {
                         AboutMenu.Credit.of("ApliNi").description("Code"))
                 .credits("Translators",
                         AboutMenu.Credit.of("ApliNi").description("Simplified Chinese (zh-cn)"),
-                        AboutMenu.Credit.of("Revoolt").description("Spanish (es-es)"))
+                        AboutMenu.Credit.of("Revoolt").description("Spanish (es-es)"),
+                        AboutMenu.Credit.of("XeroLe1er").description("French (fr-fr)"))
                 .buttons(
                         AboutMenu.Link.of("https://william278.net/docs/huskhomes/gui-add-on")
                                 .text("About").icon("⛏"),
