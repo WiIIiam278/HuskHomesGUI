@@ -4,7 +4,7 @@ plugins {
     id 'java'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'org.cadixdev.licenser' version '0.6.1'
-    id 'org.ajoberstar.grgit' version '5.2.0'
+    id 'org.ajoberstar.grgit' version '5.2.1'
 }
 
 group 'net.william278'
