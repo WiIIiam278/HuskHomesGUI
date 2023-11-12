@@ -32,7 +32,7 @@ It replaces the chat menu system that is built into HuskHomes when you type `/ho
 If you prefer to browse using a menu, or would like better support for Bedrock players connecting over Geyser, then this add-on is for you.
 
 ## Setup
-1. Have HuskHomes v3.x+ installed on your server(s)
+1. Have HuskHomes v4.x+ installed on your server(s)
 2. Download HuskHomesGUI and place it in your server's `~/plugins/` folder
 
 ## Usage
