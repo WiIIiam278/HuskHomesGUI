@@ -34,7 +34,7 @@ dependencies {
     compileOnly 'net.william278:huskhomes:4.4.1'
 
     implementation 'de.themoep:inventorygui:1.6.1-SNAPSHOT'
-    implementation 'org.apache.commons:commons-text:1.10.0'
+    implementation 'org.apache.commons:commons-text:1.11.0'
     implementation 'de.themoep:minedown-adventure:1.7.2-SNAPSHOT'
     implementation 'net.kyori:adventure-text-serializer-legacy:4.14.0'
     implementation 'net.kyori:adventure-platform-bukkit:4.3.1'
