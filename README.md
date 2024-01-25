@@ -1,3 +1,5 @@
+> 🚨 **HuskHomesGUI has been discontinued** 🚨 and is no longer actively maintained. It may cease to function with newer versions of Minecraft/HuskHomes. We no longer provide support for it. Thank you for your understanding.
+
 <!--suppress ALL -->
 <p align="center">
     <img src="images/banner.png" alt="HuskHomesGUI" />
